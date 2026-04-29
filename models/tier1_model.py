@@ -46,11 +46,26 @@ class Tier1Model:
     def pretrain(self, train_texts, train_labels, batch_size=16, epochs=3):
         self.model.train()
         
-        inputs = self.tokenizer(train_texts, return_tensors="pt", truncation=True, padding=True, max_length=128)
-        labels_tensor = torch.tensor(train_labels)
+        # Build simple dataset holding raw texts and labels
+        class TextDataset(torch.utils.data.Dataset):
+            def __init__(self, texts, labels):
+                self.texts = texts
+                self.labels = labels
+            def __len__(self):
+                return len(self.texts)
+            def __getitem__(self, idx):
+                return self.texts[idx], self.labels[idx]
         
-        dataset = TensorDataset(inputs['input_ids'], inputs['attention_mask'], labels_tensor)
-        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        dataset = TextDataset(train_texts, train_labels)
+        
+        # Collate fn to tokenize per batch
+        def collate_fn(batch):
+            texts, labels = zip(*batch)
+            inputs = self.tokenizer(list(texts), return_tensors="pt", truncation=True, padding=True, max_length=128)
+            labels_tensor = torch.tensor(labels)
+            return inputs['input_ids'], inputs['attention_mask'], labels_tensor
+
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
         
         total_steps = len(dataloader) * epochs
         scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=int(0.1 * total_steps), num_training_steps=total_steps)

@@ -69,7 +69,7 @@ def main():
 
     # Init Models
     print("Initializing Tier 1 Model...")
-    ag_categories = ["World", "Sports", "Business", "Sci/Tech"]
+    ag_categories = config["tier2"]["categories"]
     
     tier1 = Tier1Model(
         config["tier1"]["model_name"], 
@@ -110,7 +110,14 @@ def main():
             for t2 in tau2_grid:
                 ue = UncertaintyEngine(t1, t2)
                 router = TieredRouter(tier1, tier2, ue, ag_categories)
-                evaluator, _ = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=False)
+                
+                # WARNING: update_model=False must never be changed to True inside the sweep.
+                # Each (tau1, tau2) configuration must evaluate against the SAME pretrained model state
+                # to produce comparable results. Otherwise, early configurations will alter the model 
+                # for later configurations, invalidating the sweep.
+                _update_model_for_sweep = False
+                assert _update_model_for_sweep is False, "Active learning (update_model=True) is not allowed during the threshold sweep."
+                evaluator, _ = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=_update_model_for_sweep)
                 metrics = evaluator.calculate_metrics()
                 
                 sweep_results.append({
@@ -151,6 +158,7 @@ def main():
 - Total Samples: {metrics['total_samples']}
 - Final F1 (Weighted): {metrics['f1_weighted']:.4f}
 - Accuracy Improvement over Tier 1: {metrics['accuracy_final'] - metrics['accuracy_t1']:.4f}
+  *Note: Tier 1 accuracy is calculated on all samples as a counterfactual baseline of using only Tier 1 with no routing.*
 - Human Effort Ratio: {metrics['human_effort_ratio']:.4f}
 - PICR: {metrics['picr']:.4f}
 

@@ -13,7 +13,7 @@ tier1:
 tier2:
   ollama_model: "qwen2.5:3b"
   url: "http://localhost:11434"
-  categories: ["Politics", "Technology", "Entertainment", "Sports", "Business", "Health"]
+  categories: ["World", "Sports", "Business", "Sci/Tech"]
 
 tier3:
   human_error_rate: 0.05
