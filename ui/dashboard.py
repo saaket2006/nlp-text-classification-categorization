@@ -46,26 +46,46 @@ else:
     with row1_col1:
         st.subheader("Routing Distribution")
         dist = metrics["tier_distribution"]
+        t1_count = dist.get("1", dist.get(1, 0))
+        t2_count = dist.get("2", dist.get(2, 0))
+        t3_count = dist.get("3", dist.get(3, 0))
         df_dist = pd.DataFrame({
             "Tier": ["Tier 1 (Encoder)", "Tier 2 (LLM)", "Tier 3 (Human)"],
-            "Count": [dist["1"], dist["2"], dist["3"]]
+            "Count": [t1_count, t2_count, t3_count]
         })
         fig = px.pie(df_dist, values='Count', names='Tier', hole=0.5, 
                      color_discrete_sequence=px.colors.qualitative.Pastel)
         st.plotly_chart(fig, use_container_width=True)
 
-    # 2. Efficiency Frontier Placeholder
+    # 2. Efficiency Frontier
     with row1_col2:
         st.subheader("Efficiency Frontier")
-        # Simulating points for other thresholds for visualization
-        effort = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
-        acc = [metrics['accuracy_t1'], metrics['accuracy_t1']+0.05, metrics['accuracy_t1']+0.1, 
-               metrics['accuracy_final'], metrics['accuracy_final']+0.02, 0.95]
-        
+        sweep_file = os.path.join(logs_dir, "threshold_sweep.json")
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=effort, y=acc, mode='lines+markers', name='Frontier'))
-        fig.add_trace(go.Scatter(x=[metrics['human_effort_ratio']], y=[metrics['accuracy_final']], 
-                                 mode='markers', marker=dict(size=15, color='red'), name='Current Pipeline'))
+        
+        if os.path.exists(sweep_file):
+            with open(sweep_file, "r") as f:
+                sweep_data = json.load(f)
+            
+            effort = [pt['human_effort_ratio'] for pt in sweep_data]
+            acc = [pt['accuracy'] for pt in sweep_data]
+            
+            fig.add_trace(go.Scatter(
+                x=effort, 
+                y=acc, 
+                mode='markers', 
+                name='Sweep Points',
+                marker=dict(size=8, color='blue', opacity=0.6)
+            ))
+            
+        fig.add_trace(go.Scatter(
+            x=[metrics['human_effort_ratio']], 
+            y=[metrics['accuracy_final']], 
+            mode='markers', 
+            marker=dict(size=15, color='red', symbol='star'), 
+            name='Current Config'
+        ))
+        
         fig.update_layout(xaxis_title="Human Effort (Ratio)", yaxis_title="Accuracy")
         st.plotly_chart(fig, use_container_width=True)
 
@@ -103,8 +123,8 @@ else:
 
     st.markdown("---")
     st.info("The framework target: ≥60% handled by Tier 1 and ≤30% escalation to Tier 3.")
-    t1_ratio = dist["1"] / metrics["total_samples"]
-    t3_ratio = dist["3"] / metrics["total_samples"]
+    t1_ratio = t1_count / metrics["total_samples"]
+    t3_ratio = t3_count / metrics["total_samples"]
     
     col1, col2 = st.columns(2)
     if t1_ratio >= 0.6:

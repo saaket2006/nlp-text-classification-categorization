@@ -7,11 +7,16 @@ tier1:
   batch_size: 16
   threshold_entropy: 0.7  # tau_1
   threshold_confidence: 0.6 # tau_2
+  active_learning_batch_size: 4
+  pretrain_epochs: 3
 
 tier2:
   ollama_model: "qwen2.5:3b"
   url: "http://localhost:11434"
   categories: ["Politics", "Technology", "Entertainment", "Sports", "Business", "Health"]
+
+tier3:
+  human_error_rate: 0.05
 
 data:
   dataset_name: "ag_news"
@@ -22,3 +27,4 @@ paths:
   logs_dir: "./logs"
   metrics_file: "./logs/metrics_summary.json"
   report_file: "./logs/research_report.md"
+  sweep_file: "./logs/threshold_sweep.json"

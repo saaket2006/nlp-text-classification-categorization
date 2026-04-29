@@ -1,7 +1,9 @@
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
+from torch.optim import AdamW
 import torch.nn.functional as F
 import numpy as np
+from torch.utils.data import DataLoader, TensorDataset
 
 class Tier1Model:
     def __init__(self, model_name: str, num_labels: int, device="cpu"):
@@ -10,8 +12,10 @@ class Tier1Model:
         self.device = device
         self.model.to(self.device)
         self.model.eval()
+        self.optimizer = AdamW(self.model.parameters(), lr=2e-5)
 
     def predict(self, text: str):
+        self.model.eval()
         inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
         with torch.no_grad():
             outputs = self.model(**inputs)
@@ -24,7 +28,47 @@ class Tier1Model:
 
     def train_on_batch(self, texts, labels):
         """
-        Placeholder for online training or initial fine-tuning.
+        Online fine-tuning step.
         """
-        # Implementation of small fine-tuning step
-        pass
+        self.model.train()
+        inputs = self.tokenizer(texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+        labels_tensor = torch.tensor(labels).to(self.device)
+        
+        self.optimizer.zero_grad()
+        outputs = self.model(**inputs, labels=labels_tensor)
+        loss = outputs.loss
+        loss.backward()
+        self.optimizer.step()
+        
+        self.model.eval()
+        return loss.item()
+
+    def pretrain(self, train_texts, train_labels, batch_size=16, epochs=3):
+        self.model.train()
+        
+        inputs = self.tokenizer(train_texts, return_tensors="pt", truncation=True, padding=True, max_length=128)
+        labels_tensor = torch.tensor(train_labels)
+        
+        dataset = TensorDataset(inputs['input_ids'], inputs['attention_mask'], labels_tensor)
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        
+        total_steps = len(dataloader) * epochs
+        scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=int(0.1 * total_steps), num_training_steps=total_steps)
+        
+        for epoch in range(epochs):
+            total_loss = 0
+            for batch in dataloader:
+                b_input_ids, b_attention_mask, b_labels = [b.to(self.device) for b in batch]
+                
+                self.optimizer.zero_grad()
+                outputs = self.model(input_ids=b_input_ids, attention_mask=b_attention_mask, labels=b_labels)
+                loss = outputs.loss
+                loss.backward()
+                self.optimizer.step()
+                scheduler.step()
+                total_loss += loss.item()
+                
+            avg_loss = total_loss / len(dataloader)
+            print(f"Pretraining Epoch {epoch+1}/{epochs} | Loss: {avg_loss:.4f}")
+            
+        self.model.eval()
