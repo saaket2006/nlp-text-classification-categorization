@@ -1,0 +1,12 @@
+torch
+transformers
+ollama
+streamlit
+pandas
+numpy
+scikit-learn
+pyyaml
+plotly
+scipy
+datasets
+tqdm

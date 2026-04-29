@@ -1,0 +1,24 @@
+project_name: "Tri-Tiered Local LLM AL Framework"
+seed: 42
+
+tier1:
+  model_name: "distilbert-base-uncased"
+  max_length: 128
+  batch_size: 16
+  threshold_entropy: 0.7  # tau_1
+  threshold_confidence: 0.6 # tau_2
+
+tier2:
+  ollama_model: "qwen2.5:3b"
+  url: "http://localhost:11434"
+  categories: ["Politics", "Technology", "Entertainment", "Sports", "Business", "Health"]
+
+data:
+  dataset_name: "ag_news"
+  train_samples: 1000
+  test_samples: 200
+
+paths:
+  logs_dir: "./logs"
+  metrics_file: "./logs/metrics_summary.json"
+  report_file: "./logs/research_report.md"
