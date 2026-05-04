@@ -58,19 +58,32 @@ Download and install [Ollama](https://ollama.com/). Then pull the required model
 ollama pull qwen2.5:3b
 ```
 
+### 4. GPU Acceleration (NVIDIA)
+For best performance, ensure you have the CUDA version of PyTorch (installed automatically by the current `requirements.txt` for CUDA 12.1). If you need to reinstall:
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
 ---
 
 ## 🏃 Usage
 
 ### 1. Run the Pipeline
-Execute the main script to process the dataset through the tiered framework:
+Execute the main script to process the dataset:
 ```bash
 python main.py
 ```
-This will generate execution logs and a `research_report.md` in the `logs/` directory.
+**Offline Mode**: To run without an internet connection (using cached models/data), set the environment variable:
+```bash
+$env:HF_HUB_OFFLINE=1; python main.py
+```
 
 ### 2. Launch the Dashboard
-Visualize the results and model performance:
+Visualize results and model performance:
+```bash
+./run_dashboard.bat
+```
+or
 ```bash
 streamlit run ui/dashboard.py
 ```

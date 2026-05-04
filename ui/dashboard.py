@@ -12,10 +12,31 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from core.calibration import reliability_diagram_data
 
-st.set_page_config(page_title="Tri-Tiered LLM AL Dashboard", layout="wide")
+st.set_page_config(
+    page_title="Tri-Tiered LLM AL Dashboard",
+    page_icon="🛡️",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-st.title("🛡️ A Tri-Tiered Local LLM Framework for Active Learning")
-st.markdown("### Cost-Efficient Text Classification & Automated Categorization")
+# Custom CSS for Premium Look
+st.markdown("""
+    <style>
+    .main { background-color: #0e1117; color: #fafafa; }
+    .stMetric {
+        background-color: #1e2130;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #3d4156;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .stSubheader { color: #60a5fa; font-weight: 600; margin-top: 2rem; }
+    .stMarkdown h3 { color: #94a3b8; }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("🛡️ Tri-Tiered Local LLM Framework")
+st.markdown("### Research Dashboard: Active Learning & Automated Categorization")
 
 # Sidebar
 st.sidebar.header("Configuration")
@@ -86,14 +107,35 @@ else:
             name='Current Config'
         ))
         
-        fig.update_layout(xaxis_title="Human Effort (Ratio)", yaxis_title="Accuracy")
+        fig.update_layout(
+            xaxis_title="Human Effort (Ratio)", 
+            yaxis_title="Accuracy",
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(color="white")
+        )
         st.plotly_chart(fig, use_container_width=True)
 
     # row 2
     row2_col1, row2_col2 = st.columns(2)
 
-    # 3. Reliability Diagram
+    # 3. Confidence Distribution
     with row2_col1:
+        st.subheader("Confidence Distribution")
+        all_confs = [r["prediction"]["confidence"] for r in detailed_results]
+        df_conf = pd.DataFrame({"Confidence": all_confs})
+        fig = px.histogram(df_conf, x="Confidence", nbins=20, 
+                           color_discrete_sequence=['#60a5fa'],
+                           marginal="box")
+        fig.update_layout(
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(color="white")
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    # 4. Reliability Diagram
+    with row2_col2:
         st.subheader("Reliability Diagram (Calibration)")
         confidences = np.array([r["prediction"]["confidence"] for r in detailed_results])
         predictions = np.array([r["prediction"]["predicted_labels"][0] for r in detailed_results])
@@ -102,24 +144,31 @@ else:
         bin_lowers, bin_accs, bin_confs = reliability_diagram_data(confidences, predictions, labels)
         
         fig = go.Figure()
-        fig.add_trace(go.Bar(x=bin_lowers, y=bin_accs, name="Accuracy", offsetgroup=0))
-        fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", line=dict(dash='dash'), name="Perfectly Calibrated"))
-        fig.update_layout(xaxis_title="Confidence", yaxis_title="Accuracy", barmode='group')
+        fig.add_trace(go.Bar(x=bin_lowers, y=bin_accs, name="Accuracy", marker_color='#34d399', offsetgroup=0))
+        fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", line=dict(dash='dash', color='#f87171'), name="Perfectly Calibrated"))
+        fig.update_layout(
+            xaxis_title="Confidence", 
+            yaxis_title="Accuracy", 
+            barmode='group',
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(color="white")
+        )
         st.plotly_chart(fig, use_container_width=True)
 
-    # 4. Detailed Decision Log
-    with row2_col2:
-        st.subheader("Sample Decision Logs")
-        df_logs = pd.DataFrame([
-            {
-                "Text": r["prediction"]["text"][:100] + "...",
-                "Tier": r["prediction"]["tier"],
-                "Predicted": r["prediction"]["predicted_labels"],
-                "GT": r["ground_truth"],
-                "Confidence": r["prediction"]["confidence"]
-            } for r in detailed_results[:10]
-        ])
-        st.table(df_logs)
+    # row 3
+    st.subheader("Sample Decision Logs")
+    df_logs = pd.DataFrame([
+        {
+            "Text": r["prediction"]["text"][:100] + "...",
+            "Tier": f"Tier {r['prediction']['tier']}",
+            "Predicted": ", ".join(r["prediction"]["predicted_labels"]),
+            "GT": r["ground_truth"],
+            "Confidence": f"{r['prediction']['confidence']:.2f}",
+            "Entropy": f"{r['prediction'].get('entropy', 0):.2f}"
+        } for r in detailed_results[:20]
+    ])
+    st.dataframe(df_logs, use_container_width=True)
 
     st.markdown("---")
     st.info("The framework target: ≥60% handled by Tier 1 and ≤30% escalation to Tier 3.")

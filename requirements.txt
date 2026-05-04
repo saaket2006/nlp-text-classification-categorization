@@ -1,4 +1,7 @@
-torch
+--index-url https://download.pytorch.org/whl/cu121
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+torchaudio==2.5.1+cu121
 transformers
 ollama
 streamlit
@@ -10,3 +13,4 @@ plotly
 scipy
 datasets
 tqdm
+typing-extensions>=4.14.1
