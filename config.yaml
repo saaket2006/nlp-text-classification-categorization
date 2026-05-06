@@ -5,8 +5,8 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 0.7  # tau_1
-  threshold_confidence: 0.6 # tau_2
+  threshold_entropy: 0.65  # tau_1 (Slightly more aggressive Tier 1)
+  threshold_confidence: 0.5 # tau_2 (Trust LLM reasoning more)
   active_learning_batch_size: 4
   pretrain_epochs: 3
 

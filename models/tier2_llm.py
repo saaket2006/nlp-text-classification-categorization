@@ -11,18 +11,41 @@ class Tier2LLM:
 
     def generate_prompt(self, text: str, categories: list):
         prompt = f"""
-Task: Classify the following text into one or more of the specified categories. provide CoT reasoning.
+Task: Classify the following text into one or more of the specified categories. Provide CoT (Chain of Thought) reasoning.
 Available Categories: {', '.join(categories)}
 
-Input Text: "{text}"
-
-Output Format (STRICT JSON):
-{{
-  "labels": ["Category1", "Category2"],
-  "confidence": 0.95,
-  "reasoning": "Explain why this label was chosen based on the text.",
-  "new_category_suggestion": "Optional category name if none of the above fit perfectly"
+Examples:
+Input Text: "United Nations officials meet to discuss the ongoing humanitarian crisis in Sudan."
+Output: {{
+  "labels": ["World"],
+  "confidence": 0.98,
+  "reasoning": "The text mentions international diplomatic bodies (UN) and humanitarian crises in a specific country, which fits the 'World' category."
 }}
+
+Input Text: "The Lakers secured a narrow victory over the Celtics in a high-stakes NBA playoffs match."
+Output: {{
+  "labels": ["Sports"],
+  "confidence": 0.99,
+  "reasoning": "Mentions professional basketball teams (Lakers, Celtics) and sporting events (NBA playoffs), clearly belonging to 'Sports'."
+}}
+
+Input Text: "Global oil prices surged after major producers announced unexpected production cuts."
+Output: {{
+  "labels": ["Business"],
+  "confidence": 0.96,
+  "reasoning": "Discusses global market prices and production announcements by industry producers, which is characteristic of 'Business' news."
+}}
+
+Input Text: "A new study reveals that advanced machine learning algorithms can predict solar flares with 90% accuracy."
+Output: {{
+  "labels": ["Sci/Tech"],
+  "confidence": 0.97,
+  "reasoning": "Focuses on scientific research, machine learning technology, and solar phenomena, aligning with 'Sci/Tech'."
+}}
+
+---
+Input Text: "{text}"
+Output (STRICT JSON):
 """
         return prompt
 
