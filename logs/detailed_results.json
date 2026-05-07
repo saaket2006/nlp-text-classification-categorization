@@ -1,0 +1,3603 @@
+[
+  {
+    "prediction": {
+      "text": "Indian board plans own telecast of Australia series The Indian cricket board said on Wednesday it was making arrangements on its own to broadcast next month #39;s test series against Australia, which is under threat because of a raging TV rights dispute.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.8226138353347778,
+      "entropy": 0.7760332822799683,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Stocks Higher on Drop in Jobless Claims A sharp drop in initial unemployment claims and bullish forecasts from Nokia and Texas Instruments sent stocks slightly higher in early trading Thursday.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9766165614128113,
+      "entropy": 0.1907174289226532,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Nuggets 112, Raptors 106 Carmelo Anthony scored 30 points and Kenyon Martin added 24 points and 16 rebounds, helping the Denver Nuggets hold off the Toronto Raptors 112-106 Wednesday night.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9754965305328369,
+      "entropy": 0.19146007299423218,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Stocks Higher on Drop in Jobless Claims A sharp drop in initial unemployment claims and bullish forecasts from Nokia and Texas Instruments sent stocks higher in early trading Thursday.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9767469763755798,
+      "entropy": 0.18984802067279816,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "REVIEW: 'Half-Life 2' a Tech Masterpiece (AP) AP - It's been six years since Valve Corp. perfected the first-person shooter with \"Half-Life.\" Video games have come a long way since, with better graphics and more options than ever. Still, relatively few games have mustered this one's memorable characters and original science fiction story.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.931797206401825,
+      "entropy": 0.44713643193244934,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "China's inflation rate slows sharply but problems remain (AFP) AFP - China's inflation rate eased sharply in October as government efforts to cool the economy began to really bite, with food prices, one of the main culprits, showing some signs of slowing, official data showed.",
+      "tier": 2,
+      "t1_label": "World",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.0169070959091187,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text discusses China's inflation rate and how it has slowed due to government efforts aimed at cooling the economy. This information primarily revolves around economic policies and financial indicators which are core 'Business' topics, specifically focusing on an important aspect of economic management and market performance. | Strong Tier 2 confidence (0.88+) overrides T1 disagreement."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "ADV: Try Currency Trading Risk-Free 30 Days 24-hour commission-free trading, 100-to-1 leverage of your capital, and Dealbook Fx 2 - our free advanced trading software. Sign up for our free 30-day trial and receive one-on-one training.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9312745332717896,
+      "entropy": 0.4188097417354584,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "OPEC Can Raise Output Capacity by 1 Mln Barrels/Day (Update1) The Organization of Petroleum Exporting Countries, which supplies a third of the world #39;s crude oil, can raise production capacity by 1 million barrels a day by year-end, OPEC President Purnomo Yusgiantoro said.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9192948937416077,
+      "entropy": 0.4821808636188507,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Intel gets off chip speed roller coaster: Technology India: New York, Oct 19 : The world #39;s leading computer chipmaker Intel has jumped off the chip speed roller coaster by yanking its four giga hertz (4 GHz) Pentium 4 processor off the drawing board.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9733831286430359,
+      "entropy": 0.2104412168264389,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Amazon Snaps Up China's Largest Web Retailer (NewsFactor) NewsFactor - Amazon.com (Nasdaq: AMZN) has said it will buy Joyo.com Limited -- a British Virgin Islands company that operates the largest Internet retail Web site in China -- for US #36;75 million.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9484972357749939,
+      "entropy": 0.3412119448184967,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Bookies take bets on new Band Aid Bookies take bets on a new Band Aid single being Christmas No 1, expected to be confirmed by Midge Ure.",
+      "tier": 3,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.8003708124160767,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Extreme uncertainty detected (>1.5). Mandatory human review.",
+      "simulated_annotation_error": false
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Hokies making statement about ACC title intentions The annual summer barbecues that Ralph Friedgen and Frank Beamer co-host at their lake homes in Georgia may be a little less cordial after the way Beamer #39;s Virginia Tech Hokies waxed Friedgen #39;s Maryland Terrapins 55-6 last night.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9794999361038208,
+      "entropy": 0.17186705768108368,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Gilchrist confident about India tour SYDNEY, Sep 25: Australia #39;s stand-in captain and wicketkeeper Adam Gilchrist has said that his twin responsibilities will not come in the way of seeking a winning start for his team against India in next month #39;s Test series.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9134029746055603,
+      "entropy": 0.4870714247226715,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Israeli Tanks Surge Into Gaza Refugee Camp -Witnesses  GAZA (Reuters) - A column of Israeli tanks surged into the  heart of the Jabalya refugee camp in the northern Gaza Strip on  Thursday as the army broadened its sweep for militants behind a  deadly rocket attack on an Israeli town.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.990598738193512,
+      "entropy": 0.09165793657302856,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Microsoft, EU Officials in Procedure Meeting Microsoft (Quote, Chart) and representatives of the European Union #39;s Competition Commission will sit down at the table together on Thursday, but it won #39;t be to eat.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9760395288467407,
+      "entropy": 0.19510406255722046,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Nevada Implements 1st Touch-Screen Voting Machines With Paper-Trail By RACHEL KONRAD     CARSON CITY, Nev. (AP) -- In what could become a model for other states, Nevada voters on Tuesday became the first in the nation to cast ballots in a statewide election on computers that printed paper records of electronic ballots...",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9720345735549927,
+      "entropy": 0.22442755103111267,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Public warning over letter bombs The discovery of 10 letter bombs has prompted a police warning to the public to exercise caution. Bedfordshire Police said none of the improvised devices - containing lighter fluid - had ignited, despite the fact that some had been opened.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9634890556335449,
+      "entropy": 0.27745506167411804,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Athletics: Dominant Phillips takes long jump gold ATHENS - Dwight Phillips of the United States completed a hat-trick of global long jump titles when he crushed the field with his opening leap in Thursday #39;s final to win Olympic gold.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.947861909866333,
+      "entropy": 0.3356473445892334,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "UN aid plane shot at in Ivory Coast Abidjan - A United Nations World Food Programme (WFP) plane was met with gunfire and threats when it arrived in Man, western Ivory Coast, the UN said in a statement on Saturday.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9897458553314209,
+      "entropy": 0.09859149158000946,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Vampire: The Masquerade - Bloodlines Review November 17, 2004 - Most of us who #39;ve been gamers for a while are familiar with the history behind Troika, which was formed from key members of the Black Isle group that made the Fallout, among other talented individuals.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9105933308601379,
+      "entropy": 0.5547775626182556,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Israel Destroys Refugee Homes, Kills One GAZA CITY, Gaza Strip - A day after a mortar round killed an Israeli-American woman in a nearby settlement, the Israeli army charged into a Palestinian refugee camp Saturday, killing one person and tearing down 35 homes, witnesses and a U.N. aid official said...",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9902231693267822,
+      "entropy": 0.09478406608104706,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "PeopleSoft revises third-quarter profit Oracle target adds \\$2.6 million to bottom line after tax adjustment related to ex-CEO's severance package.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.7812156677246094,
+      "entropy": 0.8472773432731628,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "SCHOOL #39;S OUT FOR STERNE A first win on the European Tour - any tour, in fact - is a notable feat in any golfer #39;s career. But the one by South African Richard Sterne in the Madrid Open yesterday deserves special mention.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9638636112213135,
+      "entropy": 0.2593686580657959,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Streaking Astros Clock Reds 11-5 (AP) AP - Astros pitcher Brandon Backe hit his first career homer, a two-run shot, and allowed one run in seven innings to keep Houston in the thick of the NL wild-card chase with an 11-5 rout of the Cincinnati Reds on Monday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9705283045768738,
+      "entropy": 0.2194177508354187,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Kerry assails Bush troop withdrawal plan (AFP) AFP - Democratic White House hopeful Senator John Kerry warned that President George W. Bush's plan to withdraw 70,000 troops from Europe and Asia would hinder the war on terrorism and embolden North Korea.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9900751709938049,
+      "entropy": 0.09576289355754852,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "TSA Deal Overpaid Boeing, Report Says Boeing Co. received at least \\$49 million in excessive profits on a \\$1.2 billion contract to supply explosives-detection systems to hundreds of the nation #39;s airports, the Department of Homeland ",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9563848376274109,
+      "entropy": 0.3075259029865265,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Shares Gain While Oil Holds Near \\$50  LONDON (Reuters) - European stock markets rose and absorbed  three separate share placings on Wednesday, boosted by Wall  Street's strong finish while oil prices held close to \\$50 a  barrel ahead of U.S. oil inventory data.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9687933325767517,
+      "entropy": 0.23906594514846802,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Red Hat replaces CFO Red Hat on Thursday named Charles Peters Jr. as executive vice president and chief financial officer. Peters replaces Kevin Thompson, who unexpectedly announced his resignation in June, a few days before the ",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9727593660354614,
+      "entropy": 0.21866224706172943,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Jobless Claims Rise Unexpectedly  WASHINGTON (Reuters) - The number of Americans filing  initial claims for jobless pay grew unexpectedly last week to  357,000, Labor Department data showed on Thursday, but an  official said an increase in the week after a public holiday  was typical.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9692593216896057,
+      "entropy": 0.23890385031700134,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Ballmer strikes big rivals from Microsoft shopping list LISBON - Customers watching for Microsoft Corp. to make a headline-grabbing buy in the business applications market faced disappointment Tuesday as company Chief Executive Officer Steven Ballmer ruled out acquisitions of PeopleSoft Inc., Oracle Corp. and SAP AG.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.8593958020210266,
+      "entropy": 0.6607657670974731,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Auto Parts Sector Falls on Delphi News Investors sold off shares of auto parts makers Friday after Delphi Corp. issued a profit warning and said it would cut nearly 5 percent of its work force next year.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9808714985847473,
+      "entropy": 0.1631205528974533,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Cisco joins WiMax Forum The networking giant formally signs on to the wireless broadband group as the organization's ranks increase.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9656809568405151,
+      "entropy": 0.25546231865882874,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Hasbro's No Conehead Its Saturday Night Live version of \"Trivial Pursuit\" is good strategy for staying ahead of age compression.",
+      "tier": 2,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.0856552124023438,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text mentions Hasbro, a company, and discusses strategies related to its product, Trivial Pursuit. While the content touches on entertainment (Saturday Night Live), the primary focus is on business strategy and staying ahead in market competition, which aligns more closely with the 'Business' category than the other options provided. | Strong Tier 2 confidence (0.88+) overrides T1 disagreement."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Intel dauphin Otellini becomes king Intel #39;s board has given the go ahead for the long anticipated shift in power from current CEO Craig Barrett to current President Paul Otellini Come May 18, Otellini will take over the chipmaker and become its fifth ever CEO.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9766649007797241,
+      "entropy": 0.19120609760284424,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Top exec shares business lessons Jeff Raikes was working at Apple Computer in the early 1980s when a guy named Steve Ballmer called and asked him to interview for a product-management job at a small software outfit in the Seattle area.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9116392135620117,
+      "entropy": 0.4990815222263336,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "India's Tata expands regional footprint via NatSteel buyout (AFP) AFP - India's Tata Iron and Steel Company Ltd. took a strategic step to expand its Asian footprint with the announcement it will buy the Asia-Pacific steel operations of Singapore's NatSteel Ltd.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9690076112747192,
+      "entropy": 0.23586319386959076,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Ken Caminiti, 1996 NL MVP, Dies at Age 41 NEW YORK - Ken Caminiti, the 1996 National League MVP who later admitted using steroids during his major league career, died Sunday. He was 41...",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9708186388015747,
+      "entropy": 0.2212916612625122,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "The Next Shock: Not Oil, but Debt The American economic ship, which has weathered the recent run-up in crude oil prices, may be more vulnerable to sudden surges in the price of money.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.8821178078651428,
+      "entropy": 0.6185059547424316,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Cocoa prices down but Ivorian exports still blocked World cocoa prices were down on Tuesday but off the day #39;s lows as exports remained on hold after mob violence and military clashes in Ivory Coast, the key global supplier, traders said.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9403994679450989,
+      "entropy": 0.37959980964660645,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Bellhorn Makes Big Noise for Red Sox  BOSTON (Reuters) - With a power-packed lineup that features  sluggers like Manny Ramirez and David Ortiz, it was Mark  Bellhorn who was the unlikely hero of Game One of the 100th  World Series with a two-run homer for the Boston Red Sox  Saturday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9762118458747864,
+      "entropy": 0.18757852911949158,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Sugar Shane Not so Sweet (November 21, 2004). Ronald Winky Wright successfully defended his 154 lb. title for the sixth time in the highly anticipated rematch with the formerly sweet Sugar Shane Mosley ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9736959934234619,
+      "entropy": 0.20378437638282776,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Egypt steps back on Gaza plan over Israeli attacks Egypt took a step back from plans to help the Palestinians prepare for an Israeli withdrawal from Gaza on Wednesday, saying it could not play its role in full as long as Israeli attacks on Palestinians continue.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9905727505683899,
+      "entropy": 0.09180738776922226,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "One held in Jakarta embassy blast probe Indonesian police said on Friday they had made their first arrest directly linked to last week #39;s deadly embassy bombing in Jakarta, detaining a man who delivered explosives to those blamed for the attack.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9904860854148865,
+      "entropy": 0.09255535155534744,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Security Beyond Antivirus Programs Comprehensive security programs that include firewall software, spyware defenses and diagnostic and repair tools are necessay to keep a PC in good health these days. &lt;FONT face=\"verdana,MS Sans Serif,arial,helvetica\" size=\"-2\" color=\"#666666\"&gt;&lt;B&gt;-The Washington Post&lt;/B&gt;&lt;/FONT&gt;",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9768190979957581,
+      "entropy": 0.19215936958789825,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Putin praises Ukraine #39;s leader Russian President Vladimir Putin has taken part in a live phone-in on Ukrainian TV, just days before the country #39;s presidential election.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9879966378211975,
+      "entropy": 0.11217650026082993,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Myskina, Kuznetsov to Play in Fed Cup (AP) AP - Anastasia Myskina and Svetlana Kuznetsova will lead Russia's Fed Cup team when it plays Austria in this month's semifinals. Defending champion France will feature Amelie Mauresmo and Mary Pierce in the other semifinal against Spain, which has won this event five times.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9531338214874268,
+      "entropy": 0.3116176128387451,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Oil price rise adds to airlines woes as losses continue The global airline industry is forecast to have made net losses of \\$4.8bn this year, as the rise in the oil price has overwhelmed efforts by carriers to cut costs.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9815022349357605,
+      "entropy": 0.15857988595962524,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Yanks shock Twins, earn date with Sox: Another late rally erases 4 &lt;b&gt;...&lt;/b&gt; Just when you think you #39;ve seen it all, the Yankees devise a new way to win a game and torture their opponents. Last night, they somehow landed a spot in the American League ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9800081253051758,
+      "entropy": 0.16408675909042358,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "United #39;s pension dilemma United Airlines says it likely will end funding for employee pension plans, a move that would be the largest ever default by a US company and could lead to a taxpayer-funded bailout rivaling the savings-and-loan fiasco of the 1980s.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.977741539478302,
+      "entropy": 0.1842125803232193,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Barrichello Wins Chinese Grand Prix SHANGHAI, China - Rubens Barrichello won the inaugural Chinese Grand Prix on Sunday, taking advantage of Formula One champion Michael Schumacher #39;s disastrous weekend and outlasting runner-up Jenson Button by just over a second.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9532589316368103,
+      "entropy": 0.3115812838077545,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Microsoft Browser Market Share Slips Slightly Microsoft Corp. #39;s (MSFT.O: Quote, Profile, Research) share of the browser market slipped slightly in recent months but still dominated with 92.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9355129599571228,
+      "entropy": 0.3937310576438904,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "UN 'must ignore cloning ban call' The UK's Royal Society urges the UN to ignore a call by President Bush to ban all forms of human cloning.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.7782242298126221,
+      "entropy": 0.8994400501251221,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Rivals Try to Turn Tables on Charles Schwab By MICHAEL LIEDTKE     SAN FRANCISCO (AP) -- With its low prices and iconoclastic attitude, discount stock broker Charles Schwab Corp. (SCH) represented an annoying stone in Wall Street's wing-tipped shoes for decades...",
+      "tier": 2,
+      "t1_label": "World",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.97,
+      "entropy": 1.1790870428085327,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text mentions \"discount stock broker\" and discusses how it has been perceived by Wall Street, focusing on competitive dynamics within the financial industry. Terms like \"Wall Street\" also strongly indicate that this news is about business dealings in finance. | Strong Tier 2 confidence (0.88+) overrides T1 disagreement."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "UPDATE 1-UPS buys CNF #39;s Menlo Worldwide United Parcel Service Inc. (UPS.N: Quote, Profile, Research) agreed to buy Menlo Worldwide Forwarding, a unit of CNF Inc. (CNF.N: Quote, Profile, Research) , for \\$150 million in ",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9829226732254028,
+      "entropy": 0.14943204820156097,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Atlanta police arrest Braves player on DUI charge ATLANTA - An Atlanta Braves player is in the Atlanta Jail today after being arrested on a charge of driving under the influence. Members of the DUI Task Force arrested shortstop Rafael Furcal about 4:20 am ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9722511172294617,
+      "entropy": 0.21076352894306183,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Hewlett-Packard buys Synstar Palo Alto-based Hewlett-Packard Co. has bought IT services company Synstar plc, of Bracknell, England for about \\$293.3 million. Synstar has some 1,500 customers across Europe, selling IT support for various computer platforms.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.7788887619972229,
+      "entropy": 0.8589062690734863,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "N.Korea called worst for press freedom Media watchdog Reporters Without Borders has labeled North Korea and Cuba the worst countries in terms of press freedom, with Denmark being the best.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.984243631362915,
+      "entropy": 0.13971979916095734,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Headshake to the SETI Headfake Did the famous screensaver, SETIhome, uncover the first strong evidence for an extraterrestrial signal? The SETI Institute's Seth Shostak discusses how hyperbole can misrepresent the last addition to a list of stellar candidates.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.972593367099762,
+      "entropy": 0.22278884053230286,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "UnitedHealthcare pays \\$3.5M to settle Medicare fraud claim UnitedHealthcare Insurance Co., a branch of UnitedHealth Group, will pay \\$3.5 million to settle charges that it defrauded the Medicare program, the US Department of Justice announced Monday.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9797232747077942,
+      "entropy": 0.1701515167951584,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Loeb extends lead over Solberg CARDIFF -- Championship leader Sebastien Loeb took two stage wins to boost his lead over Norwegian Petter Solberg as the Rally of Britain entered its second leg on Saturday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9572933912277222,
+      "entropy": 0.29098695516586304,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Level 3 Acquires Sprint #39;s Wholesale Dial-Up Internet Business Level 3 today announced that it has purchased Sprint #39;s wholesale dial-up Internet access business for \\$34 million in cash. Sprint is one of the largest providers of wholesale dial-up service to ISPs in North America.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.8799028992652893,
+      "entropy": 0.5968325734138489,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Michigan Gets Rose Bowl Berth Despite Loss to Ohio St.  COLUMBUS, Ohio (Sports Network) - Troy Smith threw for 241  yards and two touchdowns and ran for 145 yards and a score to  lead the Ohio State Buckeyes to a 37-21 victory over No. 7  Michigan in the final game of the regular season for both  teams.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9744873046875,
+      "entropy": 0.19906505942344666,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Dodgers Nip Giants 3-2 in Crucial Series SAN FRANCISCO - Shawn Green can sit out Saturday knowing he was a huge help to the Dodgers during their crucial series against San Francisco. Green hit a two-run homer in Los Angeles' 3-2 victory over the Giants on Friday night, a day before the first baseman will miss a game to observe the Jewish holiday Yom Kippur...",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.937227725982666,
+      "entropy": 0.3817864656448364,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "CHUCK JAFFE BOSTON (CBS.MW) -- A lot of people got excited when Fidelity Investments announced recently that it was cutting fees on five index mutual funds.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.973440408706665,
+      "entropy": 0.21164226531982422,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Moose bullish about chances This is Mike Mussina #39;s fourth postseason here, so he knows the drill. He understands that all of his bad memories of his disappointing season -- the Japan trip, his early-season struggles and ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9819944500923157,
+      "entropy": 0.15176478028297424,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "A PC in the toaster? How mod! photos There's also room in the humidor and the Darth Vader helmet. Take a gander at some strange and wonderful creations.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.957502007484436,
+      "entropy": 0.3149889409542084,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Hyundai signs deal for China truck plant Hyundai Motor Co. said yesterday that it has signed an agreement with a Chinese company, Jianghuai Automobile Corp., to build a commercial vehicle and engine plant in China #39;s Anhui province.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.8892250061035156,
+      "entropy": 0.582958996295929,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Ex-Philly Eagles Coach Nick Skorich Dies (AP) AP - Nick Skorich, head coach of the Philadelphia Eagles from 1961-63 and the offensive line coach on the 1960 championship team, has died at the age of 83.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9775740504264832,
+      "entropy": 0.18072648346424103,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Roundup: Pleasantly Perfect takes Pacific Classic Favored Pleasantly Perfect took charge down the stretch to win by a length in the 14th running of the \\$1 million Pacific Classic yesterday at Del Mar. Pleasantly ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9584315419197083,
+      "entropy": 0.29020950198173523,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Update 1: UAL Posts \\$274M Loss, Capping Bad Quarter Record fuel costs and low air fares contributed to a \\$274 million third-quarter loss for United Airlines #39; parent company, which warned again that labor costs must be slashed again soon in order for it to emerge from bankruptcy.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9839135408401489,
+      "entropy": 0.14279301464557648,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Bush won #39;t take Iran #39;s word for it CRAWFORD, Texas As President Bush sees it,  quot;the only good deal is one that #39;s verifiable. quot;. He #39;s applauding the efforts of some European countries to get Iran to honor its commitment to refrain from developing nuclear weapons.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9885846972465515,
+      "entropy": 0.10783267766237259,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Woods on Top at Rain-Soaked Dunlop Phoenix  MIYAZAKI, Japan (Reuters) - Tiger Woods fired a superb  five-under-par 65 in torrential rain to take a three-stoke lead  after the first round of the Dunlop Phoenix tournament  Thursday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9587808847427368,
+      "entropy": 0.2823813557624817,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Sharon 'at risk of assassination' Israel's opposition leader warns that the prime minister risks being assassinated over his Gaza disengagement plan.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9906852841377258,
+      "entropy": 0.09083880484104156,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "President Susilo stresses fighting against graft, terror as &lt;b&gt;...&lt;/b&gt; In line with his pledge made during the election campaign, Indonesian new President Susilo Bambang Yudhoyono stressed the importance of fighting corruption and terror while ",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9890691637992859,
+      "entropy": 0.10389024764299393,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Arson attack on Jewish centre in Paris (AFP) AFP - A Jewish social centre in central Paris was destroyed by fire overnight in an anti-Semitic arson attack, city authorities said.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9864701628684998,
+      "entropy": 0.12393969297409058,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Bekele, Isinbayeva top track athletes Names Ethiopian distance runner Kenenisa Bekele and Russian pole vaulter Yelena Isinbayeva were named male and female athletes of the year by the world track and field federation. Isinbayeva set eight world records in 2004, including one while winning the gold medal at the Olympics. Bekele won the 10,000 meters in Athens and finished second to Hicham El Guerrouj in ...",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.7571097612380981,
+      "entropy": 0.9082172513008118,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "James Lawton: In mourning for big fights of Las Vegas En route to Las Vegas for the world heavyweight title fight between Vitali Klitschko and Britain #39;s Danny Williams, there is, inevitably, an old stirring of that anticipation which is familiar to almost anyone who has attended a big fight.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9558126926422119,
+      "entropy": 0.29993003606796265,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Microsoft: No extra licenses needed for multicore chips Customers that use the dual-core processors that Intel Corp. and Advanced Micro Devices Inc. (AMD) are expected to begin shipping next year will not need to buy extra licenses for Microsoft Corp. software, the software maker will announce Tuesday.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9768194556236267,
+      "entropy": 0.18990561366081238,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "NASA Cancels Hypersonic Flight NASA scrubbed its mission Monday to launch a pilotless plane that is capable of flying at 10 times the speed of sound. The launch of the X-43A was canceled due to technical problems.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9780617952346802,
+      "entropy": 0.1852356344461441,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Consumer spending jumped in September WASHINGTON - Consumers, who substantially slowed down their spending in late summer, roared back to life in September, boosting their purchases by 0.6 percent.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9586117267608643,
+      "entropy": 0.2979511320590973,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Editorial: Sub incident shows China #39;s stripes After days of speculation and a chase by Japanese destroyers and a surveillance plane, it has finally been determined that the nuclear submarine that intruded into Japanese territorial water between Okinawa and Taiwan was Chinese.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9807906150817871,
+      "entropy": 0.16663706302642822,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Thrashers Owner Fined The NHL fined one of the owners of the Thrashers \\$250,000 on Tuesday for saying the league would use replacement players next year if a new collective bargaining agreement isn't reached.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9772863984107971,
+      "entropy": 0.18311040103435516,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Different Shea provides late-game heroics for Hanover Hanover boys' soccer coach Jim Sylvia is beginning to see a pattern in his team's play. Luckily, it's not the kind of trend to complain about.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9796252250671387,
+      "entropy": 0.1696375012397766,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "China rebuffs Powell over Taiwan recommendation China has rebuffed suggestions by US Secretary of State Colin Powell that it consider accepting the Taiwanese President #39;s offer of talks to reduce cross-strait tension.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9893875122070312,
+      "entropy": 0.10131853818893433,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Arsenal only manage draw LONDON - Arsenal manager Arsene Wenger has praised Thierry Henry #39;s speed of thought after the striker stroked home a quick free-kick that helped champions Arsenal to a 2-2 draw against Premiership leaders Chelsea at Highbury last night.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9623244404792786,
+      "entropy": 0.2659572958946228,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "New Sony PC Boasts 1,000 GB of Storage (AP) AP - Japan's Sony Corp. will begin selling a computer and home-server system in Japan with 1,000 gigabytes of hard-drive storage  #151; enough to record six TV channels for a week straight  #151; the company said.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9775558114051819,
+      "entropy": 0.1841181367635727,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Two Michigan State receivers arrested on bomb-making charges Two Michigan State football players have been charged with planting homemade bombs outside apartments. Terry Love and Irving Campbell, both 19-year-old redshirt freshmen wide receivers ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9422618746757507,
+      "entropy": 0.3660898804664612,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Rebound in US consumer spending US consumer spending rebounded in July, a sign the economy may be emerging from an early summer decline. Consumer spending rose 0.8 last month, boosted by car and retail sales.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9048334956169128,
+      "entropy": 0.5607840418815613,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Dogs said to smell cancer signs  LONDON -- It has long been suspected that man's best friend has a special ability to sense when something is wrong with us. Now, the first experiment to verify that scientifically has demonstrated that dogs are able to smell cancer.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9625267386436462,
+      "entropy": 0.287568062543869,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Oil Falls to 4-Month Low on Signs of Heating-Oil Supply Rise Crude oil fell to the lowest in more than four months on speculation that warm weather and increased refinery production bolstered US heating-oil stockpiles last week.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9676804542541504,
+      "entropy": 0.2457001954317093,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Victory so sweet after Athens collapse BRITAIN #39;S world record holder Paula Radcliffe ran away with the closest women #39;s winning margin in the history of the New York City marathon yesterday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9358866214752197,
+      "entropy": 0.3883855938911438,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Wall St.'s Nest Egg - the Housing Sector  NEW YORK (Reuters) - If there were any doubts that we're  still living in the era of the stay-at-home economy, the rows  of empty seats at the Athens Olympics should help erase them.",
+      "tier": 2,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.0725185871124268,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text mentions \"WALL St.\", which likely refers to Wall Street, and discusses the housing sector's performance. Additionally, it references the empty seats at the Olympics, suggesting a commentary on economic conditions leading up to an important financial event (the Olympics). Both these points align with 'Business' categories, focusing on finance, stock markets, or industry trends related to the real estate market and broader economic indicators. | T1/T2 Consensus reached."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Deutsche Bank to Sell Scudder Business to Legg Mason Deutsche Bank AG of Germany plans to sell its New York, Philadelphia, Cincinnati and Chicago offices of Scudder Private Investment Counsel to Legg Mason Inc. for \\$55 million, plus payments of up to \\$26 million, the company said Monday.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9762622714042664,
+      "entropy": 0.19306206703186035,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Van driven by Arsenal quest for glory There #39;s little danger of Robin Van Persie getting carried away with himself. After scoring a dramatic first Premiership goal with the injury-time equaliser against Southampton ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.973423421382904,
+      "entropy": 0.20408901572227478,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Oil Prices Sink to a Four-Month Low  LONDON (Reuters) - Oil prices sank to a four-month low  below \\$41 for U.S. crude on Wednesday after leading OPEC  producer Saudi Arabia questioned the need for the cartel to  curb supplies.",
+      "tier": 2,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.0504151582717896,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text discusses oil prices, which are a significant financial and economic indicator impacting various sectors including energy companies and consumers. Additionally, it mentions OPEC producers and their production decisions affecting global markets. These factors clearly indicate that the primary focus is on business and finance, with commodity pricing being affected by geopolitical events related to oil supply. | T1/T2 Consensus reached."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Symantec Said to Be in Talks for Veritas Symantec, which produces the Norton line of computer products, is in talks to acquire Veritas Software, a maker of data backup programs.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.972588062286377,
+      "entropy": 0.21463584899902344,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Gold Fields loses high court bid to halt Harmony takeover South African mining giant Gold Fields lost a high court bid to halt a hostile takeover by rival Harmony Gold, which is seeking to create the world #39;s biggest gold producer, a court official said.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9265778660774231,
+      "entropy": 0.4385838806629181,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Google Enhances Discussion Groups Google is improving on the discussions its popular Web site hosts, hoping the upgrades will spur more online banter and make its market-leading search engine a richer destination.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9712284803390503,
+      "entropy": 0.22678795456886292,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "The Handbag? Total Knockoff. The Price Tag? All Too Real. It is as much a rite of the New York holiday season as sidewalk Santas or crowded Fifth Avenue sidewalks: the proliferation of hawkers selling counterfeit products like the fake Fendi handbag, the replica Rolex watch and the pirated DVD.",
+      "tier": 2,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.1536591053009033,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "While this text touches on a variety of topics including counterfeiting and consumer rights, its primary focus is on the economic impact of counterfeit goods in the retail industry. The context revolves around price tags and the holiday shopping season, which are primarily business-related issues. The discussion about hawkers selling fake products highlights market dynamics and economic factors rather than scientific or technological advancements. | Strong Tier 2 confidence (0.88+) overrides T1 disagreement."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Bedding Blip? Go Back to Sleep This is getting old. Every time Hidden Gems selection Select Comfort (Nasdaq: SCSS) gets settled in and ready for a long night #39;s rest full of dreams of two-times-in-three-years capital gains, along ",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.8738758563995361,
+      "entropy": 0.6228488683700562,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Mars water tops science honours The discovery that salty, acidic water once flowed across the surface of Mars has topped a list of the 10 key scientific advances of 2004.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9741954207420349,
+      "entropy": 0.21252167224884033,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "France, Ivory Coast relations worsen Nine French peacekeepers were killed during an air raid by Ivorian bombers more than a week ago. France responded by destroying most of the Ivorian air force.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9902111887931824,
+      "entropy": 0.09466826170682907,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "WordsWorth Books files Chapter 11 WordsWorth Books, a Harvard Square institution for 29 years, yesterday filed for bankruptcy protection, as its owners seek a buyer or investor to help the independent bookseller compete with giant rivals like Amazon.com.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9807500243186951,
+      "entropy": 0.16455267369747162,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Toys Will Be Toys Trust me, you don #39;t want to see desperate parents shopping over the holidays. I was at Circuit City (NYSE: CC) last week and saw a mother pleading with a sales clerk for a Nintendo DS portable video game system.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.7646310329437256,
+      "entropy": 0.9490818977355957,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Vodafone begins 3G service Vodafone launches its third-generation services for mobile phones, offering video calls, music downloads and games.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9747861623764038,
+      "entropy": 0.2028738111257553,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Klitschko too good for Williams Vitali Klitschko proved too strong for Danny Williams as he retained his world championship crown in Las Vegas last night. Williams vowed to continue boxing despite being outclassed by Klitschko.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9626376032829285,
+      "entropy": 0.2645125389099121,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Georgia Evolution Dispute Embarrasses Some Atlanta, Nov. 11 - First, Georgia #39;s education chief tried to take the word  quot;evolution quot; out of the state #39;s science curriculum.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.96319580078125,
+      "entropy": 0.2815217673778534,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Earth's Solar System Shaped by Brush with Star, Astronomers Say (SPACE.com) SPACE.com - The outer reaches of our solar system may have been shaped long ago by a close encounter with another star that tore up both nascent planetary systems like colliding buzz saws, astronomers said today.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9729985594749451,
+      "entropy": 0.2198864221572876,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Oil Down 3 Pct. as U.S. Winter Stays Mild  NEW YORK (Reuters) - Oil prices slid 3 percent on Monday on  expectations that more mild U.S. weather at the start of the  New Year will limit heating oil demand.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9690379500389099,
+      "entropy": 0.23848819732666016,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Dell AC Adaptors Recalled October 8, 2004 - Dell Inc. is recalling about 2.9 million AC adapters nationwide_ 4.4 million worldwide_ used with notebook personal computers because they can overheat and cause a fire and electrical shock ",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9734987020492554,
+      "entropy": 0.21007123589515686,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Bush takes a double-digit lead as Kerry campaign struggles to regroup (AFP) AFP - George W. Bush took a double-digit lead in what had been a neck-and-neck presidential election contest, prompting Democratic challenger John Kerry to refocus his campaign on bread-and-butter economic issues, where the Republican incumbent president is considered vulnerable.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9858667254447937,
+      "entropy": 0.12879548966884613,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Cardinals Outslug Astros to Take Opening Game  NEW YORK (Reuters) - Jim Edmonds hit a three-run double to  key a six-run sixth inning as the St Louis Cardinals beat the  Houston Astros 10-7 in the opening game of the National League  Championship Series at Busch Stadium on Wednesday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9693278670310974,
+      "entropy": 0.22647324204444885,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "22 killed, 100 injured in Nagaland twin blasts : India News  gt; Guwahati, Oct 2 : At least 22 people, including women and children, were killed and over 100 injured when two simultaneous landmine blasts ripped through the busy railway station here and a crowded market place of this commercial town of ",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9888727068901062,
+      "entropy": 0.10567868500947952,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Lucent's history a case study in wild rides If you've ever wondered what ignited America's late-1990s obsession with telecom and tech stocks, you could well argue it all started with Lucent Technologies .",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.8753259181976318,
+      "entropy": 0.6184344291687012,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Students crazy about iPod follow the music to Apple laptops (USATODAY.com) USATODAY.com - Apple's trendy iPod digital music player, which has revitalized the company, is giving laptop sales a boost during back-to-school season.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9754987359046936,
+      "entropy": 0.1971038281917572,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Patriots have memory to feel sorry about Do not bring up last season. Patriots coach Bill Belichick despises talk of the past, except when it helps him prepare his team for the upcoming week.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.979361355304718,
+      "entropy": 0.16782771050930023,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Sri Lanka batsman fined as Pakistan tie series Sri Lanka #39;s Kumar Sangakkara has been fined 30 of his match fee for showing dissent during the fourth day of the second Test against Pakistan in Karachi.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.7724370956420898,
+      "entropy": 0.8704832792282104,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "General Mills converting all US cereals to whole grain GOLDEN VALLEY, Minn. -- Breakfast cereal maker General Mills is converting all of its cereals to whole grain. The company says it becomes the first leading food company to make the move involving cereals.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9754949808120728,
+      "entropy": 0.19787277281284332,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Butt waits on Uefa ruling Newcastle midfielder Nicky Butt is facing up to the possibility of a European three-match ban. The 29-year-old was sent off during Newcastle #39;s 2-0 Uefa Cup win against Hapoel Bnei Sakhnin for grabbing Abas Suan by the throat.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9728726744651794,
+      "entropy": 0.20823046565055847,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Taking Advantage of the Terminally Stupid Would you pay \\$4 for something that, at best, is worth a dime? Concord Communications shareholders would.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9772663116455078,
+      "entropy": 0.19048410654067993,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "West Japan on Guard for Aftershocks After Quakes  TOKYO (Reuters) - Residents of western Japan were warned of  possible aftershocks on Monday after two strong earthquakes the  previous day but authorities said the tremors were not directly  linked to a cycle of major seismic activity that hits the  region every century or so.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9633050560951233,
+      "entropy": 0.27288976311683655,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Bush Blames Poorly Made Shirt for Bulge (AP) AP - President Bush sees the value  #151; and the humor  #151; in the idea that aides could secretly feed him advice through a radio receiver hidden on his back.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9870777130126953,
+      "entropy": 0.11989577859640121,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Black Watch troops move into position The first units of a Black Watch battlegroup are due to arrive today in their new positions south of Baghdad as Tony Blair indicated that more British troops may replace them in the American-controlled zone before the end of the year.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9894569516181946,
+      "entropy": 0.10101498663425446,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Are Gunners in crisis? Gunners have won just one of their last six Prem- iership games and could go out of the Champions League if they fail to beat Rosenborg on Tuesday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9756301045417786,
+      "entropy": 0.1918538510799408,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "BSkyB sees profits rise after strong subscriber growth (AFP) AFP - British satellite broadcaster BSkyB said profit rose by 16 percent in the first quarter as the group enjoyed strong subscriber growth in the run-up to the key Christmas trading period.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.8210172057151794,
+      "entropy": 0.7610248327255249,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Al Qaeda Urge Wide-Scale Muslim Resistance Al Qaeda #39;s No. 2 man Ayman Zawahiri called for an all-out armed resistance in the Muslim world against the West and Jews whom he described as crusaders.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9899099469184875,
+      "entropy": 0.0971551388502121,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Final Round in Cable-ISP Fight The U.S. Supreme Court has agreed to hear whether cable operators must give access to their lines to third-party ISPs. Michael Grebb reports from Washington.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9013652801513672,
+      "entropy": 0.5408945679664612,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "For starters, Giants #39; Manning on mark Manning had a decent debut as a starter, but Delhomme overshadowed the No. 1 pick in the NFL Draft by throwing for a touchdown and running for another in the Carolina Panthers #39; 27-20 exhibition victory last night over ...",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9656559824943542,
+      "entropy": 0.24654696881771088,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "PeopleSofts big bash See you next year in Las Vegas , proclaimed a marquee at the PeopleSoft user conference in San Francisco in late September. It was one of many not-so-subtle attempts by the company to reassure its customers ",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9644043445587158,
+      "entropy": 0.2599776089191437,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "EBay #39;s Buy Of Rent.com May Lack Strategic Sense Standard  amp; Poor #39;s Equity Research said the purchase of Rent.com by eBay (nasdaq: EBAY - news - people ) could be a bit of a miscalculation.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9825131893157959,
+      "entropy": 0.15235808491706848,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Sharon to Hold Tense Meeting With Settlers JERUSALEM - After more than a year of avoiding Jewish settlers, Israeli Prime Minister Ariel Sharon has decided to directly confront his former supporters in a meeting about his contentious plan to withdraw from the Gaza Strip and part of the West Bank.    Sharon invited settler leaders to meet with him in Jerusalem on Sunday, just a week before he presents his \"disengagement\" plan to parliament...",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9893189072608948,
+      "entropy": 0.1021483764052391,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Black Market in British Treasure Sold on EBay (Reuters) Reuters - Pieces of Britain's past, including a\\second-century silver ring and a 500-year-old Tudor trade\\weight, are among artifacts being peddled daily on the Internet\\to the alarm of experts at the British Museum.",
+      "tier": 2,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.97,
+      "entropy": 1.2833607196807861,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "The text discusses items from Britain's past sold on eBay by individuals who likely obtained them illegally, which raises concerns for cultural heritage preservation and authenticity verification. This scenario involves issues of global history preservation and illicit trafficking, aligning with 'World' category as it addresses an international issue involving significant historical artifacts. | Strong Tier 2 confidence (0.88+) overrides T1 disagreement."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Flat-screen TV prices are falling for holidays But trend provokes industry unrest; panel makers call for drop in retail markups to move units. By Evan Ramstad and Gary McWilliams.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9540581703186035,
+      "entropy": 0.31192857027053833,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "House passes bill to criminalize spyware fraud The House Thursday passed a bill that would criminalize the use of spyware to commit fraud or other crimes, adding an additional two to five years to federal sentences.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9714492559432983,
+      "entropy": 0.2275233119726181,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Dollar Stuck, CPI Offers Little Direction  TOKYO (Reuters) - The dollar moved in tight ranges on  Wednesday as most investors shrugged off lower-than-expected  U.S. inflation data and stuck to the view the U.S. Federal  Reserve would continue raising rates.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9318234920501709,
+      "entropy": 0.4186813235282898,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Chile's Lagos Receives Torture Commission Report &lt;p&gt;&lt;/p&gt;&lt;p&gt; By Ignacio Badal&lt;/p&gt;&lt;p&gt; SANTIAGO, Chile (Reuters) - Chilean President Ricardo Lagosreceived a chilling report on Wednesday from a governmentcommission that interviewed more than 30,000 victims tochronicle for the first time the systematic use of tortureduring Augusto Pinochet's 1973-1990 dictatorship.&lt;/p&gt;",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9756895303726196,
+      "entropy": 0.19815409183502197,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Greenspan Worried Congress to Bar Options Expensing  WASHINGTON (Reuters) - Federal Reserve Chairman Alan  Greenspan on Friday said he was very worried Congress would try  to thwart efforts by the Financial Accounting Standards Board  to require expensing of stock options.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.8345168232917786,
+      "entropy": 0.7434397339820862,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "NHL Owner Is Criticized for Talking of Replacement Players The day before the regular season was supposed to open, the National Hockey League rebuked a team official yesterday for his comments about the league #39;s strategy in its labor lockout, its second in a decade.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9789694547653198,
+      "entropy": 0.17224793136119843,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "NASA Leader Cites Finances and Submits His Resignation Sean O #39;Keefe resigned as NASA administrator on Monday, saying he is leaving the position he has held for three years to pursue better economic opportunity for his family.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.856570839881897,
+      "entropy": 0.7725866436958313,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Bad Day for Drug Companies - and Patients  LONDON (Reuters) - Investors in pharmaceuticals were dealt  a triple whammy on Friday as Pfizer Inc, AstraZeneca Plc and  Eli Lilly and Co all shocked the market with bad news about key  products.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9521934390068054,
+      "entropy": 0.3234567940235138,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Why Putin is backing Kyoto again Why did Russian President Vladimir Putin decide to ratify the Kyoto Protocol on climate change last week, only six months after his top adviser, Andrei Illarionov, called it a  quot;death treaty?",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9564257860183716,
+      "entropy": 0.3142849802970886,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Longhorns face steeper competition against Razorbacks The University of Texas football team is coming off a 65-0 victory over the North Texas Eagles. Texas dominated every facet of the game against the Eagles.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9755150675773621,
+      "entropy": 0.19248686730861664,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Zeman #39;s Lecce enjoy heady heights of Serie A When Lecce sold their prolific Uruguayan striker Ernesto Chevanton to French club Monaco in the close-season, many pundits added the southern club to the list of favourites for relegation.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9764783382415771,
+      "entropy": 0.1873164027929306,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "An Afghan 'hanging chad' dispute An independent inquiry is helping to defuse a controversy over ink used in Saturday's election.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9895021319389343,
+      "entropy": 0.10060583800077438,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Calif. Mental Health Services May Expand (AP) AP - As pressures increase on California's mental health system, its workers and advocates say they are forced to do more with a supply of money that seems to shrink each year.",
+      "tier": 2,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.97,
+      "entropy": 1.0465965270996094,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text discusses issues related to the mental health services in California, including pressure on system workers and advocates due to shrinking financial resources. This primarily focuses on governmental or organizational finances within a specific industry (mental health), which aligns with 'Business' category topics such as finance, corporate operations, and economic pressures. | T1/T2 Consensus reached."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Microsoft To OK One License for Multicore Chips Customers who use the dual-core processors that Intel and Advanced Micro Devices are expected to begin shipping next year will not need to buy extra licenses for Microsoft software, the software maker will announce next week.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9774805307388306,
+      "entropy": 0.1860479861497879,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Jaguar Exit Throws F1 Deeper Into Turmoil  LONDON (Reuters) - Formula One, already struggling to shape  its future and put on a show, is staring into the abyss after  Ford's decision to pull out and sell its Jaguar team.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9504382610321045,
+      "entropy": 0.3281908631324768,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Kiwis trample USrookies LONDON -Nathan Astle #39;s 145 helped give New Zealand a record-setting 210-run victory over cricket rookie United States in the ICC Champions Trophy Pool A match at the Oval yesterday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9269008040428162,
+      "entropy": 0.42963677644729614,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Stability Control Systems Can Save Lives (AP) AP - Stability control systems could save up to 7,000 lives each year if they were standard equipment on all vehicles, according to a study by the insurance industry.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9554942846298218,
+      "entropy": 0.3104574978351593,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Two hurricanes = two deductibles Many homeowners in the Orlando area suffered a double blow when hurricanes Charley and Frances struck in quick succession. Now, they #39;re smarting from a financial one-two punch - two insurance deductibles.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9649664759635925,
+      "entropy": 0.2661775052547455,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Lawmakers give the space agency greater flexibility in its new &lt;b&gt;...&lt;/b&gt; After a year of wrangling over NASA #39;s \\$16.2 billion budget, lawmakers have delivered in a big way, giving the space agency its full funding request and unprecedented spending flexibility.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9588886499404907,
+      "entropy": 0.2980670928955078,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "NASA Space Station Status Report 10 December 2004 International Space Station crewmembers this week continued research and maintenance activities and prepared for arrival of the next Progress cargo craft.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9733846783638,
+      "entropy": 0.2179911881685257,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Chicken Genome Sheds New Light on Human DNA A new study states that 60 of the genes in chicken have close relations to human DNA. This may not comfort those who frequently eat the creature, but may ponder this the next time they order a batch of chicken wings.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9641987085342407,
+      "entropy": 0.27659428119659424,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "No. 2 Wake Forest Rips George Washington (AP) AP - Chris Paul scored 25 points and six assists to lift Wake Forest past George Washington 97-76 in the Preseason NIT in the Demon Deacons' debut as the nation's second-ranked team.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9717653393745422,
+      "entropy": 0.21251098811626434,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Stocks Seen Flat as Earnings Pour In US stock futures pointed to a flat market open Thursday as a rush of quarterly earnings reports painted a mixed picture for corporate profits amid lingering worries over the high price of oil.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9688627123832703,
+      "entropy": 0.23818723857402802,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Symonds century lifts Australia LONDON, England -- Andrew Symonds rode his luck to score the second one-day century of his career as Australia scored 269-6 from their 50 overs against Pakistan at Lord #39;s.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9003340005874634,
+      "entropy": 0.5386197566986084,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "UCLA, Notre Dame Win Soccer Matchups (AP) AP - UCLA soccer coach Jillian Ellis was happy to beat her best friend, Princeton counterpart Julie Shackford. After all, a spot in the NCAA championship game was on the line.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9748725891113281,
+      "entropy": 0.19610562920570374,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Tests Show James Died of Heart Attack LOS ANGELES - Toxicology and other tests determined that funk singer Rick James died last month from a heart attack due to an enlarged heart, with numerous drugs including methamphetamine and cocaine contributing factors, the county coroner announced Thursday.    The death was declared an accident, said coroner's spokesman David Campbell, who emphasized that none of the drugs were found to be at life-threatening levels...",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.8451001048088074,
+      "entropy": 0.8007253408432007,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Thaksin in the Firing Line After Massacre BANGKOK/JEDDAH, 29 October 2004 - A bomb ripped through two bars in southern Thailand yesterday, killing two people and wounding about 20, in what could be the first reaction to the deaths of 78 Muslims in police custody this week.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9903749823570251,
+      "entropy": 0.09352312982082367,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "It #39;s About Time Sox Became The Champs  And Real Rivals Finally. the New York Yankees and the Boston Red Sox have a bona fide rivalry. Please don #39;t assume that this belongs on the sports pages.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9796027541160583,
+      "entropy": 0.16700467467308044,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "France surges into Fed Cup final Defending champion France surged into the Fed Cup final, completing a 5-0 sweep of Spain on Thursday behind singles victories by Nathalie Dechy and Tatiana Golovin.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9352278709411621,
+      "entropy": 0.39335283637046814,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Safin tallest obstacle to host #39;s patriotic games hope AS tennis fans go, Houston #39;s Jim  #39;Mattress Mack #39; McIngvale is very rich, extremely forthright, exceedingly patriotic and unflinchingly Republican.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9797852635383606,
+      "entropy": 0.1657499074935913,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Video phones act as dating tools Plus: At 80, fractal discoverer Benoit Mandelbrot says he has much math work left to do. News.com Extra",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9762451648712158,
+      "entropy": 0.19592861831188202,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Fannie Mae agrees to accounting changes Fannie Mae, facing questions about its accounting similar to those that shook up Freddie Mac last year, has agreed to changes that will bring it in compliance with accounting standards.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9810889959335327,
+      "entropy": 0.16248078644275665,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Mobile phone  #39;deafness #39; risk p2pnet.net News:- Defects in Siemens 65 series mobile phones could cause deafness, says the company.  quot;In extreme cases, this volume could lead to hearing damage.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9425942301750183,
+      "entropy": 0.3670402467250824,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Intel Delays Launch of Projection TV Chip In another product postponement, semiconductor giant Intel Corp. said it won't be offering a chip for projection TVs by the end of 2004 as it had announced earlier this year.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9597955346107483,
+      "entropy": 0.2856150269508362,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Colts 49, Texans 14 INDIANAPOLIS Peyton Manning completed 18 of 27 passes for 320 yards and threw five touchdowns as the Indianapolis Colts beat the Houston Texans, 49-to-14.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9695451259613037,
+      "entropy": 0.22610034048557281,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "PeopleSoft gives in to Oracle, takes bid PeopleSoft Inc. capitulated to Oracle Corp., accepting a sweetened \\$10.3 billion takeover offer to end an 18-month battle that pitted PeopleSoft against its investors and led to the ouster of its chief executive.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.973800778388977,
+      "entropy": 0.20741528272628784,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Secretary Rumsfeld Remarks En Route to El Salvador SEC. RUMSFELD: As you know, were going to be stopping in El Salvador and Nicaragua and Panama and Ecuador. The first stops will be visits to the places, particularly El Salvador and Nicaragua - countries ",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9891110062599182,
+      "entropy": 0.10371188819408417,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Prosecutor Seeks 8-Year Jail Term for Italy's PM  MILAN (Reuters) - An Italian prosecutor asked a court on  Friday to sentence Silvio Berlusconi to eight years in jail for  bribing judges as the prime minister's four-year corruption  trial reached its closing stages.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9887213110923767,
+      "entropy": 0.10665856301784515,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Virus writers look for work THE WRITERS of the MyDoom viruses are encoding job applications into the latest variants of the bug. According to Sophos the plea for work was found when its boffins were stripping the code of the MyDoom-U and MyDoom-V variants.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9730960726737976,
+      "entropy": 0.2171161025762558,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Zambrano Out Early; So Are Mets ENVER, Aug. 17 - Victor Zambrano came to the Mets with radical movement on his pitches, fixable flaws in his delivery and a curious sore spot lingering around his right elbow. ",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9775338768959045,
+      "entropy": 0.17918270826339722,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Key Martha Witness Gets Wrist Slap (CBS/AP) A former brokerage assistant who helped Martha Stewart make her fateful stock trade and later emerged as a key government witness was spared both prison and probation Friday for accepting a payoff during the government #39;s investigation.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9604892730712891,
+      "entropy": 0.2859841585159302,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Australia turns down plea for more troops to protect UN staff in Iraq (AFP) AFP - Australia has turned down a diplomatic plea for a contribution to a military force to protect United Nations (UN) personnel in Iraq.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9902485013008118,
+      "entropy": 0.09437806904315948,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Delay in Shuttle Flights The battering that the hurricanes of the last month has inflicted on NASA centers could strain an already tight schedule for resuming shuttle flights, but it is too early to tell how badly, experts said Thursday.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.965268075466156,
+      "entropy": 0.2686941623687744,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Oracle #39;s sweet on PeopleSoft Oracle sweetened its hostile bid for rival business software maker PeopleSoft to \\$9.2 billion, a 14 increase aimed at resolving the long-running takeover battle between the bitter foes.",
+      "tier": 2,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.0185747146606445,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text discusses Oracle's bid for rival company PeopleSoft, focusing on the financial aspects of this business transaction, including the increased offer price to $9.2 billion. This is clearly a 'Business' category topic as it deals with corporate mergers and takeover battles, which are significant economic events affecting stock markets and corporate strategy. | T1/T2 Consensus reached."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Jags Cut Compton, Maddox (AP) AP - Veteran offensive lineman Mike Compton and rookie defensive tackle Anthony Maddox were among the 12 players cut by the Jacksonville Jaguars on Sunday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9783631563186646,
+      "entropy": 0.17475514113903046,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Chirac #39;s tour of China magnifies partnership Dialogue between China and France, two countries which highly value cultural diversity and pluralism in international politics, is no doubt conducive to world peace.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.968825101852417,
+      "entropy": 0.2445869743824005,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Northern Irish Protestant group pledges to end violence Northern Ireland #39;s main pro-British paramilitary group, The Ulster Defence Association (UDA), has pledged to end all violence and work towards complete disarmament.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9882185459136963,
+      "entropy": 0.11059777438640594,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Collaboration suite to help secure tonight's Bush-Kerry debate The U.S. Secret Service and a throng of police and emergency management officials in Missouri will for the first time use a customized Microsoft-based collaboration portal to share security information during tonight's presidential debate.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.868072509765625,
+      "entropy": 0.6929953694343567,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Update: PeopleSoft board won't negotiate Oracle takeover PeopleSoft executives said over the weekend that they won't discuss a sale to Oracle at a price of \\$24 per share but would consider an offer at a higher price.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.967452883720398,
+      "entropy": 0.2439805269241333,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Philippine Rebels Free Troops, Talks in Doubt  PRESENTACION, Philippines (Reuters) - Philippine communist  rebels freed Wednesday two soldiers they had held as \"prisoners  of war\" for more than five months, saying they wanted to  rebuild confidence in peace talks with the government.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9899953603744507,
+      "entropy": 0.09651068598031998,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "September Retail Sales Up by 1.5 Percent WASHINGTON - Shoppers got their buying groove back last month, propelling sales at the nation's retailers by a strong 1.5 percent. It was the best showing since March...",
+      "tier": 2,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.98,
+      "entropy": 1.088773488998413,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "The text discusses retail sales figures in detail and specifically mentions \"WASHINGTON - Shoppers got their buying groove back last month, propelling sales at the nation's retailers by a strong 1.5 percent.\" This data-driven news item is clearly about economic performance of retailers, which falls under 'Business' category. | T1/T2 Consensus reached."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Parmalat Investors Flock to Court Seeking Damages (Update2) Hundreds of Italians who lost savings in the collapse of food company Parmalat Finanziaria SpA flocked to Milan #39;s courthouse, seeking to recover damages as part of the criminal investigation of Italy #39; biggest bankruptcy.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9701845049858093,
+      "entropy": 0.22766493260860443,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Eight children stabbed to death as they sleep A man broke into a school dormitory and stabbed eight sleeping children to death before fleeing. The murders at the Ruzhou No2 Senior Middle School in Pingdingshan, in the central province of Henan, was the ",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9881610870361328,
+      "entropy": 0.11147382110357285,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "VARs: Stone #39;s Exit Won #39;t Slow Novell #39;s Linux Drive Solution providers last week said they do not expect the sudden departure of Novell vice chairman Chris Stone, who engineered the company #39;s aggressive Linux push, to slow its Linux initiative.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.968715488910675,
+      "entropy": 0.23554709553718567,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "North Korea Seen as Tying Nuclear Talks to US Election North Korea is waiting out the American presidential election in order to bargain with the winner over its nuclear weapons program, according to analysts here and a British diplomat who left Pyongyang today.",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9898841381072998,
+      "entropy": 0.09740785509347916,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Panasonic, Toshiba delve into alternate energy A new home heating system from Panasonic is based on a hydrogen fuel cell; it both heats the house and produces hot water.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9738454222679138,
+      "entropy": 0.20907829701900482,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": " #39;Hawks primed to finally surpass Rams Editor #39;s note: ESPN senior NFL writer John Clayton #39;s weekly  quot;First And 10 quot; column takes you around the league with a look at the best game of the week followed by primers for 10 other games.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9832626581192017,
+      "entropy": 0.14464016258716583,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Eurostocks Nudge Up on Ericsson  PARIS (Reuters) - European shares nosed up on Wednesday as  Ericsson gained on news it had won part of \\$4-billion Cingular  deal and with Glaxo buoyed after Pfizer affirmed its outlook.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9731118083000183,
+      "entropy": 0.2117597460746765,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Virus-Free Macs  #147;The single most effective way to avoid viruses and spyware is to simply chuck Windows altogether and buy an Apple Macintosh, #148; writes Walt Mossberg in the Wall Street Journal.  #147;There has never been a successful virus written for Mac OS X, and there is almost no spyware that targets the Mac. Plus, the Mac is invulnerable to viruses and spyware written for Windows. Not only is it more secure, but the Mac operating system is more capable, more modern and more attractive than Windows XP, and just as stable. #148; Sep 17",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.976375162601471,
+      "entropy": 0.19510900974273682,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Siemens Says Cellphone Flaw May Hurt Users and Its Profit Siemens, the world #39;s fourth-largest maker of mobile phones, said Friday that a software flaw that can create a piercing ring in its newest phone models might hurt earnings in its handset division.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9037677645683289,
+      "entropy": 0.5165579319000244,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Silvestre #39;s double goals help Man. United beat Liverpool Silvestre became Man. United #39;s hero as he scored twice to lift a 2-1 victory over Liverpool for home side when all eyes were on Rio Ferdinand as he returned after an eight-match ban on Monday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.9604988694190979,
+      "entropy": 0.2743261158466339,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Strong Earthquake Strikes Central Calif. PARKFIELD, Calif. - A strong earthquake struck Central California on Tuesday that was felt from San Francisco to the Los Angeles area...",
+      "tier": 1,
+      "t1_label": "World",
+      "predicted_labels": [
+        "World"
+      ],
+      "confidence": 0.9793664813041687,
+      "entropy": 0.1771104782819748,
+      "disagreement": false,
+      "final_label": [
+        "World"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "World"
+  },
+  {
+    "prediction": {
+      "text": "Lehmann may have played last Test The 34-year-old tore his right hamstring on day one of the third Test against India at the VCA Ground just as he was presenting a very good case to be retained when captain Ricky Ponting returns from injury next week.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.954561173915863,
+      "entropy": 0.3054172098636627,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  },
+  {
+    "prediction": {
+      "text": "Russian space agency: Space station crew could be forced to return &lt;b&gt;...&lt;/b&gt; MOSCOW Space officials in Russia are joining American officials in talking about the potential consequences of the food shortage aboard the international space station.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9759732484817505,
+      "entropy": 0.19947147369384766,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Update 8: Crude Oil Futures Sink to \\$46 Per Barrel December delivery crude on the New York Mercantile Exchange dropped 76 cents to \\$46.11 per barrel. The benchmark light, sweet crude remained about \\$8 a barrel cheaper than its closing record of \\$55.17 recorded Oct. 22 and Oct. 26.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9776860475540161,
+      "entropy": 0.1859157234430313,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Social Security Reform a Boon for Funds?  NEW YORK (Reuters) - The bonanza many believe President  Bush has handed the mutual fund industry with his plans to  reform Social Security may be a mirage, industry leaders said  on Friday.",
+      "tier": 1,
+      "t1_label": "Business",
+      "predicted_labels": [
+        "Business"
+      ],
+      "confidence": 0.9446597695350647,
+      "entropy": 0.3583454489707947,
+      "disagreement": false,
+      "final_label": [
+        "Business"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Business"
+  },
+  {
+    "prediction": {
+      "text": "Nokia Adopts SD Card Tech into Storage Portfolio To expand the capabilities of SD memory cards in mobile devices, the SD Card Association has recently formed a Mobile Phone Task Force.",
+      "tier": 1,
+      "t1_label": "Sci/Tech",
+      "predicted_labels": [
+        "Sci/Tech"
+      ],
+      "confidence": 0.9755846858024597,
+      "entropy": 0.19822898507118225,
+      "disagreement": false,
+      "final_label": [
+        "Sci/Tech"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sci/Tech"
+  },
+  {
+    "prediction": {
+      "text": "Stellar Putting Gives Europe a 2 - 0 Ryder Cup Lead Inspired by a brilliant putting display, holders Europe secured the first two points in the opening fourball matches against the United States at the 35th Ryder Cup Friday.",
+      "tier": 1,
+      "t1_label": "Sports",
+      "predicted_labels": [
+        "Sports"
+      ],
+      "confidence": 0.947460412979126,
+      "entropy": 0.33817175030708313,
+      "disagreement": false,
+      "final_label": [
+        "Sports"
+      ],
+      "rationale": "Tier 1 classified with high confidence."
+    },
+    "ground_truth": "Sports"
+  }
+]
