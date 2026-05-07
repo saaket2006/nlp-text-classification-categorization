@@ -17,6 +17,7 @@ class Tier1Model:
     def predict(self, text: str):
         self.model.eval()
         inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+        inputs.pop("token_type_ids", None)
         with torch.no_grad():
             outputs = self.model(**inputs)
             probabilities = F.softmax(outputs.logits, dim=-1).cpu().numpy()[0]
@@ -32,6 +33,7 @@ class Tier1Model:
         """
         self.model.train()
         inputs = self.tokenizer(texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+        inputs.pop("token_type_ids", None)
         labels_tensor = torch.tensor(labels).to(self.device)
         
         self.optimizer.zero_grad()
@@ -62,6 +64,7 @@ class Tier1Model:
         def collate_fn(batch):
             texts, labels = zip(*batch)
             inputs = self.tokenizer(list(texts), return_tensors="pt", truncation=True, padding=True, max_length=128)
+            inputs.pop("token_type_ids", None)
             labels_tensor = torch.tensor(labels)
             return inputs['input_ids'], inputs['attention_mask'], labels_tensor
 

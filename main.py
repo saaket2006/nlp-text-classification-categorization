@@ -138,12 +138,17 @@ def main():
             json.dump(sweep_results, f, indent=2)
         print(f"Sweep results saved to {sweep_file}")
         
-    print("Running Main Pipeline with Active Learning...")
     ue = UncertaintyEngine(
         config["tier1"]["threshold_entropy"],
         config["tier1"]["threshold_confidence"]
     )
-    router = TieredRouter(tier1, tier2, ue, ag_categories)
+    router = TieredRouter(
+        tier1, 
+        tier2, 
+        ue, 
+        ag_categories, 
+        extreme_entropy_cap=config["tier1"].get("threshold_extreme_entropy", 1.2)
+    )
     
     evaluator, results_log = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=True)
         
@@ -158,6 +163,10 @@ def main():
     t1_pct = (metrics['tier_distribution'].get(1, 0) / metrics['total_samples']) * 100
     t3_pct = (metrics['tier_distribution'].get(3, 0) / metrics['total_samples']) * 100
     
+    picr_warning = ""
+    if metrics.get("picr_negative_warning"):
+        picr_warning = "\n> [!WARNING]\n> **Negative PICR detected.** The system is currently performing worse than the Tier 1 baseline despite human intervention. Review threshold configurations.\n"
+
     report = f"""
 # 📊 Research Report: Tri-Tiered Local LLM AL Framework
 
@@ -174,7 +183,8 @@ This report summarizes the performance of the Tri-Tiered Active Learning framewo
 | **Weighted F1 Score** | {metrics['f1_weighted']:.4f} | |
 | **Human Effort Ratio** | {metrics['human_effort_ratio']:.2%} | Samples requiring human label |
 | **PICR** | {metrics['picr']:.4f} | Point-Improvement-per-Cost-Ratio |
-
+| **PICR Status** | **{metrics['picr_status']}** | Efficiency classification |
+{picr_warning}
 ## 3. Tier Distribution & Load Balancing
 The framework aims to maximize Tier 1 usage while minimizing Tier 3 escalation.
 
@@ -188,6 +198,14 @@ The framework aims to maximize Tier 1 usage while minimizing Tier 3 escalation.
 
 ## 5. Conclusion
 The system demonstrated a **{metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} accuracy improvement** with only **{metrics['human_effort_ratio']:.1%} human intervention**, confirming the effectiveness of the tiered routing strategy.
+
+## 6. PICR Interpretation
+The Point-Improvement-per-Cost-Ratio (PICR) measures the efficiency of human intervention.
+**Formula:** `ΔAccuracy / Human Effort Ratio`
+**Current PICR:** `{metrics['picr']:.4f}` ({metrics['picr_status']})
+
+**Interpretation:**
+A PICR below 1.0 indicates the human effort ratio exceeded the accuracy gain — adjust τ₁ (entropy) upward or τ₂ (confidence) downward to reduce unnecessary escalation and improve cost-efficiency. The threshold sweep identifies the optimal (τ₁, τ₂) operating point for maximum system utility.
 """
     with open(config["paths"]["report_file"], "w", encoding="utf-8") as f:
         f.write(report)

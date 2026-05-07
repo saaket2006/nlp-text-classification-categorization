@@ -5,10 +5,11 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 0.85  # tau_1 (Higher = more trust in Tier 1 for medium cases)
-  threshold_confidence: 0.5 # tau_2
+  threshold_entropy: 0.95  # tau_1 (Optimized for PICR stability)
+  threshold_confidence: 0.45 # tau_2 (Optimized for PICR stability)
+  threshold_extreme_entropy: 1.5 # tau_max (Standard cap)
   active_learning_batch_size: 4
-  pretrain_epochs: 5
+  pretrain_epochs: 7
 
 tier2:
   ollama_model: "qwen2.5:3b"

@@ -40,7 +40,21 @@ class PipelineEvaluator:
         human_effort_ratio = human_labels_count / total if total > 0 else 0
         delta_acc = acc_final - acc_t1
         
-        picr = delta_acc / human_effort_ratio if human_effort_ratio > 0 else 0.0
+        # Handle division by zero for infinite efficiency (Positive gain with zero human cost)
+        if human_effort_ratio == 0:
+            picr = 10.0 if delta_acc > 0 else 0.0
+        else:
+            picr = delta_acc / human_effort_ratio
+        
+        # PICR Status Interpretation
+        if picr >= 2.0:
+            picr_status = "STRONG"
+        elif picr >= 1.0:
+            picr_status = "ACCEPTABLE"
+        elif picr > 0:
+            picr_status = "BELOW_TARGET"
+        else:
+            picr_status = "NO_GAIN"
 
         metrics = {
             "total_samples": total,
@@ -50,6 +64,8 @@ class PipelineEvaluator:
             "f1_weighted": float(f1_final),
             "human_effort_ratio": float(human_effort_ratio),
             "picr": float(picr),
+            "picr_status": picr_status,
+            "picr_negative_warning": delta_acc < 0,
             "human_labels_count": human_labels_count
         }
 

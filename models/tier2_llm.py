@@ -3,7 +3,6 @@ import json
 import re
 import os
 import datetime
-import toon
 
 class Tier2LLM:
     def __init__(self, model_name: str, url: str):
@@ -12,15 +11,17 @@ class Tier2LLM:
 
     def generate_prompt(self, text: str, categories: list):
         prompt = f"""
-Task: Classify the following news text into the best category. 
+Task: Classify the following news text into the most accurate category. 
 Category Definitions:
-- World: International news, diplomacy, global conflicts, and non-US events.
-- Sports: Professional and amateur athletics, teams, and sporting events.
-- Business: Markets, companies, finance, economic indicators, and trade.
-- Sci/Tech: Science, technology, software, hardware, space, and medicine.
+- World: Global affairs, international relations, diplomacy, foreign conflicts, and events occurring outside the US or of global significance.
+- Sports: Coverage of professional/amateur athletics, matches, team news, athlete profiles, and major tournaments (NBA, NFL, FIFA, etc.).
+- Business: Finance, stock markets, corporate mergers, economic policy, trade, and industry trends.
+- Sci/Tech: Scientific discoveries, technological innovations, software/hardware releases, space exploration, and medical research.
 
-Important: Do not classify political events or debates as 'Sports' regardless of their 'high-stakes' nature.
-Provide CoT (Chain of Thought) reasoning.
+Guidelines:
+1. Provide a step-by-step reasoning (Chain of Thought) before the final label.
+2. If the text fits multiple categories, choose the primary focus.
+3. Be decisive but only report high confidence if the evidence is clear.
 Available Categories: {', '.join(categories)}
 
 Examples:
@@ -28,23 +29,29 @@ Input Text: "United Nations officials meet to discuss the ongoing humanitarian c
 Output:
 labels: World
 confidence: 0.98
-reasoning: The text mentions international diplomatic bodies (UN) and humanitarian crises in a specific country, which fits the 'World' category.
+reasoning: The focus is on a humanitarian crisis in Sudan and the involvement of the UN, which is an international diplomatic body. This fits 'World'.
 
 Input Text: "The Lakers secured a narrow victory over the Celtics in a high-stakes NBA playoffs match."
 Output:
 labels: Sports
 confidence: 0.99
-reasoning: Mentions professional basketball teams (Lakers, Celtics) and sporting events (NBA playoffs), clearly belonging to 'Sports'.
+reasoning: Mentions specific professional basketball teams and an NBA playoff game. This is clearly 'Sports'.
 
 Input Text: "Global oil prices surged after major producers announced unexpected production cuts."
 Output:
 labels: Business
 confidence: 0.96
-reasoning: Discusses global market prices and production announcements by industry producers, which is characteristic of 'Business' news.
+reasoning: This text focuses on commodity pricing, global markets, and industrial production, which are core 'Business' topics.
+
+Input Text: "Researchers have developed a new CRISPR-based method to treat genetic disorders more effectively."
+Output:
+labels: Sci/Tech
+confidence: 0.97
+reasoning: This discusses medical research and technological innovation in genetics, fitting the 'Sci/Tech' category.
 
 ---
 Input Text: "{text}"
-Output (TOON format):
+Output (structured key-value format):
 """
         return prompt
 
@@ -58,9 +65,9 @@ Output (TOON format):
         cleaned = re.sub(r'\\(?![\\"/bfnrtu])', r'\\\\', json_str)
         return cleaned
 
-    def _parse_toon_resilient(self, text: str) -> dict:
+    def _parse_resilient(self, text: str) -> dict:
         """
-        A highly robust TOON parser designed specifically for LLM outputs.
+        A highly robust structured key-value format parser designed specifically for LLM outputs.
         Handles multi-line values, different delimiters, and flexible key matching.
         """
         lines = text.strip().split('\n')
@@ -128,8 +135,8 @@ Output (TOON format):
             response = self.client.generate(model=self.model_name, prompt=prompt)
             response_text = response['response']
             
-            # 1. Attempt Resilient TOON Parsing (Primary)
-            result = self._parse_toon_resilient(response_text)
+            # 1. Attempt Resilient Parsing (Primary)
+            result = self._parse_resilient(response_text)
             
             # Check if we got at least labels and confidence
             if result.get("labels") and "confidence" in result:
@@ -147,7 +154,7 @@ Output (TOON format):
                     pass
             
             # 3. If everything fails, log and return None
-            self._log_error_response(response_text, "Failed to parse as TOON or JSON")
+            self._log_error_response(response_text, "Failed to parse as structured key-value format or JSON")
             return None, response_text
             
         except Exception as e:
