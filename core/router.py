@@ -21,6 +21,7 @@ class TieredRouter:
         output = {
             "text": text,
             "tier": 1,
+            "t1_label": t1_label,
             "predicted_labels": [t1_label],
             "confidence": float(t1_conf),
             "entropy": float(t1_entropy),
@@ -36,25 +37,38 @@ class TieredRouter:
             
             if t2_result:
                 t2_labels = t2_result.get("labels", [])
-                t2_conf = t2_result.get("confidence", 0.0)
+                t2_conf = float(t2_result.get("confidence", 0.0))
                 t2_reasoning = t2_result.get("reasoning", "")
                 
-                output["predicted_labels"] = t2_labels
-                output["confidence"] = float(t2_conf)
-                output["rationale"] = t2_reasoning
-                output["final_label"] = t2_labels
-                
-                # Step 2: Disagreement Logic
-                # If Tier 2 disagrees with Tier 1 (if Tier 1 had a clear winner but was uncertain)
-                # or if Tier 2 labels are not in categories
-                if t1_label not in t2_labels:
-                    output["disagreement"] = True
-                    output["tier"] = 3
-                    output["rationale"] += " | Disagreement between Tier 1 and Tier 2. Escalating to Tier 3."
+                # Only trust Tier 2 if it's highly confident (> 0.8)
+                if t2_conf > 0.8:
+                    output["predicted_labels"] = t2_labels
+                    output["confidence"] = t2_conf
+                    output["rationale"] = t2_reasoning
+                    output["final_label"] = t2_labels
+                    
+                    # Step 2: Disagreement Logic
+                    if t1_label not in t2_labels:
+                        if t2_conf > 0.9:
+                            output["disagreement"] = False
+                            output["rationale"] += " | Strong Tier 2 confidence overrides Tier 1 disagreement."
+                        else:
+                            output["disagreement"] = True
+                            output["tier"] = 3
+                            output["rationale"] += " | Disagreement with moderate confidence. Escalating to Human."
+                else:
+                    # Tier 2 is unsure, stay with Tier 1
+                    output["rationale"] = f"Tier 2 uncertain ({t2_conf}). Retaining Tier 1 prediction."
+                    output["tier"] = 2 # Mark as T2 used but rejected
             else:
                 # Invalid Tier 2 response
                 output["tier"] = 3
                 output["rationale"] = "Tier 2 response invalid. Escalating to Tier 3."
+                
+        # Final Anchor: Extreme Uncertainty always goes to Human
+        if t1_entropy > 1.2:
+            output["tier"] = 3
+            output["rationale"] = "Extreme uncertainty detected. Mandatory human review."
                 
         # Final validation (Tier 3 Simulation if needed)
         # In a real scenario, this waits for human input.

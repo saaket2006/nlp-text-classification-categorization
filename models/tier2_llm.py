@@ -3,6 +3,7 @@ import json
 import re
 import os
 import datetime
+import toon
 
 class Tier2LLM:
     def __init__(self, model_name: str, url: str):
@@ -11,41 +12,39 @@ class Tier2LLM:
 
     def generate_prompt(self, text: str, categories: list):
         prompt = f"""
-Task: Classify the following text into one or more of the specified categories. Provide CoT (Chain of Thought) reasoning.
+Task: Classify the following news text into the best category. 
+Category Definitions:
+- World: International news, diplomacy, global conflicts, and non-US events.
+- Sports: Professional and amateur athletics, teams, and sporting events.
+- Business: Markets, companies, finance, economic indicators, and trade.
+- Sci/Tech: Science, technology, software, hardware, space, and medicine.
+
+Important: Do not classify political events or debates as 'Sports' regardless of their 'high-stakes' nature.
+Provide CoT (Chain of Thought) reasoning.
 Available Categories: {', '.join(categories)}
 
 Examples:
 Input Text: "United Nations officials meet to discuss the ongoing humanitarian crisis in Sudan."
-Output: {{
-  "labels": ["World"],
-  "confidence": 0.98,
-  "reasoning": "The text mentions international diplomatic bodies (UN) and humanitarian crises in a specific country, which fits the 'World' category."
-}}
+Output:
+labels: World
+confidence: 0.98
+reasoning: The text mentions international diplomatic bodies (UN) and humanitarian crises in a specific country, which fits the 'World' category.
 
 Input Text: "The Lakers secured a narrow victory over the Celtics in a high-stakes NBA playoffs match."
-Output: {{
-  "labels": ["Sports"],
-  "confidence": 0.99,
-  "reasoning": "Mentions professional basketball teams (Lakers, Celtics) and sporting events (NBA playoffs), clearly belonging to 'Sports'."
-}}
+Output:
+labels: Sports
+confidence: 0.99
+reasoning: Mentions professional basketball teams (Lakers, Celtics) and sporting events (NBA playoffs), clearly belonging to 'Sports'.
 
 Input Text: "Global oil prices surged after major producers announced unexpected production cuts."
-Output: {{
-  "labels": ["Business"],
-  "confidence": 0.96,
-  "reasoning": "Discusses global market prices and production announcements by industry producers, which is characteristic of 'Business' news."
-}}
-
-Input Text: "A new study reveals that advanced machine learning algorithms can predict solar flares with 90% accuracy."
-Output: {{
-  "labels": ["Sci/Tech"],
-  "confidence": 0.97,
-  "reasoning": "Focuses on scientific research, machine learning technology, and solar phenomena, aligning with 'Sci/Tech'."
-}}
+Output:
+labels: Business
+confidence: 0.96
+reasoning: Discusses global market prices and production announcements by industry producers, which is characteristic of 'Business' news.
 
 ---
 Input Text: "{text}"
-Output (STRICT JSON):
+Output (TOON format):
 """
         return prompt
 
@@ -59,6 +58,69 @@ Output (STRICT JSON):
         cleaned = re.sub(r'\\(?![\\"/bfnrtu])', r'\\\\', json_str)
         return cleaned
 
+    def _parse_toon_resilient(self, text: str) -> dict:
+        """
+        A highly robust TOON parser designed specifically for LLM outputs.
+        Handles multi-line values, different delimiters, and flexible key matching.
+        """
+        lines = text.strip().split('\n')
+        result = {}
+        current_key = None
+        
+        # Valid keys we expect from the LLM
+        valid_keys = ['labels', 'confidence', 'reasoning', 'new_category_suggestion']
+        
+        for line in lines:
+            line_clean = line.strip()
+            if not line_clean:
+                continue
+            
+            # Check if line starts with a known key followed by a colon
+            # Regex handles case-insensitivity and optional whitespace
+            match = re.match(r'^(' + '|'.join(valid_keys) + r')\s*:\s*(.*)', line_clean, re.IGNORECASE)
+            
+            if match:
+                current_key = match.group(1).lower()
+                value = match.group(2).strip()
+                result[current_key] = value
+            elif current_key:
+                # If no key found, but we are in a multi-line section (like reasoning)
+                # Append this line to the current value
+                result[current_key] += "\n" + line_clean
+        
+        # --- Post-Processing & Normalization ---
+        
+        # 1. Normalize Labels (handle comma, semicolon, pipe, and single strings)
+        if "labels" in result:
+            labels_raw = str(result["labels"])
+            # Split by common delimiters used by LLMs
+            labels_list = re.split(r'[;,|]', labels_raw)
+            # Clean and filter
+            result["labels"] = [l.strip() for l in labels_list if l.strip()]
+        else:
+            result["labels"] = []
+
+        # 2. Normalize Confidence (ensure it's a float)
+        if "confidence" in result:
+            try:
+                # Extract the first float-like string found
+                conf_val = str(result["confidence"])
+                conf_match = re.search(r'0?\.\d+', conf_val)
+                if conf_match:
+                    result["confidence"] = float(conf_match.group())
+                else:
+                    result["confidence"] = 0.5
+            except:
+                result["confidence"] = 0.5
+        else:
+            result["confidence"] = 0.5
+            
+        # 3. Clean Reasoning (remove potential trailing dashes or markers)
+        if "reasoning" in result:
+            result["reasoning"] = result["reasoning"].strip()
+
+        return result
+
     def predict(self, text: str, categories: list):
         prompt = self.generate_prompt(text, categories)
         response_text = ""
@@ -66,28 +128,31 @@ Output (STRICT JSON):
             response = self.client.generate(model=self.model_name, prompt=prompt)
             response_text = response['response']
             
-            # Extract JSON from response (handling potential markdown formatting)
+            # 1. Attempt Resilient TOON Parsing (Primary)
+            result = self._parse_toon_resilient(response_text)
+            
+            # Check if we got at least labels and confidence
+            if result.get("labels") and "confidence" in result:
+                return result, response_text
+                
+            # 2. Fallback: Check if it's JSON anyway (Legacy Support)
             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
             if json_match:
-                json_str = json_match.group()
                 try:
-                    result = json.loads(json_str)
+                    result = json.loads(self._clean_json_string(json_match.group()))
+                    if isinstance(result.get("labels"), str):
+                        result["labels"] = [result["labels"]]
                     return result, response_text
-                except json.JSONDecodeError:
-                    # Try cleaning the string and parsing again
-                    cleaned_json = self._clean_json_string(json_str)
-                    try:
-                        result = json.loads(cleaned_json)
-                        return result, response_text
-                    except json.JSONDecodeError as e:
-                        self._log_error_response(response_text, str(e))
-                        return None, response_text
-            else:
-                return None, response_text
+                except:
+                    pass
+            
+            # 3. If everything fails, log and return None
+            self._log_error_response(response_text, "Failed to parse as TOON or JSON")
+            return None, response_text
+            
         except Exception as e:
             print(f"Error in Tier 2 LLM: {e}")
-            if response_text:
-                self._log_error_response(response_text, str(e))
+            self._log_error_response(response_text if response_text else "NO_RESPONSE", str(e))
             return None, str(e)
 
     def _log_error_response(self, response_text: str, error_msg: str):

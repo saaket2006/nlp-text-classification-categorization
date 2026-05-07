@@ -18,9 +18,8 @@ class PipelineEvaluator:
 
         y_true = [r["ground_truth"] for r in self.results]
         # For Tier 1 label
-        # We intentionally use Tier 1's original prediction on all samples (even those escalated to Tier 2 or 3)
-        # because this represents the counterfactual baseline of "what accuracy would we have achieved using only Tier 1 with no routing?".
-        y_t1 = [r["prediction"]["predicted_labels"][0] if r["prediction"]["tier"] >= 1 else None for r in self.results]
+        # We use Tier 1's original prediction (t1_label) as the counterfactual baseline
+        y_t1 = [r["prediction"]["t1_label"] if "t1_label" in r["prediction"] else None for r in self.results]
         # For Final label (weighted by tier)
         y_final = [r["prediction"]["final_label"][0] if r["prediction"]["final_label"] else None for r in self.results]
 

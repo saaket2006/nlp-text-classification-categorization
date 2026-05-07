@@ -5,10 +5,10 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 0.65  # tau_1 (Slightly more aggressive Tier 1)
-  threshold_confidence: 0.5 # tau_2 (Trust LLM reasoning more)
+  threshold_entropy: 0.85  # tau_1 (Higher = more trust in Tier 1 for medium cases)
+  threshold_confidence: 0.5 # tau_2
   active_learning_batch_size: 4
-  pretrain_epochs: 3
+  pretrain_epochs: 5
 
 tier2:
   ollama_model: "qwen2.5:3b"
@@ -20,7 +20,7 @@ tier3:
 
 data:
   dataset_name: "ag_news"
-  train_samples: 1000
+  train_samples: 1500
   test_samples: 200
 
 paths:

@@ -14,3 +14,4 @@ scipy
 datasets
 tqdm
 typing-extensions>=4.14.1
+python-toon
