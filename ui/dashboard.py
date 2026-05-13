@@ -54,11 +54,31 @@ else:
         detailed_results = json.load(f)
 
     # Top Metrics
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Final Accuracy", f"{metrics['accuracy_final']:.2%}")
     col2.metric("Human Effort", f"{metrics['human_effort_ratio']:.2%}")
-    col3.metric("PICR", f"{metrics['picr']:.2f}")
-    col4.metric("F1 Score", f"{metrics['f1_weighted']:.4f}")
+    
+    # PICR Status Delta Logic
+    picr_status = metrics.get('picr_status', 'NO_GAIN')
+    if picr_status in ["PERFECT_EFFICIENCY", "STRONG"]:
+        status_delta = "High Efficiency"
+        delta_color = "normal"
+    elif picr_status == "ACCEPTABLE":
+        status_delta = None
+        delta_color = "off"
+    else:
+        status_delta = "-Low Efficiency"
+        delta_color = "normal"
+
+    col3.metric("PICR Score", metrics.get('picr_display', str(metrics.get('picr', 0.0))))
+    col4.metric("PICR Status", picr_status, delta=status_delta, delta_color=delta_color)
+    col5.metric("F1 Score", f"{metrics['f1_weighted']:.4f}")
+
+    # Conditional Banners
+    if metrics.get("picr_negative_warning"):
+        st.error("⚠️ Negative PICR: pipeline accuracy is below Tier 1 baseline. Review threshold configuration.")
+    if picr_status == "PERFECT_EFFICIENCY":
+        st.info("✨ Perfect Efficiency: accuracy improved with zero human intervention.")
 
     # Layout
     row1_col1, row1_col2 = st.columns(2)

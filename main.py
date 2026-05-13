@@ -101,19 +101,26 @@ def main():
         train_texts, 
         train_labels, 
         batch_size=config["tier1"].get("batch_size", 16),
-        epochs=config["tier1"].get("pretrain_epochs", 3)
+        epochs=config["tier1"].get("pretrain_epochs", 7)
     )
     
     if args.sweep:
         print("Running Threshold Sweep...")
         sweep_results = []
-        tau1_grid = [0.3, 0.5, 0.7, 0.9]
+        tau1_grid = [0.3, 0.5, 0.7, 0.8, 0.9]
         tau2_grid = [0.4, 0.5, 0.6, 0.7]
         
         for t1 in tau1_grid:
             for t2 in tau2_grid:
                 ue = UncertaintyEngine(t1, t2)
-                router = TieredRouter(tier1, tier2, ue, ag_categories)
+                router = TieredRouter(
+                    tier1, 
+                    tier2, 
+                    ue, 
+                    ag_categories,
+                    entropy_threshold=t1,
+                    conf_threshold=t2
+                )
                 
                 # WARNING: update_model=False must never be changed to True inside the sweep.
                 # Each (tau1, tau2) configuration must evaluate against the SAME pretrained model state
@@ -147,6 +154,8 @@ def main():
         tier2, 
         ue, 
         ag_categories, 
+        entropy_threshold=config["tier1"]["threshold_entropy"],
+        conf_threshold=config["tier1"]["threshold_confidence"],
         extreme_entropy_cap=config["tier1"].get("threshold_extreme_entropy", 1.2)
     )
     
@@ -157,7 +166,8 @@ def main():
     with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
         json.dump(results_log, f, indent=2)
         
-    metrics = evaluator.save_report(config["paths"]["metrics_file"])
+    human_weight = config.get("tier3", {}).get("human_effort_weight", 1.0)
+    metrics = evaluator.save_report(config["paths"]["metrics_file"], human_effort_weight=human_weight)
     
     # Research Report
     t1_pct = (metrics['tier_distribution'].get(1, 0) / metrics['total_samples']) * 100
@@ -182,7 +192,7 @@ This report summarizes the performance of the Tri-Tiered Active Learning framewo
 | **Accuracy Boost** | {metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} | Lift from Tier 2 & 3 |
 | **Weighted F1 Score** | {metrics['f1_weighted']:.4f} | |
 | **Human Effort Ratio** | {metrics['human_effort_ratio']:.2%} | Samples requiring human label |
-| **PICR** | {metrics['picr']:.4f} | Point-Improvement-per-Cost-Ratio |
+| **PICR** | {metrics.get('picr_display', f"{metrics['picr']:.4f}")} | Point-Improvement-per-Cost-Ratio |
 | **PICR Status** | **{metrics['picr_status']}** | Efficiency classification |
 {picr_warning}
 ## 3. Tier Distribution & Load Balancing
@@ -202,7 +212,7 @@ The system demonstrated a **{metrics['accuracy_final'] - metrics['accuracy_t1']:
 ## 6. PICR Interpretation
 The Point-Improvement-per-Cost-Ratio (PICR) measures the efficiency of human intervention.
 **Formula:** `ΔAccuracy / Human Effort Ratio`
-**Current PICR:** `{metrics['picr']:.4f}` ({metrics['picr_status']})
+**Current PICR:** `{metrics.get('picr_display', f"{metrics['picr']:.4f}")}` ({metrics['picr_status']})
 
 **Interpretation:**
 A PICR below 1.0 indicates the human effort ratio exceeded the accuracy gain — adjust τ₁ (entropy) upward or τ₂ (confidence) downward to reduce unnecessary escalation and improve cost-efficiency. The threshold sweep identifies the optimal (τ₁, τ₂) operating point for maximum system utility.

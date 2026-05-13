@@ -12,7 +12,7 @@ class PipelineEvaluator:
             "ground_truth": ground_truth
         })
 
-    def calculate_metrics(self):
+    def calculate_metrics(self, human_effort_weight: float = 1.0):
         if not self.results:
             return {}
 
@@ -37,17 +37,25 @@ class PipelineEvaluator:
         # PICR = ΔAccuracy / (Human Labels / Total Samples)
         # Here Human Labels = count of Tier 3
         human_labels_count = tier_counts[3]
-        human_effort_ratio = human_labels_count / total if total > 0 else 0
+        base_effort_ratio = human_labels_count / total if total > 0 else 0
+        human_effort_ratio = base_effort_ratio * human_effort_weight
         delta_acc = acc_final - acc_t1
         
         # Handle division by zero for infinite efficiency (Positive gain with zero human cost)
-        if human_effort_ratio == 0:
-            picr = 10.0 if delta_acc > 0 else 0.0
+        if human_effort_ratio == 0 and delta_acc > 0:
+            picr = float('inf')
+        elif human_effort_ratio == 0:
+            picr = 0.0
         else:
             picr = delta_acc / human_effort_ratio
+            
+        # PICR display string
+        picr_display = "∞" if picr == float('inf') else f"{picr:.4f}"
         
         # PICR Status Interpretation
-        if picr >= 2.0:
+        if picr == float('inf'):
+            picr_status = "PERFECT_EFFICIENCY"
+        elif picr >= 2.0:
             picr_status = "STRONG"
         elif picr >= 1.0:
             picr_status = "ACCEPTABLE"
@@ -63,7 +71,8 @@ class PipelineEvaluator:
             "accuracy_final": float(acc_final),
             "f1_weighted": float(f1_final),
             "human_effort_ratio": float(human_effort_ratio),
-            "picr": float(picr),
+            "picr": float(picr) if picr != float('inf') else float('inf'), # JSON handles Infinity
+            "picr_display": picr_display,
             "picr_status": picr_status,
             "picr_negative_warning": delta_acc < 0,
             "human_labels_count": human_labels_count
@@ -71,8 +80,8 @@ class PipelineEvaluator:
 
         return metrics
 
-    def save_report(self, filepath: str):
-        metrics = self.calculate_metrics()
+    def save_report(self, filepath: str, human_effort_weight: float = 1.0):
+        metrics = self.calculate_metrics(human_effort_weight)
         with open(filepath, "w") as f:
             json.dump(metrics, f, indent=2)
         return metrics

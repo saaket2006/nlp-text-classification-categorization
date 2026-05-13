@@ -13,15 +13,16 @@ class Tier2LLM:
         prompt = f"""
 Task: Classify the following news text into the most accurate category. 
 Category Definitions:
-- World: Global affairs, international relations, diplomacy, foreign conflicts, and events occurring outside the US or of global significance.
-- Sports: Coverage of professional/amateur athletics, matches, team news, athlete profiles, and major tournaments (NBA, NFL, FIFA, etc.).
-- Business: Finance, stock markets, corporate mergers, economic policy, trade, and industry trends.
-- Sci/Tech: Scientific discoveries, technological innovations, software/hardware releases, space exploration, and medical research.
+- World: International news, state affairs, diplomacy, wars, and non-economic national events. (e.g., election results, peace talks, military strikes).
+- Sports: Athletics, games, team news, athlete achievements, and competition results. (e.g., Olympic medals, football transfers, game scores).
+- Business: Markets, finance, corporate actions, economic indicators, and trade. (Note: National economic reports like inflation or interest rates are 'Business' if they focus on market impact).
+- Sci/Tech: Scientific research, consumer electronics, internet trends, space, and medicine. (e.g., new gadget releases, NASA missions, medical breakthrough).
 
 Guidelines:
 1. Provide a step-by-step reasoning (Chain of Thought) before the final label.
-2. If the text fits multiple categories, choose the primary focus.
-3. Be decisive but only report high confidence if the evidence is clear.
+2. If the text mentions a company's stock price or a merger, it is 'Business'.
+3. If it is about a specific tech product review, it is 'Sci/Tech'.
+4. If it is about a political conflict between countries, it is 'World'.
 Available Categories: {', '.join(categories)}
 
 Examples:
@@ -132,7 +133,7 @@ Output (structured key-value format):
         prompt = self.generate_prompt(text, categories)
         response_text = ""
         try:
-            response = self.client.generate(model=self.model_name, prompt=prompt)
+            response = self.client.generate(model=self.model_name, prompt=prompt, options={"temperature": 0.0})
             response_text = response['response']
             
             # 1. Attempt Resilient Parsing (Primary)

@@ -5,11 +5,12 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 0.95  # tau_1 (Optimized for PICR stability)
-  threshold_confidence: 0.45 # tau_2 (Optimized for PICR stability)
-  threshold_extreme_entropy: 1.5 # tau_max (Standard cap)
+  threshold_entropy: 0.65  # tau_1 (Captures more borderline cases)
+  threshold_confidence: 0.50 # tau_2 (Uncertainty floor)
+  threshold_extreme_entropy: 1.40 # tau_max (Standard cap)
   active_learning_batch_size: 4
-  pretrain_epochs: 7
+  pretrain_epochs: 7          # restored to 7 to ensure stable baseline
+  early_stopping_patience: 7  # increased to prevent premature stopping
 
 tier2:
   ollama_model: "qwen2.5:3b"
@@ -18,6 +19,7 @@ tier2:
 
 tier3:
   human_error_rate: 0.05
+  human_effort_weight: 1.0 # Pure realistic metric
 
 data:
   dataset_name: "ag_news"
