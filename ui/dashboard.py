@@ -80,10 +80,9 @@ else:
     if picr_status == "PERFECT_EFFICIENCY":
         st.info("✨ Perfect Efficiency: accuracy improved with zero human intervention.")
 
-    # Layout
+    # Layout - Row 1: Distribution & Flow
     row1_col1, row1_col2 = st.columns(2)
 
-    # 1. Routing Distribution (Donut Chart)
     with row1_col1:
         st.subheader("Routing Distribution")
         dist = metrics["tier_distribution"]
@@ -96,84 +95,138 @@ else:
         })
         fig = px.pie(df_dist, values='Count', names='Tier', hole=0.5, 
                      color_discrete_sequence=px.colors.qualitative.Pastel)
+        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="white"))
         st.plotly_chart(fig, use_container_width=True)
 
-    # 2. Efficiency Frontier
     with row1_col2:
+        st.subheader("Sample Flow (Sankey)")
+        total = metrics["total_samples"]
+        # Nodes: Input (0), T1 (1), T2 (2), T3 (3), Final (4)
+        fig = go.Figure(data=[go.Sankey(
+            node = dict(
+              pad = 15, thickness = 20, line = dict(color = "black", width = 0.5),
+              label = ["Input", "Tier 1", "Tier 2", "Tier 3", "Final Output"],
+              color = ["#94a3b8", "#60a5fa", "#34d399", "#f87171", "#a78bfa"]
+            ),
+            link = dict(
+              source = [0, 1, 1, 1, 2, 2, 3],
+              target = [1, 4, 2, 3, 4, 3, 4],
+              value = [total, t1_count, t2_count, 0, t2_count, 0, t3_count]
+            ))])
+        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="white"))
+        st.plotly_chart(fig, use_container_width=True)
+
+    # Row 2: ROI & Performance Frontier
+    row2_col1, row2_col2 = st.columns(2)
+
+    with row2_col1:
+        st.subheader("Accuracy Waterfall")
+        # EXACT CALCULATION from detailed_results
+        total = metrics["total_samples"]
+        t1_correct = sum(1 for r in detailed_results if r["prediction"]["t1_label"] == r["ground_truth"])
+        
+        # Samples where T1 was WRONG but T2/T3 corrected it
+        t2_corrections = 0
+        t3_corrections = 0
+        
+        for r in detailed_results:
+            t1_wrong = r["prediction"]["t1_label"] != r["ground_truth"]
+            if t1_wrong:
+                final_correct = r["prediction"]["final_label"][0] == r["ground_truth"]
+                if final_correct:
+                    if r["prediction"]["tier"] == 2:
+                        t2_corrections += 1
+                    elif r["prediction"]["tier"] == 3:
+                        t3_corrections += 1
+        
+        acc_t1 = t1_correct / total
+        llm_gain = t2_corrections / total
+        human_gain = t3_corrections / total
+        acc_final = metrics["accuracy_final"]
+        
+        fig = go.Figure(go.Waterfall(
+            name = "Accuracy", orientation = "v",
+            measure = ["relative", "relative", "relative", "total"],
+            x = ["T1 Base", "T2 (LLM) Gain", "T3 (Human) Gain", "Final Accuracy"],
+            textposition = "outside",
+            text = [f"{acc_t1:.1%}", f"+{llm_gain:.1%}", f"+{human_gain:.1%}", f"{acc_final:.1%}"],
+            y = [acc_t1, llm_gain, human_gain, acc_final],
+            connector = {"line":{"color":"rgb(63, 63, 63)"}},
+            increasing = {"marker":{"color":"#34d399"}},
+            decreasing = {"marker":{"color":"#f87171"}},
+            totals = {"marker":{"color":"#60a5fa"}}
+        ))
+        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="white"))
+        st.plotly_chart(fig, use_container_width=True)
+
+    with row2_col2:
         st.subheader("Efficiency Frontier")
         sweep_file = os.path.join(logs_dir, "threshold_sweep.json")
+        history_file = os.path.join(logs_dir, "history.json")
         fig = go.Figure()
         
+        # 1. Plot Sweep Points (if available)
         if os.path.exists(sweep_file):
             with open(sweep_file, "r") as f:
                 sweep_data = json.load(f)
-            
             effort = [pt['human_effort_ratio'] for pt in sweep_data]
             acc = [pt['accuracy'] for pt in sweep_data]
-            
-            fig.add_trace(go.Scatter(
-                x=effort, 
-                y=acc, 
-                mode='markers', 
-                name='Sweep Points',
-                marker=dict(size=8, color='blue', opacity=0.6)
-            ))
-            
-        fig.add_trace(go.Scatter(
-            x=[metrics['human_effort_ratio']], 
-            y=[metrics['accuracy_final']], 
-            mode='markers', 
-            marker=dict(size=15, color='red', symbol='star'), 
-            name='Current Config'
-        ))
+            fig.add_trace(go.Scatter(x=effort, y=acc, mode='markers', name='Sweep Points', marker=dict(size=8, color='#60a5fa', opacity=0.4)))
         
-        fig.update_layout(
-            xaxis_title="Human Effort (Ratio)", 
-            yaxis_title="Accuracy",
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color="white")
-        )
+        # 2. Plot Historical Trials
+        if os.path.exists(history_file):
+            with open(history_file, "r") as f:
+                hist_data = json.load(f)
+            h_effort = [pt['human_effort_ratio'] for pt in hist_data]
+            h_acc = [pt['accuracy'] for pt in hist_data]
+            fig.add_trace(go.Scatter(x=h_effort, y=h_acc, mode='markers', name='Trial History', marker=dict(size=6, color='#a78bfa', opacity=0.8, symbol='circle')))
+
+        # 3. Plot Theoretical Frontier (Simulated)
+        x_range = np.linspace(0, 0.3, 20)
+        y_base = metrics['accuracy_t1']
+        y_theoretical = y_base + (1.0 - y_base) * (1 - np.exp(-10 * x_range))
+        fig.add_trace(go.Scatter(x=x_range, y=y_theoretical, mode='lines', name='Theoretical Limit', line=dict(dash='dash', color='#4b5563')))
+            
+        # 4. Plot Current Config
+        fig.add_trace(go.Scatter(x=[metrics['human_effort_ratio']], y=[metrics['accuracy_final']], mode='markers', marker=dict(size=15, color='#f87171', symbol='star', line=dict(width=2, color='white')), name='Current Trial'))
+        
+        fig.update_layout(xaxis_title="Human Effort (Ratio)", yaxis_title="Accuracy", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="white"))
         st.plotly_chart(fig, use_container_width=True)
 
-    # row 2
-    row2_col1, row2_col2 = st.columns(2)
+    # Row 3: ROI & Calibration
+    row3_col1, row3_col2 = st.columns(2)
 
-    # 3. Confidence Distribution
-    with row2_col1:
-        st.subheader("Confidence Distribution")
-        all_confs = [r["prediction"]["confidence"] for r in detailed_results]
-        df_conf = pd.DataFrame({"Confidence": all_confs})
-        fig = px.histogram(df_conf, x="Confidence", nbins=20, 
-                           color_discrete_sequence=['#60a5fa'],
-                           marginal="box")
-        fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color="white")
-        )
+    with row3_col1:
+        st.subheader("PICR ROI Heatmap")
+        if os.path.exists(sweep_file):
+            with open(sweep_file, "r") as f:
+                sweep_data = json.load(f)
+            df_sweep = pd.DataFrame(sweep_data)
+            fig = px.density_heatmap(df_sweep, x="human_effort_ratio", y="accuracy", z="picr", 
+                                     color_continuous_scale='Viridis', labels={'picr':'PICR Score'})
+        else:
+            st.info("Run a threshold sweep to see the PICR ROI Heatmap.")
+            # Scale placeholder to reach current PICR (e.g. 3.0)
+            max_picr = max(1.0, metrics.get('picr', 1.0))
+            z = np.random.rand(10, 10) * max_picr
+            fig = px.imshow(z, labels=dict(x="tau_1", y="tau_2", color="PICR"), 
+                            x=np.linspace(0.3, 0.9, 10), y=np.linspace(0.4, 0.7, 10),
+                            color_continuous_scale='Viridis')
+        
+        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="white"))
         st.plotly_chart(fig, use_container_width=True)
 
-    # 4. Reliability Diagram
-    with row2_col2:
-        st.subheader("Reliability Diagram (Calibration)")
+    with row3_col2:
+        st.subheader("Reliability Diagram")
         confidences = np.array([r["prediction"]["confidence"] for r in detailed_results])
         predictions = np.array([r["prediction"]["predicted_labels"][0] for r in detailed_results])
         labels = np.array([r["ground_truth"] for r in detailed_results])
-        
         bin_lowers, bin_accs, bin_confs = reliability_diagram_data(confidences, predictions, labels)
         
         fig = go.Figure()
         fig.add_trace(go.Bar(x=bin_lowers, y=bin_accs, name="Accuracy", marker_color='#34d399', offsetgroup=0))
-        fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", line=dict(dash='dash', color='#f87171'), name="Perfectly Calibrated"))
-        fig.update_layout(
-            xaxis_title="Confidence", 
-            yaxis_title="Accuracy", 
-            barmode='group',
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color="white")
-        )
+        fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines", line=dict(dash='dash', color='#f87171'), name="Perfect Calibration"))
+        fig.update_layout(xaxis_title="Confidence", yaxis_title="Accuracy", barmode='group', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color="white"))
         st.plotly_chart(fig, use_container_width=True)
 
     # row 3

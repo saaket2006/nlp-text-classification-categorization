@@ -7,8 +7,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.7644519805908203,
-      "entropy": 0.9232802391052246,
+      "confidence": 0.8454511761665344,
+      "entropy": 0.7006590962409973,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -25,8 +25,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9850705862045288,
-      "entropy": 0.13400888442993164,
+      "confidence": 0.980109691619873,
+      "entropy": 0.1684589684009552,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -43,8 +43,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9872943758964539,
-      "entropy": 0.11475656181573868,
+      "confidence": 0.9850644469261169,
+      "entropy": 0.13047541677951813,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -61,8 +61,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9851651191711426,
-      "entropy": 0.13328133523464203,
+      "confidence": 0.9802990555763245,
+      "entropy": 0.1671781688928604,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -79,8 +79,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9420916438102722,
-      "entropy": 0.40608587861061096,
+      "confidence": 0.9365906715393066,
+      "entropy": 0.4313317537307739,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -93,35 +93,35 @@
     "prediction": {
       "text": "China's inflation rate slows sharply but problems remain (AFP) AFP - China's inflation rate eased sharply in October as government efforts to cool the economy began to really bite, with food prices, one of the main culprits, showing some signs of slowing, official data showed.",
       "tier": 2,
-      "t1_label": "Business",
+      "t1_label": "World",
       "predicted_labels": [
-        "Business"
+        "World"
       ],
-      "confidence": 0.7135034799575806,
-      "entropy": 1.0387593507766724,
+      "confidence": 0.5193241834640503,
+      "entropy": 1.242057204246521,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
     },
     "ground_truth": "World"
   },
   {
     "prediction": {
       "text": "ADV: Try Currency Trading Risk-Free 30 Days 24-hour commission-free trading, 100-to-1 leverage of your capital, and Dealbook Fx 2 - our free advanced trading software. Sign up for our free 30-day trial and receive one-on-one training.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Business",
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9635398983955383,
-      "entropy": 0.26668581366539,
+      "confidence": 0.8034083247184753,
+      "entropy": 0.7871606945991516,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -133,8 +133,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9795376062393188,
-      "entropy": 0.17346549034118652,
+      "confidence": 0.8893947005271912,
+      "entropy": 0.613483726978302,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -151,8 +151,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9691659212112427,
-      "entropy": 0.23219910264015198,
+      "confidence": 0.9780338406562805,
+      "entropy": 0.17921346426010132,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -169,8 +169,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.8867494463920593,
-      "entropy": 0.5890965461730957,
+      "confidence": 0.8931567072868347,
+      "entropy": 0.5593971610069275,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -187,13 +187,13 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.3842371702194214,
-      "entropy": 1.8979160785675049,
+      "confidence": 0.6001956462860107,
+      "entropy": 1.574852705001831,
       "disagreement": false,
       "final_label": [
         "World"
       ],
-      "rationale": "Extreme T1 uncertainty (1.90 > 1.4). Direct Human Escalation.",
+      "rationale": "Extreme T1 uncertainty (1.57 > 1.4). Direct Human Escalation.",
       "simulated_annotation_error": false
     },
     "ground_truth": "World"
@@ -206,8 +206,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9883431792259216,
-      "entropy": 0.10869484394788742,
+      "confidence": 0.9871333837509155,
+      "entropy": 0.11805413663387299,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -224,8 +224,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9768334627151489,
-      "entropy": 0.18389035761356354,
+      "confidence": 0.8942152261734009,
+      "entropy": 0.5450224280357361,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -242,8 +242,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9902492165565491,
-      "entropy": 0.09448425471782684,
+      "confidence": 0.9910223484039307,
+      "entropy": 0.08791393041610718,
       "disagreement": false,
       "final_label": [
         "World"
@@ -260,8 +260,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9437463283538818,
-      "entropy": 0.3811487555503845,
+      "confidence": 0.9739636778831482,
+      "entropy": 0.2074476182460785,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -273,18 +273,18 @@
   {
     "prediction": {
       "text": "Nevada Implements 1st Touch-Screen Voting Machines With Paper-Trail By RACHEL KONRAD     CARSON CITY, Nev. (AP) -- In what could become a model for other states, Nevada voters on Tuesday became the first in the nation to cast ballots in a statewide election on computers that printed paper records of electronic ballots...",
-      "tier": 2,
+      "tier": 1,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.8124068975448608,
-      "entropy": 0.8704232573509216,
+      "confidence": 0.9596882462501526,
+      "entropy": 0.30022016167640686,
       "disagreement": false,
       "final_label": [
-        "Business"
+        "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -296,8 +296,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9631068706512451,
-      "entropy": 0.2828167974948883,
+      "confidence": 0.982792854309082,
+      "entropy": 0.1496352255344391,
       "disagreement": false,
       "final_label": [
         "World"
@@ -314,8 +314,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9826845526695251,
-      "entropy": 0.14630398154258728,
+      "confidence": 0.9427265524864197,
+      "entropy": 0.35923194885253906,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -332,8 +332,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9892695546150208,
-      "entropy": 0.10237669199705124,
+      "confidence": 0.9909142255783081,
+      "entropy": 0.08877583593130112,
       "disagreement": false,
       "final_label": [
         "World"
@@ -350,8 +350,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.8252159357070923,
-      "entropy": 0.9110189080238342,
+      "confidence": 0.8553049564361572,
+      "entropy": 0.7979281544685364,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -368,8 +368,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9886437058448792,
-      "entropy": 0.10761171579360962,
+      "confidence": 0.9889981150627136,
+      "entropy": 0.10456033796072006,
       "disagreement": false,
       "final_label": [
         "World"
@@ -381,18 +381,18 @@
   {
     "prediction": {
       "text": "PeopleSoft revises third-quarter profit Oracle target adds \\$2.6 million to bottom line after tax adjustment related to ex-CEO's severance package.",
-      "tier": 1,
-      "t1_label": "Business",
+      "tier": 2,
+      "t1_label": "Sci/Tech",
       "predicted_labels": [
-        "Business"
+        "Sci/Tech"
       ],
-      "confidence": 0.9485669136047363,
-      "entropy": 0.335144579410553,
+      "confidence": 0.6231334805488586,
+      "entropy": 1.0437407493591309,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -404,8 +404,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9857546091079712,
-      "entropy": 0.1259012371301651,
+      "confidence": 0.9750860929489136,
+      "entropy": 0.19344685971736908,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -422,8 +422,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9883361458778381,
-      "entropy": 0.10697077959775925,
+      "confidence": 0.9802677631378174,
+      "entropy": 0.16058681905269623,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -440,8 +440,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9887490272521973,
-      "entropy": 0.10617668926715851,
+      "confidence": 0.9897602200508118,
+      "entropy": 0.09845267981290817,
       "disagreement": false,
       "final_label": [
         "World"
@@ -458,8 +458,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9815976619720459,
-      "entropy": 0.15867650508880615,
+      "confidence": 0.9547995328903198,
+      "entropy": 0.32159900665283203,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -476,8 +476,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9805277585983276,
-      "entropy": 0.164060577750206,
+      "confidence": 0.9734430909156799,
+      "entropy": 0.20946717262268066,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -494,8 +494,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9799485206604004,
-      "entropy": 0.17248085141181946,
+      "confidence": 0.9771531820297241,
+      "entropy": 0.1922011822462082,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -512,8 +512,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9727501273155212,
-      "entropy": 0.21783943474292755,
+      "confidence": 0.8916721343994141,
+      "entropy": 0.5570679306983948,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -530,8 +530,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.95891934633255,
-      "entropy": 0.2844037413597107,
+      "confidence": 0.8759918808937073,
+      "entropy": 0.5982676148414612,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -548,8 +548,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9856211543083191,
-      "entropy": 0.13016782701015472,
+      "confidence": 0.9804613590240479,
+      "entropy": 0.16642828285694122,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -566,8 +566,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9767374396324158,
-      "entropy": 0.18873922526836395,
+      "confidence": 0.9727445840835571,
+      "entropy": 0.21074147522449493,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -579,18 +579,18 @@
   {
     "prediction": {
       "text": "Hasbro's No Conehead Its Saturday Night Live version of \"Trivial Pursuit\" is good strategy for staying ahead of age compression.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.8983958959579468,
-      "entropy": 0.6011737585067749,
+      "confidence": 0.850404679775238,
+      "entropy": 0.8088462948799133,
       "disagreement": false,
       "final_label": [
-        "Sci/Tech"
+        "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
     },
     "ground_truth": "Business"
   },
@@ -602,8 +602,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9386674165725708,
-      "entropy": 0.3847362697124481,
+      "confidence": 0.930729866027832,
+      "entropy": 0.4117576777935028,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -620,8 +620,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9425414800643921,
-      "entropy": 0.36651673913002014,
+      "confidence": 0.9621000289916992,
+      "entropy": 0.27431586384773254,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -638,8 +638,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9797402024269104,
-      "entropy": 0.1710376739501953,
+      "confidence": 0.9618627429008484,
+      "entropy": 0.27669480443000793,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -656,8 +656,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.7456621527671814,
-      "entropy": 1.0059915781021118,
+      "confidence": 0.49727314710617065,
+      "entropy": 1.1340192556381226,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -674,8 +674,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.974219799041748,
-      "entropy": 0.20835906267166138,
+      "confidence": 0.9415464401245117,
+      "entropy": 0.3817450702190399,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -692,8 +692,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9454803466796875,
-      "entropy": 0.357333242893219,
+      "confidence": 0.981376051902771,
+      "entropy": 0.15962278842926025,
       "disagreement": false,
       "final_label": [
         "World"
@@ -710,8 +710,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9887127876281738,
-      "entropy": 0.1050717756152153,
+      "confidence": 0.9832667112350464,
+      "entropy": 0.14260004460811615,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -728,8 +728,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9715877771377563,
-      "entropy": 0.217963308095932,
+      "confidence": 0.950095534324646,
+      "entropy": 0.32869377732276917,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -746,8 +746,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9901154041290283,
-      "entropy": 0.09546170383691788,
+      "confidence": 0.9910509586334229,
+      "entropy": 0.08784349262714386,
       "disagreement": false,
       "final_label": [
         "World"
@@ -764,8 +764,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9899592995643616,
-      "entropy": 0.09688541293144226,
+      "confidence": 0.9911952018737793,
+      "entropy": 0.08639033138751984,
       "disagreement": false,
       "final_label": [
         "World"
@@ -782,8 +782,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9808886647224426,
-      "entropy": 0.1646653115749359,
+      "confidence": 0.9769232869148254,
+      "entropy": 0.19043196737766266,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -800,8 +800,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.986275315284729,
-      "entropy": 0.12574416399002075,
+      "confidence": 0.9869313836097717,
+      "entropy": 0.12069746851921082,
       "disagreement": false,
       "final_label": [
         "World"
@@ -818,8 +818,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9832504391670227,
-      "entropy": 0.14304684102535248,
+      "confidence": 0.957003116607666,
+      "entropy": 0.2896776795387268,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -836,8 +836,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9824451804161072,
-      "entropy": 0.15204256772994995,
+      "confidence": 0.980050265789032,
+      "entropy": 0.16728109121322632,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -854,8 +854,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9887925982475281,
-      "entropy": 0.10399559885263443,
+      "confidence": 0.9853143692016602,
+      "entropy": 0.129205122590065,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -872,8 +872,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9837677478790283,
-      "entropy": 0.14253808557987213,
+      "confidence": 0.9811367392539978,
+      "entropy": 0.16162621974945068,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -890,8 +890,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9847169518470764,
-      "entropy": 0.13384543359279633,
+      "confidence": 0.9567718505859375,
+      "entropy": 0.29198968410491943,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -908,8 +908,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9409186840057373,
-      "entropy": 0.3657797873020172,
+      "confidence": 0.9452295899391174,
+      "entropy": 0.34501931071281433,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -926,8 +926,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.8855994343757629,
-      "entropy": 0.6239354014396667,
+      "confidence": 0.9527068734169006,
+      "entropy": 0.33802640438079834,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -940,17 +940,17 @@
     "prediction": {
       "text": "Rivals Try to Turn Tables on Charles Schwab By MICHAEL LIEDTKE     SAN FRANCISCO (AP) -- With its low prices and iconoclastic attitude, discount stock broker Charles Schwab Corp. (SCH) represented an annoying stone in Wall Street's wing-tipped shoes for decades...",
       "tier": 2,
-      "t1_label": "World",
+      "t1_label": "Business",
       "predicted_labels": [
-        "World"
+        "Business"
       ],
-      "confidence": 0.7226380109786987,
-      "entropy": 1.0441733598709106,
+      "confidence": 0.6698052883148193,
+      "entropy": 1.0733885765075684,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -962,8 +962,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9867072105407715,
-      "entropy": 0.12206748127937317,
+      "confidence": 0.9840694069862366,
+      "entropy": 0.14091625809669495,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -980,8 +980,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9880968332290649,
-      "entropy": 0.10907969623804092,
+      "confidence": 0.9756691455841064,
+      "entropy": 0.18870572745800018,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -998,8 +998,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.7242149114608765,
-      "entropy": 0.9413072466850281,
+      "confidence": 0.5036670565605164,
+      "entropy": 1.1144373416900635,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1016,8 +1016,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9848793148994446,
-      "entropy": 0.13549967110157013,
+      "confidence": 0.9891313314437866,
+      "entropy": 0.10359394550323486,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1034,8 +1034,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9790859818458557,
-      "entropy": 0.17943601310253143,
+      "confidence": 0.9768418669700623,
+      "entropy": 0.19411133229732513,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1052,8 +1052,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9824098348617554,
-      "entropy": 0.15252597630023956,
+      "confidence": 0.9777848720550537,
+      "entropy": 0.18437746167182922,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1070,8 +1070,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9863367676734924,
-      "entropy": 0.12124936282634735,
+      "confidence": 0.9657906293869019,
+      "entropy": 0.24388487637043,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1083,18 +1083,18 @@
   {
     "prediction": {
       "text": "Level 3 Acquires Sprint #39;s Wholesale Dial-Up Internet Business Level 3 today announced that it has purchased Sprint #39;s wholesale dial-up Internet access business for \\$34 million in cash. Sprint is one of the largest providers of wholesale dial-up service to ISPs in North America.",
-      "tier": 2,
+      "tier": 1,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.7672648429870605,
-      "entropy": 0.866774320602417,
+      "confidence": 0.8880281448364258,
+      "entropy": 0.5643594264984131,
       "disagreement": false,
       "final_label": [
-        "Business"
+        "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Business"
   },
@@ -1106,8 +1106,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9870904088020325,
-      "entropy": 0.11613739281892776,
+      "confidence": 0.9832296967506409,
+      "entropy": 0.14337339997291565,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1124,13 +1124,13 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.871663510799408,
-      "entropy": 0.6805977821350098,
+      "confidence": 0.747482419013977,
+      "entropy": 0.9192098379135132,
       "disagreement": false,
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.99). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
     },
     "ground_truth": "World"
   },
@@ -1142,8 +1142,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9838185906410217,
-      "entropy": 0.14259450137615204,
+      "confidence": 0.9804605841636658,
+      "entropy": 0.16785414516925812,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1160,8 +1160,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9888706803321838,
-      "entropy": 0.10398270189762115,
+      "confidence": 0.9863986372947693,
+      "entropy": 0.12221669405698776,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1178,8 +1178,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9633346199989319,
-      "entropy": 0.28404611349105835,
+      "confidence": 0.9610670208930969,
+      "entropy": 0.2931976020336151,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1191,18 +1191,18 @@
   {
     "prediction": {
       "text": "Hyundai signs deal for China truck plant Hyundai Motor Co. said yesterday that it has signed an agreement with a Chinese company, Jianghuai Automobile Corp., to build a commercial vehicle and engine plant in China #39;s Anhui province.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Business",
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.8956296443939209,
-      "entropy": 0.5670528411865234,
+      "confidence": 0.8298638463020325,
+      "entropy": 0.7645431756973267,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -1214,8 +1214,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.982177734375,
-      "entropy": 0.1526460349559784,
+      "confidence": 0.9818975329399109,
+      "entropy": 0.15524953603744507,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1232,8 +1232,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9785242080688477,
-      "entropy": 0.17591090500354767,
+      "confidence": 0.9399673342704773,
+      "entropy": 0.3824162483215332,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1250,8 +1250,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9867318272590637,
-      "entropy": 0.12226148694753647,
+      "confidence": 0.9826664924621582,
+      "entropy": 0.14949339628219604,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1268,8 +1268,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9840098023414612,
-      "entropy": 0.14194485545158386,
+      "confidence": 0.9830615520477295,
+      "entropy": 0.1492847204208374,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1286,8 +1286,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9870263934135437,
-      "entropy": 0.1157432496547699,
+      "confidence": 0.969347357749939,
+      "entropy": 0.2232697755098343,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1304,8 +1304,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9897149205207825,
-      "entropy": 0.09872569143772125,
+      "confidence": 0.9911202788352966,
+      "entropy": 0.0872427374124527,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1322,8 +1322,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.986782431602478,
-      "entropy": 0.12181790918111801,
+      "confidence": 0.9886206984519958,
+      "entropy": 0.1075841411948204,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1340,8 +1340,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9869750738143921,
-      "entropy": 0.12053362280130386,
+      "confidence": 0.989546000957489,
+      "entropy": 0.10032697021961212,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1358,8 +1358,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.6514455676078796,
-      "entropy": 1.123759150505066,
+      "confidence": 0.7610831260681152,
+      "entropy": 0.8972665071487427,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1376,8 +1376,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9784432649612427,
-      "entropy": 0.1752999871969223,
+      "confidence": 0.9693536162376404,
+      "entropy": 0.2263742983341217,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1394,8 +1394,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9762699007987976,
-      "entropy": 0.1895381659269333,
+      "confidence": 0.980006754398346,
+      "entropy": 0.16881163418293,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1412,8 +1412,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9822516441345215,
-      "entropy": 0.15542183816432953,
+      "confidence": 0.9800196886062622,
+      "entropy": 0.17068614065647125,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1430,8 +1430,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.983052134513855,
-      "entropy": 0.14879117906093597,
+      "confidence": 0.9713284373283386,
+      "entropy": 0.22586806118488312,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1448,8 +1448,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.982819139957428,
-      "entropy": 0.15241044759750366,
+      "confidence": 0.9781928062438965,
+      "entropy": 0.18560591340065002,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1466,8 +1466,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9842706322669983,
-      "entropy": 0.13836145401000977,
+      "confidence": 0.9840534329414368,
+      "entropy": 0.1407686322927475,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1484,8 +1484,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9883204698562622,
-      "entropy": 0.10881591588258743,
+      "confidence": 0.9865019917488098,
+      "entropy": 0.12366196513175964,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1502,8 +1502,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9875120520591736,
-      "entropy": 0.11540794372558594,
+      "confidence": 0.989200234413147,
+      "entropy": 0.10299694538116455,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1520,8 +1520,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9863945245742798,
-      "entropy": 0.12105509638786316,
+      "confidence": 0.971617579460144,
+      "entropy": 0.21334363520145416,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1538,8 +1538,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9808068871498108,
-      "entropy": 0.1628309041261673,
+      "confidence": 0.9776996374130249,
+      "entropy": 0.18303769826889038,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1556,8 +1556,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9730652570724487,
-      "entropy": 0.21105419099330902,
+      "confidence": 0.9252350926399231,
+      "entropy": 0.4349026679992676,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1574,8 +1574,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9716450572013855,
-      "entropy": 0.22469694912433624,
+      "confidence": 0.9178230166435242,
+      "entropy": 0.4990987777709961,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1592,8 +1592,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9646103978157043,
-      "entropy": 0.27467843890190125,
+      "confidence": 0.9649824500083923,
+      "entropy": 0.27296143770217896,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1610,8 +1610,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9837497472763062,
-      "entropy": 0.14440837502479553,
+      "confidence": 0.9760746359825134,
+      "entropy": 0.1969217211008072,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1628,8 +1628,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9786002039909363,
-      "entropy": 0.17354057729244232,
+      "confidence": 0.9167768359184265,
+      "entropy": 0.46861493587493896,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1641,18 +1641,18 @@
   {
     "prediction": {
       "text": "Wall St.'s Nest Egg - the Housing Sector  NEW YORK (Reuters) - If there were any doubts that we're  still living in the era of the stay-at-home economy, the rows  of empty seats at the Athens Olympics should help erase them.",
-      "tier": 2,
-      "t1_label": "World",
+      "tier": 1,
+      "t1_label": "Business",
       "predicted_labels": [
-        "World"
+        "Business"
       ],
-      "confidence": 0.674792468547821,
-      "entropy": 1.2071048021316528,
+      "confidence": 0.8954617977142334,
+      "entropy": 0.5739074945449829,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Business"
   },
@@ -1664,8 +1664,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9827699661254883,
-      "entropy": 0.1498427838087082,
+      "confidence": 0.9735254645347595,
+      "entropy": 0.21019119024276733,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1682,8 +1682,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.986656665802002,
-      "entropy": 0.11900295317173004,
+      "confidence": 0.9797331094741821,
+      "entropy": 0.16528666019439697,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1695,18 +1695,18 @@
   {
     "prediction": {
       "text": "Oil Prices Sink to a Four-Month Low  LONDON (Reuters) - Oil prices sank to a four-month low  below \\$41 for U.S. crude on Wednesday after leading OPEC  producer Saudi Arabia questioned the need for the cartel to  curb supplies.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Business",
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.957500696182251,
-      "entropy": 0.29322129487991333,
+      "confidence": 0.8117119669914246,
+      "entropy": 0.7962035536766052,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -1718,8 +1718,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9735965132713318,
-      "entropy": 0.20699122548103333,
+      "confidence": 0.976973831653595,
+      "entropy": 0.18773561716079712,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1736,8 +1736,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9705807566642761,
-      "entropy": 0.22637753188610077,
+      "confidence": 0.9502760171890259,
+      "entropy": 0.33459779620170593,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1754,8 +1754,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9770734310150146,
-      "entropy": 0.18976080417633057,
+      "confidence": 0.9758200645446777,
+      "entropy": 0.19663894176483154,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1767,18 +1767,18 @@
   {
     "prediction": {
       "text": "The Handbag? Total Knockoff. The Price Tag? All Too Real. It is as much a rite of the New York holiday season as sidewalk Santas or crowded Fifth Avenue sidewalks: the proliferation of hawkers selling counterfeit products like the fake Fendi handbag, the replica Rolex watch and the pirated DVD.",
-      "tier": 2,
+      "tier": 1,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.611853301525116,
-      "entropy": 1.110154390335083,
+      "confidence": 0.9491822719573975,
+      "entropy": 0.345369815826416,
       "disagreement": false,
       "final_label": [
-        "Business"
+        "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Business"
   },
@@ -1790,8 +1790,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.7485707402229309,
-      "entropy": 0.9117605090141296,
+      "confidence": 0.6588097214698792,
+      "entropy": 1.0202112197875977,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1808,8 +1808,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9789308309555054,
-      "entropy": 0.18058867752552032,
+      "confidence": 0.9762933254241943,
+      "entropy": 0.19862544536590576,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1826,8 +1826,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9894486665725708,
-      "entropy": 0.10089379549026489,
+      "confidence": 0.9905005693435669,
+      "entropy": 0.092312753200531,
       "disagreement": false,
       "final_label": [
         "World"
@@ -1844,8 +1844,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9831048846244812,
-      "entropy": 0.14881570637226105,
+      "confidence": 0.9822292327880859,
+      "entropy": 0.15491849184036255,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1862,8 +1862,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.5647505521774292,
-      "entropy": 1.177639126777649,
+      "confidence": 0.5614064335823059,
+      "entropy": 1.1489075422286987,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1880,8 +1880,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9785397052764893,
-      "entropy": 0.1787753850221634,
+      "confidence": 0.9762256145477295,
+      "entropy": 0.19342584908008575,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1898,8 +1898,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9820298552513123,
-      "entropy": 0.1522834151983261,
+      "confidence": 0.9550322890281677,
+      "entropy": 0.29799968004226685,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -1916,8 +1916,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9690989851951599,
-      "entropy": 0.24438029527664185,
+      "confidence": 0.9710238575935364,
+      "entropy": 0.226878821849823,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1934,8 +1934,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9820759296417236,
-      "entropy": 0.1573030948638916,
+      "confidence": 0.9744939804077148,
+      "entropy": 0.21064037084579468,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1952,8 +1952,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9823164343833923,
-      "entropy": 0.1536189168691635,
+      "confidence": 0.9804899096488953,
+      "entropy": 0.1671176701784134,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -1970,8 +1970,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9799623489379883,
-      "entropy": 0.16805525124073029,
+      "confidence": 0.9776347875595093,
+      "entropy": 0.18304868042469025,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -1988,8 +1988,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9796085953712463,
-      "entropy": 0.1743469536304474,
+      "confidence": 0.9815401434898376,
+      "entropy": 0.16025981307029724,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2006,8 +2006,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9868549108505249,
-      "entropy": 0.11799811571836472,
+      "confidence": 0.9798086285591125,
+      "entropy": 0.1638096421957016,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2024,8 +2024,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9879822134971619,
-      "entropy": 0.11280862241983414,
+      "confidence": 0.9892393350601196,
+      "entropy": 0.10251563042402267,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2042,8 +2042,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9270862340927124,
-      "entropy": 0.42757463455200195,
+      "confidence": 0.8899871110916138,
+      "entropy": 0.5530248880386353,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2060,8 +2060,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9797291159629822,
-      "entropy": 0.17062392830848694,
+      "confidence": 0.9781686663627625,
+      "entropy": 0.17863139510154724,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2078,8 +2078,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9892593622207642,
-      "entropy": 0.10063372552394867,
+      "confidence": 0.9872568845748901,
+      "entropy": 0.11615220457315445,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2091,18 +2091,18 @@
   {
     "prediction": {
       "text": "Sri Lanka batsman fined as Pakistan tie series Sri Lanka #39;s Kumar Sangakkara has been fined 30 of his match fee for showing dissent during the fourth day of the second Test against Pakistan in Karachi.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Sports",
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.8805557489395142,
-      "entropy": 0.5994715094566345,
+      "confidence": 0.7533414959907532,
+      "entropy": 0.8950674533843994,
       "disagreement": false,
       "final_label": [
         "Sports"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sports"
   },
@@ -2114,8 +2114,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9837017059326172,
-      "entropy": 0.14434084296226501,
+      "confidence": 0.9791041612625122,
+      "entropy": 0.17658862471580505,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2132,8 +2132,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9863033890724182,
-      "entropy": 0.12258303910493851,
+      "confidence": 0.9769203662872314,
+      "entropy": 0.18544425070285797,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2150,8 +2150,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.982444703578949,
-      "entropy": 0.15426994860172272,
+      "confidence": 0.9804233312606812,
+      "entropy": 0.16845302283763885,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2168,8 +2168,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9782525897026062,
-      "entropy": 0.18409018218517303,
+      "confidence": 0.9842832088470459,
+      "entropy": 0.14091171324253082,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2186,8 +2186,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9749852418899536,
-      "entropy": 0.20715391635894775,
+      "confidence": 0.9807769656181335,
+      "entropy": 0.16652652621269226,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2204,8 +2204,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9893669486045837,
-      "entropy": 0.10153330862522125,
+      "confidence": 0.9899757504463196,
+      "entropy": 0.0968199297785759,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2222,8 +2222,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9884219765663147,
-      "entropy": 0.10662925243377686,
+      "confidence": 0.9859817028045654,
+      "entropy": 0.12521234154701233,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2240,8 +2240,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.8253195881843567,
-      "entropy": 0.7537450790405273,
+      "confidence": 0.7501810789108276,
+      "entropy": 0.8940728902816772,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2258,8 +2258,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9899890422821045,
-      "entropy": 0.09652423858642578,
+      "confidence": 0.9911401867866516,
+      "entropy": 0.08714208751916885,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2276,8 +2276,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9326292276382446,
-      "entropy": 0.42000269889831543,
+      "confidence": 0.9124194979667664,
+      "entropy": 0.48463746905326843,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2294,13 +2294,13 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.8442158102989197,
-      "entropy": 0.7694833874702454,
+      "confidence": 0.527378499507904,
+      "entropy": 1.124376654624939,
       "disagreement": false,
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.99). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
     },
     "ground_truth": "Sports"
   },
@@ -2312,8 +2312,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9772499203681946,
-      "entropy": 0.18495722115039825,
+      "confidence": 0.9776952862739563,
+      "entropy": 0.1831798553466797,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2330,8 +2330,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9859290719032288,
-      "entropy": 0.12779366970062256,
+      "confidence": 0.9836095571517944,
+      "entropy": 0.14348728954792023,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2348,8 +2348,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9855958223342896,
-      "entropy": 0.13154400885105133,
+      "confidence": 0.9884282946586609,
+      "entropy": 0.10932677984237671,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2366,8 +2366,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.5998837947845459,
-      "entropy": 1.2986634969711304,
+      "confidence": 0.8059815764427185,
+      "entropy": 0.835443377494812,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2384,8 +2384,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9330039024353027,
-      "entropy": 0.4018394351005554,
+      "confidence": 0.9472334980964661,
+      "entropy": 0.3372606933116913,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2402,8 +2402,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9760687351226807,
-      "entropy": 0.19913813471794128,
+      "confidence": 0.9765368700027466,
+      "entropy": 0.194271519780159,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2420,8 +2420,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9799107313156128,
-      "entropy": 0.16812512278556824,
+      "confidence": 0.9727461934089661,
+      "entropy": 0.2144671380519867,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2438,8 +2438,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9552724957466125,
-      "entropy": 0.32423096895217896,
+      "confidence": 0.9446203112602234,
+      "entropy": 0.3853895664215088,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2456,8 +2456,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9789841771125793,
-      "entropy": 0.17397458851337433,
+      "confidence": 0.9501698613166809,
+      "entropy": 0.3343220055103302,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2474,8 +2474,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9877331256866455,
-      "entropy": 0.11284998804330826,
+      "confidence": 0.98527991771698,
+      "entropy": 0.13109666109085083,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2487,18 +2487,18 @@
   {
     "prediction": {
       "text": "NASA Leader Cites Finances and Submits His Resignation Sean O #39;Keefe resigned as NASA administrator on Monday, saying he is leaving the position he has held for three years to pursue better economic opportunity for his family.",
-      "tier": 2,
+      "tier": 1,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.6489712595939636,
-      "entropy": 1.1990878582000732,
+      "confidence": 0.9552314877510071,
+      "entropy": 0.3250957429409027,
       "disagreement": false,
       "final_label": [
-        "Business"
+        "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -2510,8 +2510,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.979617178440094,
-      "entropy": 0.16941557824611664,
+      "confidence": 0.9407880306243896,
+      "entropy": 0.37665215134620667,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2528,8 +2528,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9701526165008545,
-      "entropy": 0.23549197614192963,
+      "confidence": 0.958995521068573,
+      "entropy": 0.3060828149318695,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2546,8 +2546,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9844807386398315,
-      "entropy": 0.13554377853870392,
+      "confidence": 0.985573947429657,
+      "entropy": 0.12818627059459686,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2564,8 +2564,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9877541661262512,
-      "entropy": 0.1124773845076561,
+      "confidence": 0.9823576211929321,
+      "entropy": 0.15293511748313904,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2582,8 +2582,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9903344511985779,
-      "entropy": 0.09381803125143051,
+      "confidence": 0.9905493855476379,
+      "entropy": 0.09189412742853165,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2595,18 +2595,18 @@
   {
     "prediction": {
       "text": "Calif. Mental Health Services May Expand (AP) AP - As pressures increase on California's mental health system, its workers and advocates say they are forced to do more with a supply of money that seems to shrink each year.",
-      "tier": 2,
-      "t1_label": "Sci/Tech",
+      "tier": 1,
+      "t1_label": "Business",
       "predicted_labels": [
-        "Sci/Tech"
+        "Business"
       ],
-      "confidence": 0.6126077175140381,
-      "entropy": 1.324568271636963,
+      "confidence": 0.878612756729126,
+      "entropy": 0.6361542344093323,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "World"
   },
@@ -2618,8 +2618,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9799724221229553,
-      "entropy": 0.16718505322933197,
+      "confidence": 0.9799586534500122,
+      "entropy": 0.16897901892662048,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2636,8 +2636,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9826906323432922,
-      "entropy": 0.1490512192249298,
+      "confidence": 0.9678758382797241,
+      "entropy": 0.23544453084468842,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2654,8 +2654,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9801878333091736,
-      "entropy": 0.1623321920633316,
+      "confidence": 0.9585951566696167,
+      "entropy": 0.2805977463722229,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2672,8 +2672,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9502570629119873,
-      "entropy": 0.3327949345111847,
+      "confidence": 0.9105446338653564,
+      "entropy": 0.4913700819015503,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2685,18 +2685,18 @@
   {
     "prediction": {
       "text": "Two hurricanes = two deductibles Many homeowners in the Orlando area suffered a double blow when hurricanes Charley and Frances struck in quick succession. Now, they #39;re smarting from a financial one-two punch - two insurance deductibles.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Sports",
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9091083407402039,
-      "entropy": 0.5431481003761292,
+      "confidence": 0.755013108253479,
+      "entropy": 1.1146503686904907,
       "disagreement": false,
       "final_label": [
-        "Sports"
+        "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
     },
     "ground_truth": "Business"
   },
@@ -2708,8 +2708,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.8945215344429016,
-      "entropy": 0.558333694934845,
+      "confidence": 0.9696792364120483,
+      "entropy": 0.2328760027885437,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2726,8 +2726,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9782448410987854,
-      "entropy": 0.18507887423038483,
+      "confidence": 0.9766977429389954,
+      "entropy": 0.19521857798099518,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2744,8 +2744,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9703603386878967,
-      "entropy": 0.23879332840442657,
+      "confidence": 0.9725626707077026,
+      "entropy": 0.2229701727628708,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2762,8 +2762,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9846001267433167,
-      "entropy": 0.13247373700141907,
+      "confidence": 0.9782741665840149,
+      "entropy": 0.1726476103067398,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2780,8 +2780,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9830650091171265,
-      "entropy": 0.14785626530647278,
+      "confidence": 0.9766343235969543,
+      "entropy": 0.19149062037467957,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2798,8 +2798,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9108088612556458,
-      "entropy": 0.490093469619751,
+      "confidence": 0.8855829834938049,
+      "entropy": 0.5741106271743774,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2816,8 +2816,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9861314296722412,
-      "entropy": 0.12450424581766129,
+      "confidence": 0.9865409731864929,
+      "entropy": 0.12119664996862411,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2834,8 +2834,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9078407883644104,
-      "entropy": 0.581969141960144,
+      "confidence": 0.9496466517448425,
+      "entropy": 0.35745421051979065,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2852,8 +2852,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9907183051109314,
-      "entropy": 0.09056068956851959,
+      "confidence": 0.9910187721252441,
+      "entropy": 0.08797822147607803,
       "disagreement": false,
       "final_label": [
         "World"
@@ -2870,8 +2870,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9867497086524963,
-      "entropy": 0.11947815120220184,
+      "confidence": 0.9874129295349121,
+      "entropy": 0.11574362218379974,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2888,8 +2888,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9837108254432678,
-      "entropy": 0.1396331489086151,
+      "confidence": 0.9444867968559265,
+      "entropy": 0.3482697606086731,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2906,8 +2906,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9894614815711975,
-      "entropy": 0.09904339164495468,
+      "confidence": 0.9881426692008972,
+      "entropy": 0.11003586649894714,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -2924,8 +2924,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9804753661155701,
-      "entropy": 0.16820761561393738,
+      "confidence": 0.9794537425041199,
+      "entropy": 0.17400889098644257,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2942,8 +2942,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9851921796798706,
-      "entropy": 0.13332973420619965,
+      "confidence": 0.9844723343849182,
+      "entropy": 0.1385759711265564,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -2960,8 +2960,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9452751278877258,
-      "entropy": 0.34859445691108704,
+      "confidence": 0.967132568359375,
+      "entropy": 0.2382325530052185,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2978,8 +2978,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9701236486434937,
-      "entropy": 0.2281157225370407,
+      "confidence": 0.9640138149261475,
+      "entropy": 0.2590448558330536,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -2996,8 +2996,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.985660195350647,
-      "entropy": 0.12590040266513824,
+      "confidence": 0.9766457676887512,
+      "entropy": 0.18378156423568726,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -3014,8 +3014,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9826750159263611,
-      "entropy": 0.15092888474464417,
+      "confidence": 0.9029921889305115,
+      "entropy": 0.51377934217453,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3032,8 +3032,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9823877215385437,
-      "entropy": 0.1550581008195877,
+      "confidence": 0.9864023327827454,
+      "entropy": 0.12509310245513916,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3050,8 +3050,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9848039150238037,
-      "entropy": 0.13652867078781128,
+      "confidence": 0.9891020655632019,
+      "entropy": 0.10335196554660797,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3068,8 +3068,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9804003238677979,
-      "entropy": 0.16930799186229706,
+      "confidence": 0.976316511631012,
+      "entropy": 0.19575946033000946,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3086,8 +3086,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9887264370918274,
-      "entropy": 0.10458492487668991,
+      "confidence": 0.9842171669006348,
+      "entropy": 0.13602297008037567,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -3104,8 +3104,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9554697871208191,
-      "entropy": 0.3181196451187134,
+      "confidence": 0.955503523349762,
+      "entropy": 0.31780868768692017,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3122,8 +3122,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9899411797523499,
-      "entropy": 0.09674488753080368,
+      "confidence": 0.9902681708335876,
+      "entropy": 0.09437485784292221,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3140,8 +3140,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9693008661270142,
-      "entropy": 0.23186403512954712,
+      "confidence": 0.9725415110588074,
+      "entropy": 0.22027233242988586,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3153,18 +3153,18 @@
   {
     "prediction": {
       "text": "Oracle #39;s sweet on PeopleSoft Oracle sweetened its hostile bid for rival business software maker PeopleSoft to \\$9.2 billion, a 14 increase aimed at resolving the long-running takeover battle between the bitter foes.",
-      "tier": 1,
+      "tier": 2,
       "t1_label": "Business",
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.961208164691925,
-      "entropy": 0.2741146683692932,
+      "confidence": 0.618324875831604,
+      "entropy": 1.0517666339874268,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "Tier 1 classified with high confidence."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -3176,8 +3176,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9872719645500183,
-      "entropy": 0.11502724140882492,
+      "confidence": 0.9848655462265015,
+      "entropy": 0.13232523202896118,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -3194,8 +3194,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9581634402275085,
-      "entropy": 0.3113636374473572,
+      "confidence": 0.9704252481460571,
+      "entropy": 0.23416876792907715,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3212,8 +3212,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9882219433784485,
-      "entropy": 0.11058849841356277,
+      "confidence": 0.9891242980957031,
+      "entropy": 0.10374236106872559,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3230,8 +3230,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9253074526786804,
-      "entropy": 0.4735899865627289,
+      "confidence": 0.9637615084648132,
+      "entropy": 0.27569130063056946,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3248,8 +3248,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9714435338973999,
-      "entropy": 0.22090111672878265,
+      "confidence": 0.9151821136474609,
+      "entropy": 0.46907180547714233,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3266,8 +3266,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9892232418060303,
-      "entropy": 0.10251937061548233,
+      "confidence": 0.9908968806266785,
+      "entropy": 0.08910001069307327,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3280,17 +3280,17 @@
     "prediction": {
       "text": "September Retail Sales Up by 1.5 Percent WASHINGTON - Shoppers got their buying groove back last month, propelling sales at the nation's retailers by a strong 1.5 percent. It was the best showing since March...",
       "tier": 2,
-      "t1_label": "World",
+      "t1_label": "Business",
       "predicted_labels": [
-        "World"
+        "Business"
       ],
-      "confidence": 0.7779343128204346,
-      "entropy": 0.9637828469276428,
+      "confidence": 0.5053426623344421,
+      "entropy": 1.2400695085525513,
       "disagreement": false,
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | Strong T2 confidence (0.85) overrides T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -3302,8 +3302,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9741331338882446,
-      "entropy": 0.20468494296073914,
+      "confidence": 0.9423100352287292,
+      "entropy": 0.3715614676475525,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3320,8 +3320,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9819557070732117,
-      "entropy": 0.15882608294487,
+      "confidence": 0.9887946844100952,
+      "entropy": 0.10608895868062973,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3338,8 +3338,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9746326804161072,
-      "entropy": 0.19917108118534088,
+      "confidence": 0.9763142466545105,
+      "entropy": 0.189736008644104,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3356,8 +3356,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9888888001441956,
-      "entropy": 0.1053551435470581,
+      "confidence": 0.9901027679443359,
+      "entropy": 0.09577116370201111,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3374,8 +3374,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9184982776641846,
-      "entropy": 0.4595780074596405,
+      "confidence": 0.9702061414718628,
+      "entropy": 0.22452490031719208,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3392,8 +3392,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.988807201385498,
-      "entropy": 0.10463538020849228,
+      "confidence": 0.9874858260154724,
+      "entropy": 0.1160779818892479,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -3410,8 +3410,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9809107184410095,
-      "entropy": 0.1615721583366394,
+      "confidence": 0.9712329506874084,
+      "entropy": 0.22288329899311066,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3428,8 +3428,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9819833040237427,
-      "entropy": 0.15707485377788544,
+      "confidence": 0.9785671234130859,
+      "entropy": 0.18044604361057281,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3446,8 +3446,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.8910534381866455,
-      "entropy": 0.5573675632476807,
+      "confidence": 0.9214209318161011,
+      "entropy": 0.4423259198665619,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3464,8 +3464,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9840012788772583,
-      "entropy": 0.13749344646930695,
+      "confidence": 0.968656063079834,
+      "entropy": 0.23006239533424377,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -3482,8 +3482,8 @@
       "predicted_labels": [
         "World"
       ],
-      "confidence": 0.9582774043083191,
-      "entropy": 0.31409966945648193,
+      "confidence": 0.9699804186820984,
+      "entropy": 0.23853448033332825,
       "disagreement": false,
       "final_label": [
         "World"
@@ -3500,8 +3500,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9848233461380005,
-      "entropy": 0.1327938288450241,
+      "confidence": 0.9426908493041992,
+      "entropy": 0.35302746295928955,
       "disagreement": false,
       "final_label": [
         "Sports"
@@ -3518,8 +3518,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9812256693840027,
-      "entropy": 0.163274347782135,
+      "confidence": 0.9775879383087158,
+      "entropy": 0.1876695156097412,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3536,8 +3536,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9844211339950562,
-      "entropy": 0.13863398134708405,
+      "confidence": 0.9819914698600769,
+      "entropy": 0.15639753639698029,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3554,8 +3554,8 @@
       "predicted_labels": [
         "Business"
       ],
-      "confidence": 0.9721294641494751,
-      "entropy": 0.21599289774894714,
+      "confidence": 0.9624454379081726,
+      "entropy": 0.27210819721221924,
       "disagreement": false,
       "final_label": [
         "Business"
@@ -3572,8 +3572,8 @@
       "predicted_labels": [
         "Sci/Tech"
       ],
-      "confidence": 0.9792360663414001,
-      "entropy": 0.17348293960094452,
+      "confidence": 0.9788969159126282,
+      "entropy": 0.17503640055656433,
       "disagreement": false,
       "final_label": [
         "Sci/Tech"
@@ -3590,8 +3590,8 @@
       "predicted_labels": [
         "Sports"
       ],
-      "confidence": 0.9855338335037231,
-      "entropy": 0.12706312537193298,
+      "confidence": 0.9551228284835815,
+      "entropy": 0.29706209897994995,
       "disagreement": false,
       "final_label": [
         "Sports"

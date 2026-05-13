@@ -8,10 +8,10 @@ This report summarizes the performance of the Tri-Tiered Active Learning framewo
 | Metric | Value | Note |
 | :--- | :--- | :--- |
 | **Total Samples** | 200 | Test set size |
-| **Tier 1 Accuracy** | 86.50% | Baseline (Encoder only) |
-| **Final System Accuracy** | 88.00% | Integrated performance |
+| **Tier 1 Accuracy** | 87.50% | Baseline (Encoder only) |
+| **Final System Accuracy** | 89.00% | Integrated performance |
 | **Accuracy Boost** | 1.50% | Lift from Tier 2 & 3 |
-| **Weighted F1 Score** | 0.8803 | |
+| **Weighted F1 Score** | 0.8904 | |
 | **Human Effort Ratio** | 0.50% | Samples requiring human label |
 | **PICR** | 3.0000 | Point-Improvement-per-Cost-Ratio |
 | **PICR Status** | **STRONG** | Efficiency classification |
@@ -19,12 +19,12 @@ This report summarizes the performance of the Tri-Tiered Active Learning framewo
 ## 3. Tier Distribution & Load Balancing
 The framework aims to maximize Tier 1 usage while minimizing Tier 3 escalation.
 
-- **Tier 1 (Base Encoder):** 179 samples (89.5%)
-- **Tier 2 (Local LLM):** 20 samples (10.0%)
+- **Tier 1 (Base Encoder):** 177 samples (88.5%)
+- **Tier 2 (Local LLM):** 22 samples (11.0%)
 - **Tier 3 (Human Expert):** 1 samples (0.5%)
 
 ## 4. Constraint Validation
-- ✅ **Efficiency Target (T1 >= 60%):** 89.5% (PASSED)
+- ✅ **Efficiency Target (T1 >= 60%):** 88.5% (PASSED)
 - ✅ **Human Cost Target (T3 <= 30%):** 0.5% (PASSED)
 
 ## 5. Conclusion

@@ -1,13 +1,13 @@
 {
   "total_samples": 200,
   "tier_distribution": {
-    "1": 179,
-    "2": 20,
+    "1": 177,
+    "2": 22,
     "3": 1
   },
-  "accuracy_t1": 0.865,
-  "accuracy_final": 0.88,
-  "f1_weighted": 0.8803238069438799,
+  "accuracy_t1": 0.875,
+  "accuracy_final": 0.89,
+  "f1_weighted": 0.890433356554579,
   "human_effort_ratio": 0.005,
   "picr": 3.0000000000000027,
   "picr_display": "3.0000",

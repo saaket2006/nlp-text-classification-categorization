@@ -166,8 +166,29 @@ def main():
     with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
         json.dump(results_log, f, indent=2)
         
-    human_weight = config.get("tier3", {}).get("human_effort_weight", 1.0)
     metrics = evaluator.save_report(config["paths"]["metrics_file"], human_effort_weight=human_weight)
+
+    # Update History Log
+    history_file = os.path.join(config["paths"]["logs_dir"], "history.json")
+    history = []
+    if os.path.exists(history_file):
+        try:
+            with open(history_file, "r") as f:
+                history = json.load(f)
+        except: history = []
+    
+    import datetime
+    history.append({
+        "timestamp": datetime.datetime.now().isoformat(),
+        "accuracy": metrics["accuracy_final"],
+        "human_effort_ratio": metrics["human_effort_ratio"],
+        "picr": metrics["picr"],
+        "t1": config["tier1"]["threshold_entropy"],
+        "t2": config["tier1"]["threshold_confidence"]
+    })
+    
+    with open(history_file, "w") as f:
+        json.dump(history, f, indent=2)
     
     # Research Report
     t1_pct = (metrics['tier_distribution'].get(1, 0) / metrics['total_samples']) * 100
