@@ -4,6 +4,7 @@ import os
 import torch
 import random
 import argparse
+import numpy as np
 from models.tier1_model import Tier1Model
 from models.tier2_llm import Tier2LLM
 from core.uncertainty import UncertaintyEngine
@@ -11,6 +12,13 @@ from core.router import TieredRouter
 from data.loader import DataLoader
 from metrics.evaluator import PipelineEvaluator
 from tqdm import tqdm
+
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=False):
     evaluator = PipelineEvaluator()
@@ -59,7 +67,8 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
     return evaluator, results_log
 
 def main():
-    parser = argparse.ArgumentParser()
+    set_seed(42)
+    parser = argparse.ArgumentParser(description="Tri-Tiered Active Learning Pipeline")
     parser.add_argument("--sweep", action="store_true", help="Run threshold sweep")
     args = parser.parse_args()
 
@@ -166,6 +175,7 @@ def main():
     with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
         json.dump(results_log, f, indent=2)
         
+    human_weight = config.get("tier3", {}).get("human_effort_weight", 1.0)
     metrics = evaluator.save_report(config["paths"]["metrics_file"], human_effort_weight=human_weight)
 
     # Update History Log

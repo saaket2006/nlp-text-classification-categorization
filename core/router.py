@@ -42,7 +42,7 @@ class TieredRouter:
         # 2. Uncertainty Window: Potential Tier 2 / Tier 3
         if t1_entropy > self.entropy_threshold or t1_conf < self.conf_threshold:
             # Escalate to Tier 2
-            t2_res, raw_res = self.llm.predict(text, self.categories)
+            t2_res, raw_res = self.llm.predict(text, self.categories, t1_label=t1_label)
             
             if t2_res:
                 t2_labels = t2_res.get("labels", [])
@@ -55,11 +55,11 @@ class TieredRouter:
                     output["rationale"] += " | T1/T2 Consensus reached."
                 else:
                     # Disagreement - be very careful
-                    if t2_conf >= 0.85:
-                        # Extreme LLM confidence - allow free override
+                    if (t2_conf >= 1.01):
+                        # Free Gain path: (Disabled to ensure stability)
                         output["tier"] = 2
                         output["final_label"] = t2_labels
-                        output["rationale"] += " | Strong T2 confidence (0.85) overrides T1."
+                        output["rationale"] += " | (Override Disabled for Stability)."
                     else:
                         # Standard disagreement -> Human
                         output["tier"] = 3

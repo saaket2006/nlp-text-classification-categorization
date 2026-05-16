@@ -3,13 +3,14 @@ import json
 import re
 import os
 import datetime
+import numpy as np
 
 class Tier2LLM:
     def __init__(self, model_name: str, url: str):
         self.model_name = model_name
         self.client = ollama.Client(host=url)
 
-    def generate_prompt(self, text: str, categories: list):
+    def generate_prompt(self, text: str, categories: list, t1_label: str = None):
         prompt = f"""
 Task: Classify the following news text into the most accurate category. 
 Category Definitions:
@@ -20,9 +21,8 @@ Category Definitions:
 
 Guidelines:
 1. Provide a step-by-step reasoning (Chain of Thought) before the final label.
-2. If the text mentions a company's stock price or a merger, it is 'Business'.
-3. If it is about a specific tech product review, it is 'Sci/Tech'.
-4. If it is about a political conflict between countries, it is 'World'.
+2. Only suggest a different category than you think Tier 1 might suggest if you are 100% certain. 
+3. If the text is ambiguous, stick to the most obvious category.
 Available Categories: {', '.join(categories)}
 
 Examples:
@@ -129,39 +129,48 @@ Output (structured key-value format):
 
         return result
 
-    def predict(self, text: str, categories: list):
-        prompt = self.generate_prompt(text, categories)
-        response_text = ""
-        try:
-            response = self.client.generate(model=self.model_name, prompt=prompt, options={"temperature": 0.0})
-            response_text = response['response']
+    def predict(self, text: str, categories: list, t1_label: str = None, num_votes: int = 3):
+        prompt = self.generate_prompt(text, categories, t1_label)
+        votes = []
+        raw_responses = []
+        
+        for _ in range(num_votes):
+            try:
+                # Use temperature 0.7 for voting diversity
+                response = self.client.generate(model=self.model_name, prompt=prompt, options={"temperature": 0.7})
+                res_text = response['response']
+                raw_responses.append(res_text)
+                result = self._parse_resilient(res_text)
+                if result.get("labels"):
+                    votes.append(result)
+            except Exception as e:
+                print(f"Voting error: {e}")
+        
+        if not votes:
+            return None, "All votes failed"
             
-            # 1. Attempt Resilient Parsing (Primary)
-            result = self._parse_resilient(response_text)
+        # Majority Vote Logic
+        label_counts = {}
+        for v in votes:
+            for lbl in v["labels"]:
+                label_counts[lbl] = label_counts.get(lbl, 0) + 1
+        
+        if not label_counts:
+            return None, "No labels found in votes"
             
-            # Check if we got at least labels and confidence
-            if result.get("labels") and "confidence" in result:
-                return result, response_text
-                
-            # 2. Fallback: Check if it's JSON anyway (Legacy Support)
-            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
-            if json_match:
-                try:
-                    result = json.loads(self._clean_json_string(json_match.group()))
-                    if isinstance(result.get("labels"), str):
-                        result["labels"] = [result["labels"]]
-                    return result, response_text
-                except:
-                    pass
-            
-            # 3. If everything fails, log and return None
-            self._log_error_response(response_text, "Failed to parse as structured key-value format or JSON")
-            return None, response_text
-            
-        except Exception as e:
-            print(f"Error in Tier 2 LLM: {e}")
-            self._log_error_response(response_text if response_text else "NO_RESPONSE", str(e))
-            return None, str(e)
+        # Pick top label
+        best_label = max(label_counts, key=label_counts.get)
+        
+        # Calculate average confidence of votes for that label
+        avg_conf = np.mean([v.get("confidence", 0.5) for v in votes if best_label in v["labels"]])
+        
+        final_result = {
+            "labels": [best_label],
+            "confidence": float(avg_conf),
+            "reasoning": votes[0].get("reasoning", "Majority vote winner.")
+        }
+        
+        return final_result, "\n---\n".join(raw_responses)
 
     def _log_error_response(self, response_text: str, error_msg: str):
         log_dir = "logs/tier2_errors"
