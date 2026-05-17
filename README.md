@@ -118,7 +118,3 @@ Modify `config.yaml` to adjust model parameters and routing thresholds:
 - `human_effort_weight`: Set to `1.0` for realistic ROI analysis.
 - `model_name`: Switch between different HuggingFace or Ollama models.
 
----
-
-## 📜 License
-[MIT License](LICENSE)
