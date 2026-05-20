@@ -103,7 +103,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -182,7 +182,7 @@
   {
     "prediction": {
       "text": "Bookies take bets on new Band Aid Bookies take bets on a new Band Aid single being Christmas No 1, expected to be confirmed by Midge Ure.",
-      "tier": 3,
+      "tier": 2,
       "t1_label": "Business",
       "predicted_labels": [
         "Business"
@@ -191,10 +191,9 @@
       "entropy": 1.8462361097335815,
       "disagreement": false,
       "final_label": [
-        "World"
+        "Business"
       ],
-      "rationale": "Extreme T1 uncertainty (1.85 > 1.45). Direct Human Escalation.",
-      "simulated_annotation_error": false
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.97). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -662,7 +661,7 @@
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -921,19 +920,18 @@
   {
     "prediction": {
       "text": "UN 'must ignore cloning ban call' The UK's Royal Society urges the UN to ignore a call by President Bush to ban all forms of human cloning.",
-      "tier": 3,
+      "tier": 1,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
       "confidence": 0.6906518936157227,
       "entropy": 1.0339115858078003,
-      "disagreement": true,
+      "disagreement": false,
       "final_label": [
-        "Sports"
+        "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9833333333333334). | T1/T2 Disagreement. Escalating to Human for safety.",
-      "simulated_annotation_error": true
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -1642,7 +1640,7 @@
   {
     "prediction": {
       "text": "Wall St.'s Nest Egg - the Housing Sector  NEW YORK (Reuters) - If there were any doubts that we're  still living in the era of the stay-at-home economy, the rows  of empty seats at the Athens Olympics should help erase them.",
-      "tier": 3,
+      "tier": 2,
       "t1_label": "World",
       "predicted_labels": [
         "World"
@@ -1653,8 +1651,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Disagreement. Escalating to Human for safety.",
-      "simulated_annotation_error": false
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Disagreement Override: T1 highly uncertain (ent: 1.29), selected Tier 2 prediction ['Business']"
     },
     "ground_truth": "Business"
   },
@@ -1769,7 +1766,7 @@
   {
     "prediction": {
       "text": "The Handbag? Total Knockoff. The Price Tag? All Too Real. It is as much a rite of the New York holiday season as sidewalk Santas or crowded Fifth Avenue sidewalks: the proliferation of hawkers selling counterfeit products like the fake Fendi handbag, the replica Rolex watch and the pirated DVD.",
-      "tier": 2,
+      "tier": 1,
       "t1_label": "Business",
       "predicted_labels": [
         "Business"
@@ -1780,7 +1777,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Consensus reached."
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Business"
   },
@@ -1870,7 +1867,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.96). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -2104,7 +2101,7 @@
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sports"
   },
@@ -2237,7 +2234,7 @@
   {
     "prediction": {
       "text": "BSkyB sees profits rise after strong subscriber growth (AFP) AFP - British satellite broadcaster BSkyB said profit rose by 16 percent in the first quarter as the group enjoyed strong subscriber growth in the run-up to the key Christmas trading period.",
-      "tier": 3,
+      "tier": 2,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
@@ -2246,10 +2243,9 @@
       "entropy": 1.1323671340942383,
       "disagreement": true,
       "final_label": [
-        "World"
+        "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Disagreement. Escalating to Human for safety.",
-      "simulated_annotation_error": false
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9866666666666667). | T1/T2 Disagreement Override: T1 highly uncertain (ent: 1.13), selected Tier 2 prediction ['Business']"
     },
     "ground_truth": "World"
   },
@@ -2292,7 +2288,7 @@
   {
     "prediction": {
       "text": "For starters, Giants #39; Manning on mark Manning had a decent debut as a starter, but Delhomme overshadowed the No. 1 pick in the NFL Draft by throwing for a touchdown and running for another in the Carolina Panthers #39; 27-20 exhibition victory last night over ...",
-      "tier": 3,
+      "tier": 2,
       "t1_label": "World",
       "predicted_labels": [
         "World"
@@ -2303,8 +2299,7 @@
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9866666666666667). | T1/T2 Disagreement. Escalating to Human for safety.",
-      "simulated_annotation_error": false
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.98). | T1/T2 Disagreement Override: T1 highly uncertain (ent: 1.11), selected Tier 2 prediction ['Sports']"
     },
     "ground_truth": "Sports"
   },
@@ -2365,19 +2360,18 @@
   {
     "prediction": {
       "text": "Black Market in British Treasure Sold on EBay (Reuters) Reuters - Pieces of Britain's past, including a\\second-century silver ring and a 500-year-old Tudor trade\\weight, are among artifacts being peddled daily on the Internet\\to the alarm of experts at the British Museum.",
-      "tier": 3,
+      "tier": 2,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
       "confidence": 0.5820000171661377,
       "entropy": 1.2090470790863037,
-      "disagreement": true,
+      "disagreement": false,
       "final_label": [
-        "World"
+        "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9833333333333334). | T1/T2 Disagreement. Escalating to Human for safety.",
-      "simulated_annotation_error": false
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -2492,19 +2486,18 @@
   {
     "prediction": {
       "text": "NASA Leader Cites Finances and Submits His Resignation Sean O #39;Keefe resigned as NASA administrator on Monday, saying he is leaving the position he has held for three years to pursue better economic opportunity for his family.",
-      "tier": 3,
+      "tier": 1,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
       "confidence": 0.7945621609687805,
       "entropy": 0.9743493795394897,
-      "disagreement": true,
+      "disagreement": false,
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Disagreement. Escalating to Human for safety.",
-      "simulated_annotation_error": false
+      "rationale": "Tier 1 classified with high confidence."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -2601,19 +2594,18 @@
   {
     "prediction": {
       "text": "Calif. Mental Health Services May Expand (AP) AP - As pressures increase on California's mental health system, its workers and advocates say they are forced to do more with a supply of money that seems to shrink each year.",
-      "tier": 3,
+      "tier": 2,
       "t1_label": "Sci/Tech",
       "predicted_labels": [
         "Sci/Tech"
       ],
       "confidence": 0.3645153045654297,
       "entropy": 1.658941388130188,
-      "disagreement": false,
+      "disagreement": true,
       "final_label": [
-        "World"
+        "Business"
       ],
-      "rationale": "Extreme T1 uncertainty (1.66 > 1.45). Direct Human Escalation.",
-      "simulated_annotation_error": false
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9866666666666667). | T1/T2 Disagreement Override: T1 highly uncertain (ent: 1.66), selected Tier 2 prediction ['Business']"
     },
     "ground_truth": "World"
   },

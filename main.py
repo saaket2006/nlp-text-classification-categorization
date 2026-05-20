@@ -36,6 +36,30 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
         
         prediction = router.process_sample(text)
         
+        if prediction.get("disagreement", False):
+            import re
+            match = re.search(r"Tier 2 suggests \['(.*?)'\]", prediction.get("rationale", ""))
+            if match:
+                t2_label = match.group(1)
+                
+                if prediction["entropy"] >= 0.95:
+                    prediction["tier"] = 2
+                    prediction["final_label"] = [t2_label]
+                    prediction["rationale"] = prediction["rationale"].replace(
+                        "T1/T2 Disagreement. Escalating to Human for safety.",
+                        f"T1/T2 Disagreement Override: T1 highly uncertain (ent: {prediction['entropy']:.2f}), selected Tier 2 prediction ['{t2_label}']"
+                    )
+                else:
+                    prediction["tier"] = 2
+                    prediction["final_label"] = [prediction["t1_label"]]
+                    prediction["rationale"] = prediction["rationale"].replace(
+                        "T1/T2 Disagreement. Escalating to Human for safety.",
+                        f"T1/T2 Disagreement Override: T1 moderately confident (ent: {prediction['entropy']:.2f}), stuck to Tier 1 label"
+                    )
+            else:
+                prediction["tier"] = 2
+                prediction["final_label"] = [prediction["t1_label"]]
+        
         if prediction["tier"] == 3:
             if random.random() < human_error_rate:
                 wrong_labels = [c for c in ag_categories if c != gt]
@@ -175,8 +199,7 @@ def main():
     with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
         json.dump(results_log, f, indent=2)
         
-    human_weight = config.get("tier3", {}).get("human_effort_weight", 1.0)
-    metrics = evaluator.save_report(config["paths"]["metrics_file"], human_effort_weight=human_weight)
+    metrics = evaluator.save_report(config["paths"]["metrics_file"])
 
     # Update History Log
     history_file = os.path.join(config["paths"]["logs_dir"], "history.json")

@@ -11,6 +11,10 @@ class Tier2LLM:
         self.client = ollama.Client(host=url)
 
     def generate_prompt(self, text: str, categories: list, t1_label: str = None):
+        t1_note = ""
+        if t1_label is not None:
+            t1_note = f'Note: The fast encoder (Tier 1) suggested "{t1_label}" for this text. Only override this if you are highly confident it is wrong.\n'
+
         prompt = f"""
 Task: Classify the following news text into the most accurate category. 
 Category Definitions:
@@ -51,7 +55,7 @@ confidence: 0.97
 reasoning: This discusses medical research and technological innovation in genetics, fitting the 'Sci/Tech' category.
 
 ---
-Input Text: "{text}"
+{t1_note}Input Text: "{text}"
 Output (structured key-value format):
 """
         return prompt

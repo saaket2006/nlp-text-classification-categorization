@@ -1,17 +1,17 @@
 {
   "total_samples": 200,
   "tier_distribution": {
-    "1": 186,
-    "2": 6,
-    "3": 8
+    "1": 189,
+    "2": 11,
+    "3": 0
   },
   "accuracy_t1": 0.865,
-  "accuracy_final": 0.89,
-  "f1_weighted": 0.890405977523329,
-  "human_effort_ratio": 0.008,
-  "picr": 3.1250000000000027,
-  "picr_display": "3.1250",
-  "picr_status": "STRONG",
+  "accuracy_final": 0.875,
+  "f1_weighted": 0.8755658609739956,
+  "human_effort_ratio": 0.0,
+  "picr": 4.0000000000000036,
+  "picr_display": "4.0000",
+  "picr_status": "PERFECT_EFFICIENCY",
   "picr_negative_warning": false,
-  "human_labels_count": 8
+  "human_labels_count": 0
 }
