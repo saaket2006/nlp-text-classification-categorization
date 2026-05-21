@@ -22,8 +22,8 @@ tier3:
 
 data:
   dataset_name: "ag_news"
-  train_samples: 1500
-  test_samples: 200
+  train_samples: 2500
+  test_samples: 1000
 
 paths:
   logs_dir: "./logs"
