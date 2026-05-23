@@ -1,6 +1,6 @@
 # 🛡️ Tri-Tiered Local LLM Active Learning Framework
 
-### Cost-Efficient Text Classification & Automated Categorization — IEEE Conference Submission
+### Cost-Efficient Text Classification & Automated Categorization
 
 The **Tri-Tiered Local LLM Active Learning (AL) Framework** is a performance-optimized system designed for high-accuracy text classification while minimizing computational costs and human intervention. By combining fast encoder models with powerful local LLMs and human-in-the-loop escalation, it achieves an optimal balance between efficiency and reliability.
 
@@ -147,12 +147,12 @@ The interactive Streamlit dashboard provides a comprehensive view of all pipelin
 | **Total Samples** | 1000 | Test set size |
 | **Training Samples** | 2500 | AG News dataset |
 | **Tier 1 Accuracy** | 90.50% | DistilBERT baseline |
-| **Final System Accuracy** | 91.60% | Integrated performance |
-| **Accuracy Boost** | +1.10% | Lift from Tier 2 |
-| **Weighted F1 Score** | 0.9161 | |
-| **ECE** | 0.0567 | Calibration error |
-| **Human Effort Ratio** | 0.00% | Zero human escalation |
-| **PICR** | **4.4000** | **PERFECT_EFFICIENCY** |
+| **Final System Accuracy** | 91.10% | Integrated performance |
+| **Accuracy Boost** | +0.60% | Lift from Tier 2 consensus overrides |
+| **Weighted F1 Score** | 0.9112 | |
+| **ECE** | 0.0539 | Calibration error |
+| **Human Effort Ratio** | 0.10% | Only 1 human escalation out of 1000 samples |
+| **PICR** | **6.0000** | **STRONG** |
 
 ### Scalability Results
 
@@ -160,13 +160,24 @@ The interactive Streamlit dashboard provides a comprehensive view of all pipelin
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | 300 | 88.67% | 90.67% | +2.00% | 19 (6.3%) | 0 | **8.0000** | PERFECT_EFFICIENCY |
 | 500 | 89.80% | 91.00% | +1.20% | 30 (6.0%) | 0 | **4.8000** | PERFECT_EFFICIENCY |
-| 1000 | 90.50% | 91.60% | +1.10% | 51 (5.1%) | 0 | **4.4000** | PERFECT_EFFICIENCY |
+| 1000 | 90.50% | 91.10% | +0.60% | 48 (4.8%) | 1 (0.1%) | **6.0000** | STRONG |
 
 ### Routing Strategy
-- **Tier 1 Coverage:** ~94% of all samples handled by the fast encoder
-- **Tier 2 (LLM) Escalation:** ~5-6% of uncertain samples improved by Qwen 2.5
-- **Tier 3 (Human):** 0% — zero human intervention required
+- **Tier 1 Coverage:** ~95.1% of all samples handled by the fast encoder
+- **Tier 2 (LLM) Escalation:** ~4.8% of uncertain samples routed to Tier 2 (Qwen 2.5)
+- **Tier 3 (Human):** 0.1% — only 1 sample escalated to human intervention
 - **PICR > 3.0** consistently across all test set sizes
+
+### 🧮 Point-Improvement-per-Cost-Ratio (PICR)
+The **PICR** measures the return on investment of human annotation (Tier 3) by comparing the accuracy improvement against the human effort required:
+
+$$\text{PICR} = \frac{\Delta\text{Accuracy}}{\text{Human Effort Ratio}} = \frac{\text{Final Accuracy} - \text{Tier 1 Accuracy}}{\text{Tier 3 Sample Count} / \text{Total Sample Count}}$$
+
+*   **Status Classifications**:
+    *   `AUTONOMOUS`: System achieved gain entirely through Tier 2 LLM reasoning with zero human intervention.
+    *   `PERFECT_EFFICIENCY` / `STRONG`: Highly efficient routing where the accuracy boost vastly outperforms human cost (PICR >= 4.0).
+    *   `ACCEPTABLE` / `BELOW_TARGET`: Modest efficiency.
+    *   `NO_GAIN`: The accuracy gain did not offset or justify the human cost (or was negative).
 
 ---
 
@@ -182,10 +193,10 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 1.10        # τ₁ — entropy threshold for Tier 2 escalation
-  threshold_confidence: 0.50     # τ₂ — confidence threshold
-  threshold_extreme_entropy: 10.0
-  active_learning_batch_size: 1
+  threshold_entropy: 0.80   # τ₁ — entropy threshold for Tier 2 escalation
+  threshold_confidence: 0.75    # τ₂ — confidence threshold for Tier 2 
+  threshold_extreme_entropy: 1.80
+  active_learning_batch_size: 4
   pretrain_epochs: 7
   early_stopping_patience: 7
 

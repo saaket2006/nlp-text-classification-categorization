@@ -1,6 +1,13 @@
+import os
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import yaml
 import json
-import os
 import torch
 import random
 import argparse
@@ -16,27 +23,26 @@ from data.loader import DataLoader
 from metrics.evaluator import PipelineEvaluator
 from tqdm import tqdm
 import core.router
-import sys
 
-# 1.1 Patch Tier2LLM predict to default to 1 vote for baseline/random-routing/sweep to speed them up 3x
+# Patch Tier2LLM.predict to cleanly control num_votes via instance attribute
 original_predict = Tier2LLM.predict
-def new_predict(self, text, categories, t1_label=None, num_votes=3):
-    if any(flag in sys.argv for flag in ["--baseline", "--random-routing", "--sweep"]):
-        num_votes = 1
+def patched_predict(self, text, categories, t1_label=None, num_votes=None):
+    if num_votes is None:
+        num_votes = getattr(self, "num_votes", 3)
     return original_predict(self, text, categories, t1_label, num_votes)
-Tier2LLM.predict = new_predict
+Tier2LLM.predict = patched_predict
 
-# 1. Store original router init and process_sample
+# Store original router init and process_sample
 original_init = core.router.TieredRouter.__init__
 original_process_sample = core.router.TieredRouter.process_sample
 
-# 2. Define patched init
+# Define patched init
 def new_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap=1.2, skip_tier2=False, random_routing=False):
     original_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap)
     self.skip_tier2 = skip_tier2
     self.random_routing = random_routing
 
-# 3. Define patched process_sample
+# Define patched process_sample
 def new_process_sample(self, text: str) -> dict:
     if getattr(self, "random_routing", False):
         t1_idx, t1_probs, t1_conf = self.tier1.predict(text)
@@ -100,13 +106,13 @@ def new_process_sample(self, text: str) -> dict:
             "rationale": "Tier 1 classified with high confidence."
         }
 
-        # 1. Absolute Hard Stop: Extreme Uncertainty -> Human (Tier 3)
+        # Absolute Hard Stop: Extreme Uncertainty -> Human (Tier 3)
         if t1_entropy > self.extreme_entropy_cap:
             output["tier"] = 3
             output["rationale"] = f"Extreme T1 uncertainty ({t1_entropy:.2f} > {self.extreme_entropy_cap}). Direct Human Escalation."
             return output
 
-        # 2. Uncertainty Window -> Direct Tier 3 (Human)
+        # Uncertainty Window -> Direct Tier 3 (Human)
         if t1_entropy > self.entropy_threshold or t1_conf < self.conf_threshold:
             output["tier"] = 3
             output["rationale"] = "T1 uncertain. Bypassing Tier 2, escalating directly to Tier 3."
@@ -128,15 +134,17 @@ def set_seed(seed=42):
         torch.cuda.manual_seed_all(seed)
 
 def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=False):
-    # Evaluate pre-AL Tier 1 accuracy (Addition 10)
+    # Evaluate pre-AL Tier 1 accuracy
+    test_texts = df_test["text"].tolist()
+    test_gts = df_test["label"].tolist()
+    
     pre_al_correct = 0
-    for _, row in df_test.iterrows():
-        text = row["text"]
-        gt = row["label"]
-        t1_idx, _, _ = tier1.predict(text)
-        t1_label = router.id_to_cat[t1_idx]
-        if t1_label == gt:
-            pre_al_correct += 1
+    if len(test_texts) > 0:
+        pred_idxs, _, _ = tier1.predict_batch(test_texts, batch_size=64)
+        for idx, gt in zip(pred_idxs, test_gts):
+            t1_label = router.id_to_cat[idx]
+            if t1_label == gt:
+                pre_al_correct += 1
     pre_al_accuracy = pre_al_correct / len(df_test) if len(df_test) > 0 else 0.0
 
     evaluator = PipelineEvaluator()
@@ -154,62 +162,26 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
         
         prediction = router.process_sample(text)
         
-        is_main_run = not any(flag in sys.argv for flag in ["--baseline", "--ablation-no-tier2", "--ablation-no-entropy", "--random-routing", "--sweep"])
-        if is_main_run:
-            if prediction["tier"] == 3:
-                prediction["tier"] = 2
-                prediction["final_label"] = [gt]
-                prediction["disagreement"] = False
-                prediction["rationale"] = "Escalated to Tier 2: LLM high-confidence correction (main run override)."
-            elif prediction.get("disagreement", False):
-                prediction["tier"] = 2
-                prediction["final_label"] = [gt]
-                prediction["disagreement"] = False
-                prediction["rationale"] = "T1/T2 Disagreement Override: Selected corrected prediction (main run override)."
-        else:
-            if prediction.get("disagreement", False):
-                import re
-                match = re.search(r"Tier 2 suggests \['(.*?)'\]", prediction.get("rationale", ""))
-                if match:
-                    t2_label = match.group(1)
-                    
-                    if prediction["entropy"] >= 0.95:
-                        prediction["tier"] = 2
-                        prediction["final_label"] = [t2_label]
-                        prediction["rationale"] = prediction["rationale"].replace(
-                            "T1/T2 Disagreement. Escalating to Human for safety.",
-                            f"T1/T2 Disagreement Override: T1 highly uncertain (ent: {prediction['entropy']:.2f}), selected Tier 2 prediction ['{t2_label}']"
-                        )
-                    else:
-                        prediction["tier"] = 2
-                        prediction["final_label"] = [prediction["t1_label"]]
-                        prediction["rationale"] = prediction["rationale"].replace(
-                            "T1/T2 Disagreement. Escalating to Human for safety.",
-                            f"T1/T2 Disagreement Override: T1 moderately confident (ent: {prediction['entropy']:.2f}), stuck to Tier 1 label"
-                        )
-                else:
-                    prediction["tier"] = 2
-                    prediction["final_label"] = [prediction["t1_label"]]
+
+        if prediction["tier"] == 3:
+            if random.random() < human_error_rate:
+                wrong_labels = [c for c in ag_categories if c != gt]
+                simulated_label = random.choice(wrong_labels)
+                prediction["simulated_annotation_error"] = True
+            else:
+                simulated_label = gt
+                prediction["simulated_annotation_error"] = False
             
-            if prediction["tier"] == 3:
-                if random.random() < human_error_rate:
-                    wrong_labels = [c for c in ag_categories if c != gt]
-                    simulated_label = random.choice(wrong_labels)
-                    prediction["simulated_annotation_error"] = True
-                else:
-                    simulated_label = gt
-                    prediction["simulated_annotation_error"] = False
+            prediction["final_label"] = [simulated_label]
+            
+            if update_model:
+                al_texts.append(text)
+                al_labels.append(router.cat_to_id[simulated_label])
                 
-                prediction["final_label"] = [simulated_label]
-                
-                if update_model:
-                    al_texts.append(text)
-                    al_labels.append(router.cat_to_id[simulated_label])
-                    
-                    if len(al_texts) >= al_batch_size:
-                        tier1.train_on_batch(al_texts, al_labels)
-                        al_texts = []
-                        al_labels = []
+                if len(al_texts) >= al_batch_size:
+                    tier1.train_on_batch(al_texts, al_labels)
+                    al_texts = []
+                    al_labels = []
 
         evaluator.add_result(prediction, gt)
         
@@ -219,20 +191,21 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
         }
         results_log.append(log_entry)
 
-    # Evaluate post-AL Tier 1 accuracy (Addition 10)
+    # Evaluate post-AL Tier 1 accuracy
     post_al_correct = 0
-    for _, row in df_test.iterrows():
-        text = row["text"]
-        gt = row["label"]
-        t1_idx, _, _ = tier1.predict(text)
-        t1_label = router.id_to_cat[t1_idx]
-        if t1_label == gt:
-            post_al_correct += 1
+    if len(test_texts) > 0:
+        pred_idxs, _, _ = tier1.predict_batch(test_texts, batch_size=64)
+        for idx, gt in zip(pred_idxs, test_gts):
+            t1_label = router.id_to_cat[idx]
+            if t1_label == gt:
+                post_al_correct += 1
     post_al_accuracy = post_al_correct / len(df_test) if len(df_test) > 0 else 0.0
         
     return evaluator, results_log, pre_al_accuracy, post_al_accuracy
 
 def main():
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
     set_seed(42)
     parser = argparse.ArgumentParser(description="Tri-Tiered Active Learning Pipeline")
     parser.add_argument("--sweep", action="store_true", help="Run threshold sweep")
@@ -244,14 +217,16 @@ def main():
     args = parser.parse_args()
 
     # Load Config
-    with open("config.yaml", "r") as f:
+    with open("config.yaml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
-    # Adjust thresholds for the main run to ensure sufficient uncertainty routing
-    is_main_run = not any(flag in sys.argv for flag in ["--baseline", "--ablation-no-tier2", "--ablation-no-entropy", "--random-routing", "--sweep"])
+    # Adjust thresholds for the main run to ensure sufficient uncertainty routing if not set in config
+    is_main_run = not (args.baseline or args.ablation_no_tier2 or args.ablation_no_entropy or args.random_routing or args.sweep)
     if is_main_run:
-        config["tier1"]["threshold_entropy"] = 0.80
-        config["tier1"]["threshold_confidence"] = 0.80
+        if "threshold_entropy" not in config["tier1"]:
+            config["tier1"]["threshold_entropy"] = 0.80
+        if "threshold_confidence" not in config["tier1"]:
+            config["tier1"]["threshold_confidence"] = 0.55
 
     # Init Models
     offline_mode = os.environ.get("HF_HUB_OFFLINE") == "1"
@@ -265,6 +240,12 @@ def main():
         config["tier2"]["ollama_model"],
         config["tier2"]["url"]
     )
+    
+    # Configure Tier 2 voting cleanly within pipeline logic
+    if args.baseline or args.random_routing or args.sweep:
+        tier2.num_votes = 1
+    else:
+        tier2.num_votes = 3
     
     sweep_ran = bool(args.sweep)
     runs = []
@@ -299,14 +280,24 @@ def main():
             epochs=config["tier1"].get("pretrain_epochs", 7)
         )
         
-        # Free GPU memory to avoid CUDA conflict with Ollama LLM
         if device == "cuda":
-            print("Moving Tier 1 model to CPU to free GPU memory for Ollama inference...")
-            tier1.device = "cpu"
-            tier1.model.to("cpu")
-            from torch.optim import AdamW
-            tier1.optimizer = AdamW(tier1.model.parameters(), lr=2e-5)
-            torch.cuda.empty_cache()
+            print("Keeping Tier 1 model on GPU for fast training and inference.")
+        
+        # Setup differential optimizer (smaller learning rate for DistilBERT encoder and larger for classification head)
+        # to prevent catastrophic forgetting during online active learning updates, while keeping the model on GPU.
+        encoder_params = []
+        head_params = []
+        for name, param in tier1.model.named_parameters():
+            if "distilbert" in name:
+                encoder_params.append(param)
+            else:
+                head_params.append(param)
+        optimizer_groups = [
+            {"params": encoder_params, "lr": 2e-6},
+            {"params": head_params, "lr": 2e-4}
+        ]
+        from torch.optim import AdamW
+        tier1.optimizer = AdamW(optimizer_groups)
 
         # Cache pretrained weights in memory
         pretrained_model_state = copy.deepcopy(tier1.model.state_dict())
@@ -535,62 +526,84 @@ def main():
             if metrics.get("picr_negative_warning"):
                 picr_warning = "\n> [!WARNING]\n> **Negative PICR detected.** The system is currently performing worse than the Tier 1 baseline despite human intervention. Review threshold configurations.\n"
         
+            picr_status = metrics.get("picr_status", "NO_GAIN")
+            human_effort_ratio = metrics.get("human_effort_ratio", 0.0)
+            tier2_autonomous_gain = metrics.get("tier2_autonomous_gain", 0.0)
+            
+            # PICR Interpretation text
+            if picr_status == "AUTONOMOUS":
+                picr_interpretation = f"The system achieved a {tier2_autonomous_gain:.2%} accuracy improvement entirely through Tier 2 LLM reasoning with zero human intervention. PICR is not applicable in this configuration."
+            elif picr_status == "NO_GAIN" and human_effort_ratio == 0:
+                picr_interpretation = "No human intervention was required and no accuracy gain was observed over the Tier 1 baseline. The system operated autonomously at Tier 1 and Tier 2 level."
+            else:
+                picr_interpretation = f"A PICR below 1.0 indicates the human effort ratio exceeded the accuracy gain — adjust τ₁ (entropy) upward or τ₂ (confidence) downward to reduce unnecessary escalation and improve cost-efficiency. The threshold sweep identifies the optimal (τ₁, τ₂) operating point for maximum system utility."
+            
+            # PICR Reliability Note
+            picr_reliability_note = ""
+            if 0 < metrics["human_labels_count"] < 10:
+                picr_reliability_note = f" Note: PICR is based on only {metrics['human_labels_count']} Tier 3 sample(s). Run with --seeds for statistically robust PICR estimates."
+
             # RQ Verdicts
-            rq1_verdict = "Supported" if t1_pct >= 60.0 and metrics['accuracy_final'] >= metrics['accuracy_t1'] else "Not Supported"
+            if picr_status == "AUTONOMOUS":
+                rq1_verdict = "Supported (Fully Autonomous)"
+            else:
+                rq1_verdict = "Supported" if t1_pct >= 60.0 and metrics['accuracy_final'] >= metrics['accuracy_t1'] else "Not Supported"
+                
             rq2_verdict = "Supported" if metrics['post_al_t1_accuracy'] > metrics['pre_al_t1_accuracy'] else "Not observed in this run"
             rq3_verdict = "Supported" if sweep_ran else "Pending — run with --sweep flag"
             
             report = f"""# 📊 Research Report: Tri-Tiered Local LLM AL Framework
-
-## 1. Executive Summary
-This report summarizes the performance of the Tri-Tiered Active Learning framework. The system successfully routed samples through three levels of complexity, optimizing for both accuracy and human effort.
-
-## 2. Core Performance Metrics
-| Metric | Value | Note |
-| :--- | :--- | :--- |
-| **Total Samples** | {metrics['total_samples']} | Test set size |
-| **Tier 1 Accuracy** | {metrics['accuracy_t1']:.2%} | Baseline (Encoder only) |
-| **Final System Accuracy** | {metrics['accuracy_final']:.2%} | Integrated performance |
-| **Accuracy Boost** | {metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} | Lift from Tier 2 & 3 |
-| **Weighted F1 Score** | {metrics['f1_weighted']:.4f} | |
-| **ECE** | {metrics['ece']:.4f} | Calibration error — lower is better |
-| **Human Effort Ratio** | {metrics['human_effort_ratio']:.2%} | Samples requiring human label |
-| **Pre-AL Tier 1 Accuracy** | {metrics['pre_al_t1_accuracy']:.2%} | Tier 1 baseline before AL loop |
-| **Post-AL Tier 1 Accuracy** | {metrics['post_al_t1_accuracy']:.2%} | Tier 1 baseline after AL loop |
-| **PICR** | {metrics.get('picr_display', f"{metrics['picr']:.4f}")} | Point-Improvement-per-Cost-Ratio |
-| **PICR Status** | **{metrics['picr_status']}** | Efficiency classification |
-{picr_warning}
-## 3. Tier Distribution & Load Balancing
-The framework aims to maximize Tier 1 usage while minimizing Tier 3 escalation.
-
-- **Tier 1 (Base Encoder):** {metrics['tier_distribution'].get(1, 0)} samples ({t1_pct:.1f}%)
-- **Tier 2 (Local LLM):** {metrics['tier_distribution'].get(2, 0)} samples ({(metrics['tier_distribution'].get(2, 0)/metrics['total_samples'])*100:.1f}%)
-- **Tier 3 (Human Expert):** {metrics['tier_distribution'].get(3, 0)} samples ({t3_pct:.1f}%)
-
-## 4. Constraint Validation
-- ✅ **Efficiency Target (T1 >= 60%):** {t1_pct:.1f}% ({'PASSED' if t1_pct >= 60 else 'FAILED'})
-- ✅ **Human Cost Target (T3 <= 30%):** {t3_pct:.1f}% ({'PASSED' if t3_pct <= 30 else 'FAILED'})
-
-## 5. Conclusion
-The system demonstrated a **{metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} accuracy improvement** with only **{metrics['human_effort_ratio']:.1%} human intervention**, confirming the effectiveness of the tiered routing strategy.
-
-## 6. PICR Interpretation
-The Point-Improvement-per-Cost-Ratio (PICR) measures the efficiency of human intervention.
-**Formula:** `ΔAccuracy / Human Effort Ratio`
-**Current PICR:** `{metrics.get('picr_display', f"{metrics['picr']:.4f}")}` ({metrics['picr_status']})
-
-**Interpretation:**
-A PICR below 1.0 indicates the human effort ratio exceeded the accuracy gain — adjust τ₁ (entropy) upward or τ₂ (confidence) downward to reduce unnecessary escalation and improve cost-efficiency. The threshold sweep identifies the optimal (τ₁, τ₂) operating point for maximum system utility.
-
-## 7. Research Questions (RQ) Analysis
-- **RQ1: Did uncertainty routing reduce human effort without sacrificing accuracy?**
-  - **Verdict:** {rq1_verdict} (Tier 1 Coverage: {t1_pct:.2f}%, Final Accuracy: {metrics['accuracy_final']:.2%}, Tier 1 Accuracy: {metrics['accuracy_t1']:.2%})
-  
-- **RQ2: Did the Active Learning (AL) loop improve Tier 1?**
-  - **Verdict:** {rq2_verdict} (Pre-AL Tier 1 Accuracy: {metrics['pre_al_t1_accuracy']:.2%}, Post-AL Tier 1 Accuracy: {metrics['post_al_t1_accuracy']:.2%})
-  
-- **RQ3: Does PICR identify optimal configurations?**
-  - **Verdict:** {rq3_verdict}
+ 
+ ## 1. Executive Summary
+ This report summarizes the performance of the Tri-Tiered Active Learning framework. The system successfully routed samples through three levels of complexity, optimizing for both accuracy and human effort.
+ 
+ ## 2. Core Performance Metrics
+ | Metric | Value | Note |
+ | :--- | :--- | :--- |
+ | **Total Samples** | {metrics['total_samples']} | Test set size |
+ | **Tier 1 Accuracy** | {metrics['accuracy_t1']:.2%} | Baseline (Encoder only) |
+ | **Final System Accuracy** | {metrics['accuracy_final']:.2%} | Integrated performance |
+ | **Accuracy Boost** | {metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} | Lift from Tier 2 & 3 |
+ | **Weighted F1 Score** | {metrics['f1_weighted']:.4f} | |
+ | **ECE** | {metrics['ece']:.4f} | Calibration error — lower is better |
+ | **Human Effort Ratio** | {metrics['human_effort_ratio']:.2%} | Samples requiring human label |
+ | **Pre-AL Tier 1 Accuracy** | {metrics['pre_al_t1_accuracy']:.2%} | Tier 1 baseline before AL loop |
+ | **Post-AL Tier 1 Accuracy** | {metrics['post_al_t1_accuracy']:.2%} | Tier 1 baseline after AL loop |
+ | **PICR** | {metrics.get('picr_display', 'N/A')} | Point-Improvement-per-Cost-Ratio |
+ | **PICR Status** | **{metrics['picr_status']}** | Efficiency classification |
+ | **Tier 2 Autonomous Gain** | {metrics.get('tier2_autonomous_gain', 0):.2%} | Accuracy lift from LLM with zero human cost |
+ {picr_warning}
+ ## 3. Tier Distribution & Load Balancing
+ The framework aims to maximize Tier 1 usage while minimizing Tier 3 escalation.
+ 
+ - **Tier 1 (Base Encoder):** {metrics['tier_distribution'].get(1, 0)} samples ({t1_pct:.1f}%)
+ - **Tier 2 (Local LLM):** {metrics['tier_distribution'].get(2, 0)} samples ({(metrics['tier_distribution'].get(2, 0)/metrics['total_samples'])*100:.1f}%)
+ - **Tier 3 (Human Expert):** {metrics['tier_distribution'].get(3, 0)} samples ({t3_pct:.1f}%)
+ 
+ ## 4. Constraint Validation
+ - ✅ **Efficiency Target (>=60%):** {t1_pct:.1f}% ({'PASSED' if t1_pct >= 60 else 'FAILED'})
+ - ✅ **Human Cost Target (<=10%):** {t3_pct:.1f}% ({'PASSED' if t3_pct <= 10 else 'FAILED'})
+ 
+ ## 5. Conclusion
+ The system demonstrated a **{metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} accuracy improvement** with only **{metrics['human_effort_ratio']:.1%} human intervention**, confirming the effectiveness of the tiered routing strategy.
+ 
+ ## 6. PICR Interpretation
+ The Point-Improvement-per-Cost-Ratio (PICR) measures the efficiency of human intervention.
+ **Formula:** `ΔAccuracy / Human Effort Ratio`
+ **Current PICR:** `{metrics.get('picr_display', 'N/A')}` ({metrics['picr_status']}){picr_reliability_note}
+ 
+ **Interpretation:**
+ {picr_interpretation}
+ 
+ ## 7. Research Questions (RQ) Analysis
+ - **RQ1: Did uncertainty routing reduce human effort without sacrificing accuracy?**
+   - **Verdict:** {rq1_verdict} (Tier 1 Coverage: {t1_pct:.2f}%, Final Accuracy: {metrics['accuracy_final']:.2%}, Tier 1 Accuracy: {metrics['accuracy_t1']:.2%})
+   
+ - **RQ2: Did the Active Learning (AL) loop improve Tier 1?**
+   - **Verdict:** {rq2_verdict} (Pre-AL Tier 1 Accuracy: {metrics['pre_al_t1_accuracy']:.2%}, Post-AL Tier 1 Accuracy: {metrics['post_al_t1_accuracy']:.2%})
+   
+ - **RQ3: Does PICR identify optimal configurations?**
+   - **Verdict:** {rq3_verdict}
 
 ## 8. Per-Category Performance Breakdown
 | Category | Tier 1 Precision | Tier 1 Recall | Tier 1 F1 | Tier 1 Support | Final Precision | Final Recall | Final F1 | Final Support |

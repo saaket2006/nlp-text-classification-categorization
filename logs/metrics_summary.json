@@ -1,20 +1,21 @@
 {
   "total_samples": 1000,
   "tier_distribution": {
-    "1": 949,
-    "2": 51,
-    "3": 0
+    "1": 951,
+    "2": 48,
+    "3": 1
   },
   "accuracy_t1": 0.905,
-  "accuracy_final": 0.916,
-  "f1_weighted": 0.9161423282020437,
-  "ece": 0.05668696570396424,
-  "human_effort_ratio": 0.0,
-  "picr": 4.400000000000004,
-  "picr_display": "4.4000",
-  "picr_status": "PERFECT_EFFICIENCY",
+  "accuracy_final": 0.911,
+  "f1_weighted": 0.9112243556235843,
+  "ece": 0.05389570581913,
+  "human_effort_ratio": 0.001,
+  "picr": 6.000000000000005,
+  "picr_display": "6.0000",
+  "picr_status": "STRONG",
   "picr_negative_warning": false,
-  "human_labels_count": 0,
+  "tier2_autonomous_gain": 0.006000000000000005,
+  "human_labels_count": 1,
   "confusion_matrix_t1": [
     [
       232,
@@ -43,10 +44,10 @@
   ],
   "confusion_matrix_final": [
     [
-      236,
-      8,
-      10,
-      12
+      234,
+      7,
+      12,
+      13
     ],
     [
       3,
@@ -57,8 +58,8 @@
     [
       4,
       1,
-      215,
-      26
+      212,
+      29
     ],
     [
       3,
@@ -69,10 +70,10 @@
   ],
   "confusion_matrix_escalated": [
     [
-      10,
-      1,
-      2,
-      0
+      8,
+      0,
+      4,
+      1
     ],
     [
       1,
@@ -83,39 +84,39 @@
     [
       0,
       0,
-      15,
-      0
+      12,
+      3
     ],
     [
       0,
       0,
-      8,
-      9
+      7,
+      8
     ]
   ],
   "per_category_f1": {
     "World": {
-      "precision": 0.959349593495935,
-      "recall": 0.8872180451127819,
-      "f1-score": 0.921875,
+      "precision": 0.9590163934426229,
+      "recall": 0.8796992481203008,
+      "f1-score": 0.9176470588235294,
       "support": 266.0
     },
     "Sports": {
-      "precision": 0.9641434262948207,
+      "precision": 0.968,
       "recall": 0.983739837398374,
-      "f1-score": 0.9738430583501007,
+      "f1-score": 0.9758064516129032,
       "support": 246.0
     },
     "Business": {
-      "precision": 0.8921161825726142,
-      "recall": 0.8739837398373984,
-      "f1-score": 0.8829568788501027,
+      "precision": 0.8833333333333333,
+      "recall": 0.8617886178861789,
+      "f1-score": 0.8724279835390947,
       "support": 246.0
     },
     "Sci/Tech": {
-      "precision": 0.851145038167939,
+      "precision": 0.8383458646616542,
       "recall": 0.9214876033057852,
-      "f1-score": 0.8849206349206349,
+      "f1-score": 0.8779527559055118,
       "support": 242.0
     }
   },
@@ -147,8 +148,8 @@
   },
   "escalation_by_category": {
     "World": {
-      "tier2": 13,
-      "tier3": 0,
+      "tier2": 12,
+      "tier3": 1,
       "total": 266
     },
     "Sports": {
@@ -162,7 +163,7 @@
       "total": 246
     },
     "Sci/Tech": {
-      "tier2": 17,
+      "tier2": 15,
       "tier3": 0,
       "total": 242
     }

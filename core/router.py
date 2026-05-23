@@ -54,17 +54,18 @@ class TieredRouter:
                     output["tier"] = 2
                     output["rationale"] += " | T1/T2 Consensus reached."
                 else:
-                    # Disagreement - be very careful
-                    if (t2_conf >= 1.01):
-                        # Free Gain path: (Disabled to ensure stability)
+                    # Selective T2 Override: Trust T2 when T1 uncertain, T1 entropy is low enough, and T2 is unanimous
+                    t2_vote_agreement = t2_res.get("vote_agreement", 0.0)
+                    if t1_conf < 0.80 and t1_entropy < 0.95 and t2_vote_agreement >= 1.0:
+                        # T1 was unsure AND all T2 votes agree — high confidence correction
                         output["tier"] = 2
                         output["final_label"] = t2_labels
-                        output["rationale"] += " | (Override Disabled for Stability)."
+                        output["rationale"] += f" | T2 Override (T1 conf {t1_conf:.2f}, T2 unanimous). Trusting T2."
                     else:
-                        # Standard disagreement -> Human
-                        output["tier"] = 3
-                        output["disagreement"] = True
-                        output["rationale"] += " | T1/T2 Disagreement. Escalating to Human for safety."
+                        # Fall back to T1 to optimize cost and avoid unnecessary human escalation
+                        output["tier"] = 2
+                        output["final_label"] = [t1_label]
+                        output["rationale"] += f" | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
             else:
                 # LLM Failure -> Human
                 output["tier"] = 3

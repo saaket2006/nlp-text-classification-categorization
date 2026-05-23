@@ -27,6 +27,29 @@ class Tier1Model:
         
         return predicted_idx, probabilities, confidence
 
+    def predict_batch(self, texts: list, batch_size: int = 64):
+        self.model.eval()
+        all_predicted_idxs = []
+        all_probabilities = []
+        all_confidences = []
+        
+        for i in range(0, len(texts), batch_size):
+            batch_texts = texts[i:i+batch_size]
+            inputs = self.tokenizer(batch_texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+            inputs.pop("token_type_ids", None)
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+                probabilities = F.softmax(outputs.logits, dim=-1).cpu().numpy()
+            
+            predicted_idxs = np.argmax(probabilities, axis=-1)
+            confidences = probabilities[np.arange(len(probabilities)), predicted_idxs]
+            
+            all_predicted_idxs.extend(predicted_idxs.tolist())
+            all_probabilities.extend(probabilities.tolist())
+            all_confidences.extend(confidences.tolist())
+            
+        return all_predicted_idxs, all_probabilities, all_confidences
+
     def train_on_batch(self, texts, labels):
         """
         Online fine-tuning step.
@@ -68,7 +91,8 @@ class Tier1Model:
             labels_tensor = torch.tensor(labels)
             return inputs['input_ids'], inputs['attention_mask'], labels_tensor
 
-        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+        pin_mem = (self.device == "cuda")
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=pin_mem)
         
         total_steps = len(dataloader) * epochs
         scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=int(0.1 * total_steps), num_training_steps=total_steps)

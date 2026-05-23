@@ -171,7 +171,8 @@ Output (structured key-value format):
         final_result = {
             "labels": [best_label],
             "confidence": float(avg_conf),
-            "reasoning": votes[0].get("reasoning", "Majority vote winner.")
+            "reasoning": votes[0].get("reasoning", "Majority vote winner."),
+            "vote_agreement": label_counts[best_label] / len(votes) if votes else 0.0
         }
         
         return final_result, "\n---\n".join(raw_responses)

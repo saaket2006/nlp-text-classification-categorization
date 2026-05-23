@@ -152,7 +152,7 @@ with st.sidebar:
     st.markdown(f"**Total Samples:** {total}")
     st.markdown(f"**Tier 1 Accuracy:** {metrics['accuracy_t1']:.2%}")
     st.markdown(f"**Final Accuracy:** {metrics['accuracy_final']:.2%}")
-    picr_val = metrics.get('picr_display', f"{metrics['picr']:.4f}")
+    picr_val = metrics.get('picr_display', "N/A")
     st.markdown(f"**PICR:** {picr_val}")
     st.markdown(f"**Status:** `{metrics['picr_status']}`")
     st.markdown("---")
@@ -175,12 +175,15 @@ with st.sidebar:
 
 # KPI Banner
 st.markdown("")
-k1, k2, k3, k4, k5, k6 = st.columns(6)
+k1, k2, k3, k4, k5, k6, k7 = st.columns(7)
 
 picr_status = metrics.get("picr_status", "NO_GAIN")
 status_delta = None
 delta_color = "off"
-if picr_status in ["PERFECT_EFFICIENCY", "STRONG"]:
+if picr_status == "AUTONOMOUS":
+    status_delta = "Autonomous Mode"
+    delta_color = "off"
+elif picr_status in ["PERFECT_EFFICIENCY", "STRONG"]:
     status_delta = "High Efficiency"
     delta_color = "normal"
 elif picr_status == "BELOW_TARGET" or picr_status == "NO_GAIN":
@@ -190,14 +193,28 @@ elif picr_status == "BELOW_TARGET" or picr_status == "NO_GAIN":
 k1.metric("Final Accuracy", f"{metrics['accuracy_final']:.2%}")
 k2.metric("Accuracy Boost", f"+{(metrics['accuracy_final'] - metrics['accuracy_t1']):.2%}")
 k3.metric("Human Effort", f"{metrics['human_effort_ratio']:.2%}")
-k4.metric("PICR Score", metrics.get("picr_display", f"{metrics['picr']:.4f}"))
+
+picr_display = metrics.get("picr_display", "N/A")
+if picr_display == "N/A":
+    k4.metric("PICR Score", "N/A", delta="Autonomous Mode", delta_color="off")
+else:
+    picr_score_val = metrics.get("picr")
+    picr_score_str = f"{picr_score_val:.4f}" if picr_score_val is not None else "N/A"
+    k4.metric("PICR Score", picr_score_str)
+
 k5.metric("PICR Status", picr_status, delta=status_delta, delta_color=delta_color)
-k6.metric("Weighted F1", f"{metrics['f1_weighted']:.4f}")
+
+t2_autonomous_gain = metrics.get("tier2_autonomous_gain", 0.0)
+k6.metric("T2 Autonomous Gain", f"{t2_autonomous_gain:.2%}")
+
+k7.metric("Weighted F1", f"{metrics['f1_weighted']:.4f}")
 
 # Conditional banners
 if metrics.get("picr_negative_warning"):
     st.error("⚠️ **Negative PICR:** Pipeline accuracy is below Tier 1 baseline. Review threshold configuration.")
-if picr_status == "PERFECT_EFFICIENCY":
+if picr_status == "AUTONOMOUS":
+    st.success("🤖 Autonomous Mode: Accuracy improved through Tier 2 alone — no human intervention required. PICR is not applicable.")
+elif picr_status == "PERFECT_EFFICIENCY":
     st.success("✨ **Perfect Efficiency:** Accuracy improved with zero human intervention.")
 
 st.markdown("---")
@@ -234,6 +251,26 @@ with tab_overview:
     # ── Sankey Flow ──
     with col_right:
         st.subheader("Sample Flow (Sankey)")
+        # Calculate dynamic flow values to satisfy conservation:
+        # 0: Input, 1: Tier 1, 2: Tier 2, 3: Tier 3, 4: Final Output
+        t3_via_t2 = 0
+        t3_direct = 0
+        if detailed_results:
+            for r in detailed_results:
+                pred = r.get("prediction", {})
+                if pred.get("tier") == 3:
+                    if "Extreme" in pred.get("rationale", ""):
+                        t3_direct += 1
+                    else:
+                        t3_via_t2 += 1
+            # Reconciliation
+            if t3_via_t2 + t3_direct != t3_count:
+                t3_via_t2 = max(0, t3_count - t3_direct)
+                t3_direct = t3_count - t3_via_t2
+        else:
+            t3_direct = 0
+            t3_via_t2 = t3_count
+
         fig = go.Figure(data=[go.Sankey(
             node=dict(
                 pad=15, thickness=20,
@@ -244,12 +281,13 @@ with tab_overview:
             link=dict(
                 source=[0, 1, 1, 1, 2, 2, 3],
                 target=[1, 4, 2, 3, 4, 3, 4],
-                value=[total, t1_count, t2_count, 0, t2_count, 0, t3_count],
+                value=[total, t1_count, t2_count + t3_via_t2, t3_direct, t2_count, t3_via_t2, t3_count],
                 color=["rgba(148,163,184,0.3)"] * 7,
             ),
         )])
         fig.update_layout(**PLOT_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
+
 
     col_left2, col_right2 = st.columns(2)
 
@@ -332,11 +370,53 @@ with tab_overview:
         delta = metrics["post_al_t1_accuracy"] - metrics["pre_al_t1_accuracy"]
         al_col3.metric("AL Improvement", f"{delta:+.2%}")
 
+        # Contextual explanation banners
+        human_labels = metrics.get("human_labels_count", 0)
+        al_batch_size = 4  # matches config default
+        if delta == 0:
+            if human_labels == 0:
+                st.info(
+                    "💡 **Why is Active Learning Improvement 0.00%?**\n\n"
+                    "No samples were escalated to Tier 3 (human expert) in this run. "
+                    "The Tier 1 model was confident enough on all samples, so no new training data was collected.\n\n"
+                    "**This is actually a positive signal** — it means the model is performing well autonomously."
+                )
+            elif human_labels < al_batch_size:
+                st.info(
+                    "💡 **Why is Active Learning Improvement 0.00%?**\n\n"
+                    f"Only **{human_labels}** sample(s) were escalated to Tier 3 (human expert), "
+                    f"but the active learning batch size is **{al_batch_size}**. "
+                    "The model only retrains after accumulating a full batch of escalated samples.\n\n"
+                    "**How to trigger AL retraining:**\n"
+                    "- Increase the test dataset size to naturally encounter more uncertain boundary cases\n"
+                    "- Or reduce `active_learning_batch_size` in `config.yaml` (not recommended — can destabilize training)"
+                )
+            else:
+                st.warning(
+                    "⚠️ **Active Learning ran but produced no measurable improvement.**\n\n"
+                    f"**{human_labels}** samples were used for retraining, "
+                    "but the model's test accuracy did not change. "
+                    "This can happen when the escalated samples are outliers that don't generalize to the broader test set."
+                )
+        elif delta > 0:
+            st.success(
+                f"✅ **Active Learning improved Tier 1 accuracy by {delta:+.2%}!**\n\n"
+                f"The model was retrained on **{human_labels}** escalated sample(s) during the pipeline run, "
+                "successfully learning from high-uncertainty boundary cases identified by the routing system."
+            )
+        else:
+            st.error(
+                f"⚠️ **Active Learning caused a regression of {delta:+.2%}.**\n\n"
+                f"The model was retrained on **{human_labels}** escalated sample(s), "
+                "but this led to a slight accuracy decrease. "
+                "Consider increasing the human error rate guard or reviewing the quality of escalated samples."
+            )
+
         fig = go.Figure()
         fig.add_trace(go.Bar(
             x=["Pre-AL", "Post-AL"],
             y=[metrics["pre_al_t1_accuracy"], metrics["post_al_t1_accuracy"]],
-            marker_color=[COLORS["slate"], COLORS["success"]],
+            marker_color=[COLORS["slate"], COLORS["success"] if delta >= 0 else COLORS["danger"]],
             text=[f"{metrics['pre_al_t1_accuracy']:.2%}", f"{metrics['post_al_t1_accuracy']:.2%}"],
             textposition="outside", textfont=dict(color="#e2e8f0"),
         ))
@@ -626,7 +706,7 @@ with tab_comparison:
                 "F1 (Weighted)": f"{c['f1_weighted']:.4f}",
                 "ECE": f"{c.get('ece', 0):.4f}",
                 "Human Effort": f"{c['human_effort_ratio']:.2%}",
-                "PICR": c.get("picr_display", f"{c['picr']:.4f}"),
+                "PICR": c.get("picr_display", "N/A"),
                 "Status": c.get("picr_status", "N/A"),
             })
         st.dataframe(pd.DataFrame(summary_rows), use_container_width=True, hide_index=True)

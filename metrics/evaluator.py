@@ -95,26 +95,23 @@ class PipelineEvaluator:
         raw_human_effort_ratio = human_labels_count / total if total > 0 else 0
         delta_acc = acc_final - acc_t1
         
-        # Handle division by zero for infinite efficiency
-        if raw_human_effort_ratio == 0 and delta_acc > 0:
-            picr = delta_acc / 0.0025
-        elif raw_human_effort_ratio == 0:
-            picr = 0.0
+        if raw_human_effort_ratio == 0:
+            picr = None
+            picr_display = "N/A"
+            picr_status = "AUTONOMOUS" if delta_acc > 0 else "NO_GAIN"
+            picr_negative_warning = False
         else:
             picr = delta_acc / raw_human_effort_ratio
-            
-        picr_display = f"{picr:.4f}"
-        
-        if raw_human_effort_ratio == 0 and delta_acc > 0:
-            picr_status = "PERFECT_EFFICIENCY"
-        elif picr >= 2.0:
-            picr_status = "STRONG"
-        elif picr >= 1.0:
-            picr_status = "ACCEPTABLE"
-        elif picr > 0:
-            picr_status = "BELOW_TARGET"
-        else:
-            picr_status = "NO_GAIN"
+            picr_display = f"{picr:.4f}"
+            if picr >= 2.0:
+                picr_status = "STRONG"
+            elif picr >= 1.0:
+                picr_status = "ACCEPTABLE"
+            elif picr > 0:
+                picr_status = "BELOW_TARGET"
+            else:
+                picr_status = "NO_GAIN"
+            picr_negative_warning = delta_acc < 0
 
         metrics = {
             "total_samples": total,
@@ -124,10 +121,11 @@ class PipelineEvaluator:
             "f1_weighted": float(f1_final),
             "ece": float(ece),
             "human_effort_ratio": float(raw_human_effort_ratio),
-            "picr": float(picr),
+            "picr": picr,
             "picr_display": picr_display,
             "picr_status": picr_status,
-            "picr_negative_warning": delta_acc < 0,
+            "picr_negative_warning": picr_negative_warning,
+            "tier2_autonomous_gain": float(delta_acc),
             "human_labels_count": human_labels_count,
             "confusion_matrix_t1": confusion_matrix_t1,
             "confusion_matrix_final": confusion_matrix_final,

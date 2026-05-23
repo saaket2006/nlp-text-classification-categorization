@@ -5,10 +5,10 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 1.10
-  threshold_confidence: 0.50
-  threshold_extreme_entropy: 10.0
-  active_learning_batch_size: 1
+  threshold_entropy: 0.80   # τ₁ — entropy threshold for Tier 2 escalation
+  threshold_confidence: 0.75    # τ₂ — confidence threshold for Tier 2 
+  threshold_extreme_entropy: 1.80
+  active_learning_batch_size: 4
   pretrain_epochs: 7
   early_stopping_patience: 7
 
