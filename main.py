@@ -235,11 +235,11 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using Device: {device}")
     
-    print("Initializing Tier 2 LLM (via Ollama)...")
     tier2 = Tier2LLM(
         config["tier2"]["ollama_model"],
         config["tier2"]["url"]
     )
+    print(f"Initializing Tier 2 LLM (Offline: {tier2.offline})...")
     
     # Configure Tier 2 voting cleanly within pipeline logic
     if args.baseline or args.random_routing or args.sweep:
@@ -251,9 +251,9 @@ def main():
     runs = []
     
     for current_seed in args.seeds:
-        print(f"\n==========================================")
+        print(f"==========================================")
         print(f"RUNNING PIPELINE WITH SEED: {current_seed}")
-        print(f"==========================================\n")
+        print(f"==========================================")
         set_seed(current_seed)
         
         # Load Data
@@ -277,7 +277,8 @@ def main():
             train_texts, 
             train_labels, 
             batch_size=config["tier1"].get("batch_size", 16),
-            epochs=config["tier1"].get("pretrain_epochs", 7)
+            epochs=config["tier1"].get("pretrain_epochs", 7),
+            early_stopping_patience=config["tier1"].get("early_stopping_patience")
         )
         
         if device == "cuda":
@@ -671,9 +672,13 @@ def main():
         mean_stats = {}
         std_stats = {}
         for key in ["accuracy_final", "accuracy_t1", "human_effort_ratio", "picr"]:
-            vals = [r_metrics[key] for r_metrics in runs]
-            mean_stats[key] = float(np.mean(vals))
-            std_stats[key] = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
+            vals = [r_metrics[key] for r_metrics in runs if r_metrics[key] is not None]
+            if len(vals) > 0:
+                mean_stats[key] = float(np.mean(vals))
+                std_stats[key] = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
+            else:
+                mean_stats[key] = None
+                std_stats[key] = 0.0
             
         summary_data = {
             "runs": runs_list,

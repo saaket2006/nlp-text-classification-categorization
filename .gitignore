@@ -2,3 +2,4 @@ venv
 __pycache__
 dataset
 logs/tier2_errors
+.vscode

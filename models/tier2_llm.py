@@ -9,6 +9,12 @@ class Tier2LLM:
     def __init__(self, model_name: str, url: str):
         self.model_name = model_name
         self.client = ollama.Client(host=url)
+        self.offline = True
+        try:
+            self.client.list()
+            self.offline = False
+        except Exception:
+            self.offline = True
 
     def generate_prompt(self, text: str, categories: list, t1_label: str = None):
         t1_note = ""

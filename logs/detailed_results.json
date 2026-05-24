@@ -193,7 +193,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.965). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -625,7 +625,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9899999999999999). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -661,7 +661,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.98). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9833333333333334). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "World"
   },
@@ -695,9 +695,9 @@
       "entropy": 0.8275302052497864,
       "disagreement": false,
       "final_label": [
-        "Business"
+        "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.965). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9766666666666666). | T2 Override (T1 conf 0.78, T2 unanimous). Trusting T2."
     },
     "ground_truth": "World"
   },
@@ -949,7 +949,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9766666666666666). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -1363,7 +1363,7 @@
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9866666666666667). | T2 Override (T1 conf 0.73, T2 unanimous). Trusting T2."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9899999999999999). | T2 Override (T1 conf 0.73, T2 unanimous). Trusting T2."
     },
     "ground_truth": "Sports"
   },
@@ -1777,7 +1777,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T2 Override (T1 conf 0.74, T2 unanimous). Trusting T2."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.96). | T2 Override (T1 conf 0.74, T2 unanimous). Trusting T2."
     },
     "ground_truth": "Business"
   },
@@ -1867,7 +1867,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9733333333333333). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -2605,7 +2605,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9666666666666667). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9499999999999998). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -3253,7 +3253,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9766666666666666). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -3289,7 +3289,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9833333333333334). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9866666666666667). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "World"
   },
@@ -3631,7 +3631,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9899999999999999). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -3703,7 +3703,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9766666666666666). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -4531,7 +4531,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.96). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "World"
   },
@@ -5539,7 +5539,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -5557,7 +5557,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9833333333333334). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.98). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -6565,7 +6565,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9633333333333333). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9899999999999999). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -6853,7 +6853,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -6907,7 +6907,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -7285,7 +7285,7 @@
       "final_label": [
         "Sports"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9766666666666666). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sports'] (conf: 0.9899999999999999). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sports"
   },
@@ -8654,7 +8654,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.98). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9700000000000001). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "World"
   },
@@ -9608,7 +9608,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -9842,7 +9842,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9733333333333333). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.98). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "Business"
   },
@@ -10724,7 +10724,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -13406,7 +13406,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9899999999999999). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sports"
   },
@@ -13550,7 +13550,7 @@
       "final_label": [
         "Business"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.96). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9700000000000001). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -14000,7 +14000,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9700000000000001). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9866666666666667). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -14468,7 +14468,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.98). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
     },
     "ground_truth": "Business"
   },
@@ -14540,7 +14540,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.98). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -15188,7 +15188,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9866666666666667). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Business'] (conf: 0.9833333333333334). | T1/T2 Disagreement. Confidence bounds not met. Falling back to T1."
     },
     "ground_truth": "Business"
   },
@@ -15332,7 +15332,7 @@
       "final_label": [
         "Sci/Tech"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9833333333333334). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['Sci/Tech'] (conf: 0.9866666666666667). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sci/Tech"
   },
@@ -15782,7 +15782,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9499999999999998). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.96). | T1/T2 Consensus reached."
     },
     "ground_truth": "World"
   },
@@ -17726,7 +17726,7 @@
       "final_label": [
         "World"
       ],
-      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.96). | T1/T2 Consensus reached."
+      "rationale": "T1 uncertain. Tier 2 suggests ['World'] (conf: 0.9700000000000001). | T1/T2 Consensus reached."
     },
     "ground_truth": "Sports"
   },

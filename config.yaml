@@ -10,7 +10,7 @@ tier1:
   threshold_extreme_entropy: 1.80
   active_learning_batch_size: 4
   pretrain_epochs: 7
-  early_stopping_patience: 7
+  early_stopping_patience: 0
 
 tier2:
   ollama_model: "qwen2.5:3b"
