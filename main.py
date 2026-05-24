@@ -220,6 +220,9 @@ def main():
     with open("config.yaml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
+    lambda_al = config["tier1"].get("picr_al_lambda", 0.5)
+    annotation_cost_weight = config["tier3"].get("annotation_cost_weight", 0.05)
+
     # Adjust thresholds for the main run to ensure sufficient uncertainty routing if not set in config
     is_main_run = not (args.baseline or args.ablation_no_tier2 or args.ablation_no_entropy or args.random_routing or args.sweep)
     if is_main_run:
@@ -338,7 +341,7 @@ def main():
                     
                     _update_model_for_sweep = False
                     evaluator, _, _, _ = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=_update_model_for_sweep)
-                    metrics = evaluator.calculate_metrics()
+                    metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
                     
                     sweep_results.append({
                         "tau1": t1,
@@ -374,7 +377,7 @@ def main():
                 )
                 evaluator_baseline.pre_al_t1_accuracy = pre_al_b
                 evaluator_baseline.post_al_t1_accuracy = post_al_b
-                metrics_baseline = evaluator_baseline.calculate_metrics()
+                metrics_baseline = evaluator_baseline.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
                 metrics_baseline["mode"] = "tier2_only_baseline"
                 
                 os.makedirs("./logs", exist_ok=True)
@@ -404,7 +407,7 @@ def main():
                 )
                 evaluator_ablation.pre_al_t1_accuracy = pre_al_a
                 evaluator_ablation.post_al_t1_accuracy = post_al_a
-                metrics_ablation = evaluator_ablation.calculate_metrics()
+                metrics_ablation = evaluator_ablation.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
                 
                 os.makedirs("./logs", exist_ok=True)
                 with open("./logs/ablation_no_tier2.json", "w") as f:
@@ -429,7 +432,7 @@ def main():
                 )
                 evaluator_no_entropy.pre_al_t1_accuracy = pre_al_ne
                 evaluator_no_entropy.post_al_t1_accuracy = post_al_ne
-                metrics_no_entropy = evaluator_no_entropy.calculate_metrics()
+                metrics_no_entropy = evaluator_no_entropy.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
                 
                 os.makedirs("./logs", exist_ok=True)
                 with open("./logs/ablation_no_entropy.json", "w") as f:
@@ -455,7 +458,7 @@ def main():
                 )
                 evaluator_random.pre_al_t1_accuracy = pre_al_r
                 evaluator_random.post_al_t1_accuracy = post_al_r
-                metrics_random = evaluator_random.calculate_metrics()
+                metrics_random = evaluator_random.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
                 
                 os.makedirs("./logs", exist_ok=True)
                 with open("./logs/baseline_random_routing.json", "w") as f:
@@ -483,7 +486,7 @@ def main():
         
         evaluator.pre_al_t1_accuracy = pre_al_acc
         evaluator.post_al_t1_accuracy = post_al_acc
-        metrics = evaluator.calculate_metrics()
+        metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
         
         metrics_copy = copy.deepcopy(metrics)
         metrics_copy["seed"] = current_seed
@@ -495,7 +498,7 @@ def main():
             with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
                 json.dump(results_log, f, indent=2)
                 
-            metrics = evaluator.save_report(config["paths"]["metrics_file"])
+            metrics = evaluator.save_report(config["paths"]["metrics_file"], lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
         
             # Update History Log
             history_file = os.path.join(config["paths"]["logs_dir"], "history.json")
@@ -572,6 +575,10 @@ def main():
  | **Post-AL Tier 1 Accuracy** | {metrics['post_al_t1_accuracy']:.2%} | Tier 1 baseline after AL loop |
  | **PICR** | {metrics.get('picr_display', 'N/A')} | Point-Improvement-per-Cost-Ratio |
  | **PICR Status** | **{metrics['picr_status']}** | Efficiency classification |
+ | **PICR-AL** | {metrics['picr_al_display']} | AL-aware cost-efficiency (λ={metrics['picr_al_lambda']}) |
+ | **PICR-AL Status** | **{metrics['picr_al_status']}** | Rewards AL loop progression |
+ | **Net Utility (U)** | {metrics['net_utility_display']} | ΔAcc − (λ × HumanEffort), λ={metrics['annotation_cost_weight']} |
+ | **Net Utility Status** | **{metrics['net_utility_status']}** | POSITIVE = system adds value after annotation cost |
  | **Tier 2 Autonomous Gain** | {metrics.get('tier2_autonomous_gain', 0):.2%} | Accuracy lift from LLM with zero human cost |
  {picr_warning}
  ## 3. Tier Distribution & Load Balancing
@@ -595,6 +602,25 @@ def main():
  
  **Interpretation:**
  {picr_interpretation}
+ 
+ ## 6b. PICR-AL Interpretation
+ **Formula:** (ΔAccuracy + λ · ΔAcc_AL) / (Human Effort Ratio + ε)
+ **λ:** {metrics['picr_al_lambda']} | **ε:** 0.001 | **ΔAcc_AL:** {metrics['delta_acc_al']:.4f}
+ **PICR-AL:** {metrics['picr_al_display']} ({metrics['picr_al_status']})
+ 
+ PICR-AL extends PICR by incorporating active learning progression into the numerator.
+ A configuration that escalates only 1 sample scores lower under PICR-AL than under PICR
+ if that sample fails to trigger a retraining batch — exposing the metric gaming behaviour
+ of near-zero human escalation strategies.
+ 
+ ## 6c. Net Utility Interpretation
+ **Formula:** ΔAccuracy − (λ_cost × Human Effort Ratio)
+ **λ_cost:** {metrics['annotation_cost_weight']} | **Net Utility:** {metrics['net_utility_display']} ({metrics['net_utility_status']})
+ 
+ Net Utility is additive and cannot be gamed by minimising human escalation. A POSITIVE
+ result confirms the system adds measurable value after accounting for annotation cost.
+ A NEGATIVE result means the human effort cost exceeded the accuracy gain at this
+ operating point — reduce escalation thresholds or increase Tier 2 autonomy.
  
  ## 7. Research Questions (RQ) Analysis
  - **RQ1: Did uncertainty routing reduce human effort without sacrificing accuracy?**

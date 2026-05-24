@@ -175,7 +175,7 @@ with st.sidebar:
 
 # KPI Banner
 st.markdown("")
-k1, k2, k3, k4, k5, k6, k7 = st.columns(7)
+k1, k2, k3, k4, k5, k5b, k5c, k6, k7 = st.columns(9)
 
 picr_status = metrics.get("picr_status", "NO_GAIN")
 status_delta = None
@@ -204,6 +204,26 @@ else:
 
 k5.metric("PICR Status", picr_status, delta=status_delta, delta_color=delta_color)
 
+# PICR-AL card
+picr_al_status = metrics.get("picr_al_status", "")
+picr_al_delta_color = "off"
+if picr_al_status in ["STRONG", "ACCEPTABLE"]:
+    picr_al_delta_color = "normal"
+elif picr_al_status in ["BELOW_TARGET", "NO_GAIN"]:
+    picr_al_delta_color = "inverse"
+k5b.metric("PICR-AL", metrics.get('picr_al_display', 'N/A'), delta=metrics.get('picr_al_status', ''), delta_color=picr_al_delta_color)
+
+# Net Utility card
+net_utility_status = metrics.get("net_utility_status", "")
+net_utility_delta_color = "off"
+if net_utility_status == "POSITIVE":
+    net_utility_delta_color = "normal"
+elif net_utility_status == "NEGATIVE":
+    net_utility_delta_color = "inverse"
+elif net_utility_status == "BREAK_EVEN":
+    net_utility_delta_color = "off"
+k5c.metric("Net Utility (U)", metrics.get('net_utility_display', 'N/A'), delta=net_utility_status, delta_color=net_utility_delta_color)
+
 t2_autonomous_gain = metrics.get("tier2_autonomous_gain", 0.0)
 k6.metric("T2 Autonomous Gain", f"{t2_autonomous_gain:.2%}")
 
@@ -216,6 +236,11 @@ if picr_status == "AUTONOMOUS":
     st.success("🤖 Autonomous Mode: Accuracy improved through Tier 2 alone — no human intervention required. PICR is not applicable.")
 elif picr_status == "PERFECT_EFFICIENCY":
     st.success("✨ **Perfect Efficiency:** Accuracy improved with zero human intervention.")
+
+if net_utility_status == "NEGATIVE":
+    st.warning("⚠️ Net Utility is negative — the annotation cost exceeded the accuracy gain at this operating point. Consider adjusting escalation thresholds.")
+elif net_utility_status == "POSITIVE":
+    st.success("✅ Net Utility is positive — the system adds measurable value after accounting for human annotation cost.")
 
 st.markdown("---")
 
@@ -708,6 +733,8 @@ with tab_comparison:
                 "Human Effort": f"{c['human_effort_ratio']:.2%}",
                 "PICR": c.get("picr_display", "N/A"),
                 "Status": c.get("picr_status", "N/A"),
+                "PICR-AL": c.get("picr_al_display", "N/A"),
+                "Net Utility": c.get("net_utility_display", "N/A"),
             })
         st.dataframe(pd.DataFrame(summary_rows), use_container_width=True, hide_index=True)
     else:

@@ -8,9 +8,11 @@ tier1:
   threshold_entropy: 0.80   # τ₁ — entropy threshold for Tier 2 escalation
   threshold_confidence: 0.75    # τ₂ — confidence threshold for Tier 2 
   threshold_extreme_entropy: 1.80
-  active_learning_batch_size: 4
+  active_learning_batch_size: 1
   pretrain_epochs: 7
-  early_stopping_patience: 0
+  early_stopping_patience: 0    # 0 = disabled; set to 2 to enable
+  picr_al_lambda: 0.5   # λ — AL progression weight for PICR-AL (0=ignore AL gain, 1=equal weight)
+
 
 tier2:
   ollama_model: "qwen2.5:3b"
@@ -19,6 +21,7 @@ tier2:
 
 tier3:
   human_error_rate: 0.05
+  annotation_cost_weight: 0.05   # λ_cost — relative cost of one unit of human effort vs accuracy gain
 
 data:
   dataset_name: "ag_news"

@@ -15,7 +15,7 @@ class PipelineEvaluator:
             "ground_truth": ground_truth
         })
 
-    def calculate_metrics(self):
+    def calculate_metrics(self, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05):
         if not self.results:
             return {}
 
@@ -113,6 +113,38 @@ class PipelineEvaluator:
                 picr_status = "NO_GAIN"
             picr_negative_warning = delta_acc < 0
 
+        # Compute delta_acc_al
+        if self.pre_al_t1_accuracy is not None and self.post_al_t1_accuracy is not None:
+            delta_acc_al = float(self.post_al_t1_accuracy - self.pre_al_t1_accuracy)
+        else:
+            delta_acc_al = 0.0
+
+        # PICR-AL computation
+        picr_al = (delta_acc + lambda_al * delta_acc_al) / (raw_human_effort_ratio + 0.001)
+        picr_al = float(round(picr_al, 4))
+        picr_al_display = f"{picr_al:.4f}"
+
+        if picr_al >= 2.0:
+            picr_al_status = "STRONG"
+        elif picr_al >= 1.0:
+            picr_al_status = "ACCEPTABLE"
+        elif picr_al > 0:
+            picr_al_status = "BELOW_TARGET"
+        else:
+            picr_al_status = "NO_GAIN"
+
+        # Net Utility computation
+        net_utility = delta_acc - (annotation_cost_weight * raw_human_effort_ratio)
+        net_utility = float(round(net_utility, 4))
+        net_utility_display = f"{net_utility:.4f}"
+
+        if net_utility > 0:
+            net_utility_status = "POSITIVE"
+        elif net_utility == 0:
+            net_utility_status = "BREAK_EVEN"
+        else:
+            net_utility_status = "NEGATIVE"
+
         metrics = {
             "total_samples": total,
             "tier_distribution": tier_counts,
@@ -132,7 +164,16 @@ class PipelineEvaluator:
             "confusion_matrix_escalated": confusion_matrix_escalated,
             "per_category_f1": per_category_f1,
             "per_category_f1_t1": per_category_f1_t1,
-            "escalation_by_category": escalation_by_category
+            "escalation_by_category": escalation_by_category,
+            "picr_al": picr_al,
+            "picr_al_display": picr_al_display,
+            "picr_al_status": picr_al_status,
+            "picr_al_lambda": float(lambda_al),
+            "delta_acc_al": float(delta_acc_al),
+            "net_utility": net_utility,
+            "net_utility_display": net_utility_display,
+            "net_utility_status": net_utility_status,
+            "annotation_cost_weight": float(annotation_cost_weight)
         }
 
         if self.pre_al_t1_accuracy is not None:
@@ -142,8 +183,8 @@ class PipelineEvaluator:
 
         return metrics
 
-    def save_report(self, filepath: str):
-        metrics = self.calculate_metrics()
+    def save_report(self, filepath: str, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05):
+        metrics = self.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
         with open(filepath, "w") as f:
             json.dump(metrics, f, indent=2)
         return metrics
