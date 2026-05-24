@@ -297,8 +297,8 @@ def main():
             else:
                 head_params.append(param)
         optimizer_groups = [
-            {"params": encoder_params, "lr": 2e-6},
-            {"params": head_params, "lr": 2e-4}
+            {"params": encoder_params, "lr": 0.0},
+            {"params": head_params, "lr": 1e-5}
         ]
         from torch.optim import AdamW
         tier1.optimizer = AdamW(optimizer_groups)
@@ -498,7 +498,10 @@ def main():
             with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
                 json.dump(results_log, f, indent=2)
                 
-            metrics = evaluator.save_report(config["paths"]["metrics_file"], lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+            metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+            metrics["active_learning_batch_size"] = config["tier1"].get("active_learning_batch_size", 1)
+            with open(config["paths"]["metrics_file"], "w") as f:
+                json.dump(metrics, f, indent=2)
         
             # Update History Log
             history_file = os.path.join(config["paths"]["logs_dir"], "history.json")

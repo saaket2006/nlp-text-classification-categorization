@@ -174,8 +174,9 @@ with st.sidebar:
         st.markdown(f"{icon} {name}")
 
 # KPI Banner
-st.markdown("")
-k1, k2, k3, k4, k5, k5b, k5c, k6, k7 = st.columns(9)
+# KPI Banner
+st.markdown("### 📈 Core Performance Metrics")
+r1_1, r1_2, r1_3, r1_4 = st.columns(4)
 
 picr_status = metrics.get("picr_status", "NO_GAIN")
 status_delta = None
@@ -190,19 +191,26 @@ elif picr_status == "BELOW_TARGET" or picr_status == "NO_GAIN":
     status_delta = "Low Efficiency"
     delta_color = "inverse"
 
-k1.metric("Final Accuracy", f"{metrics['accuracy_final']:.2%}")
-k2.metric("Accuracy Boost", f"+{(metrics['accuracy_final'] - metrics['accuracy_t1']):.2%}")
-k3.metric("Human Effort", f"{metrics['human_effort_ratio']:.2%}")
+r1_1.metric("Final Accuracy", f"{metrics['accuracy_final']:.2%}")
+r1_2.metric("Accuracy Boost", f"+{(metrics['accuracy_final'] - metrics['accuracy_t1']):.2%}")
+t2_autonomous_gain = metrics.get("tier2_autonomous_gain", 0.0)
+r1_3.metric("T2 Autonomous Gain", f"{t2_autonomous_gain:.2%}")
+r1_4.metric("Weighted F1", f"{metrics['f1_weighted']:.4f}")
+
+st.markdown("### ⚙️ Operational & Efficiency Metrics")
+r2_1, r2_2, r2_3, r2_4, r2_5 = st.columns(5)
+
+r2_1.metric("Human Effort", f"{metrics['human_effort_ratio']:.2%}")
 
 picr_display = metrics.get("picr_display", "N/A")
 if picr_display == "N/A":
-    k4.metric("PICR Score", "N/A", delta="Autonomous Mode", delta_color="off")
+    r2_2.metric("PICR Score", "N/A", delta="Autonomous Mode", delta_color="off")
 else:
     picr_score_val = metrics.get("picr")
     picr_score_str = f"{picr_score_val:.4f}" if picr_score_val is not None else "N/A"
-    k4.metric("PICR Score", picr_score_str)
+    r2_2.metric("PICR Score", picr_score_str)
 
-k5.metric("PICR Status", picr_status, delta=status_delta, delta_color=delta_color)
+r2_3.metric("PICR Status", picr_status, delta=status_delta, delta_color=delta_color)
 
 # PICR-AL card
 picr_al_status = metrics.get("picr_al_status", "")
@@ -211,7 +219,7 @@ if picr_al_status in ["STRONG", "ACCEPTABLE"]:
     picr_al_delta_color = "normal"
 elif picr_al_status in ["BELOW_TARGET", "NO_GAIN"]:
     picr_al_delta_color = "inverse"
-k5b.metric("PICR-AL", metrics.get('picr_al_display', 'N/A'), delta=metrics.get('picr_al_status', ''), delta_color=picr_al_delta_color)
+r2_4.metric("PICR-AL", metrics.get('picr_al_display', 'N/A'), delta=metrics.get('picr_al_status', ''), delta_color=picr_al_delta_color)
 
 # Net Utility card
 net_utility_status = metrics.get("net_utility_status", "")
@@ -222,12 +230,7 @@ elif net_utility_status == "NEGATIVE":
     net_utility_delta_color = "inverse"
 elif net_utility_status == "BREAK_EVEN":
     net_utility_delta_color = "off"
-k5c.metric("Net Utility (U)", metrics.get('net_utility_display', 'N/A'), delta=net_utility_status, delta_color=net_utility_delta_color)
-
-t2_autonomous_gain = metrics.get("tier2_autonomous_gain", 0.0)
-k6.metric("T2 Autonomous Gain", f"{t2_autonomous_gain:.2%}")
-
-k7.metric("Weighted F1", f"{metrics['f1_weighted']:.4f}")
+r2_5.metric("Net Utility (U)", metrics.get('net_utility_display', 'N/A'), delta=net_utility_status, delta_color=net_utility_delta_color)
 
 # Conditional banners
 if metrics.get("picr_negative_warning"):
@@ -397,7 +400,7 @@ with tab_overview:
 
         # Contextual explanation banners
         human_labels = metrics.get("human_labels_count", 0)
-        al_batch_size = 4  # matches config default
+        al_batch_size = metrics.get("active_learning_batch_size", 1)
         if delta == 0:
             if human_labels == 0:
                 st.info(
@@ -744,13 +747,14 @@ with tab_comparison:
     st.subheader("PICR ROI Heatmap (Threshold Sweep)")
     if sweep_data:
         df_sweep = pd.DataFrame(sweep_data)
+        pivot = df_sweep.pivot_table(values="picr", index="tau2", columns="tau1", aggfunc="mean", fill_value=0)
         fig = go.Figure(data=go.Heatmap(
-            x=df_sweep["tau1"].unique(),
-            y=df_sweep["tau2"].unique(),
-            z=df_sweep.pivot_table(values="picr", index="tau2", columns="tau1", aggfunc="mean").values,
+            x=pivot.columns,
+            y=pivot.index,
+            z=pivot.values,
             colorscale="Viridis",
             colorbar=dict(title="PICR"),
-            text=df_sweep.pivot_table(values="picr", index="tau2", columns="tau1", aggfunc="mean").values,
+            text=pivot.values,
             texttemplate="%{text:.2f}",
         ))
         fig.update_layout(**PLOT_LAYOUT, xaxis_title="τ₁ (Entropy Threshold)", yaxis_title="τ₂ (Confidence Threshold)",
