@@ -5,9 +5,6 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 0.80   # τ₁ — entropy threshold for Tier 2 escalation
-  threshold_confidence: 0.75    # τ₂ — confidence threshold for Tier 2 
-  threshold_extreme_entropy: 1.80
   active_learning_batch_size: 1
   pretrain_epochs: 7
   early_stopping_patience: 0    # 0 = disabled; set to 2 to enable
@@ -17,16 +14,49 @@ tier1:
 tier2:
   ollama_model: "qwen2.5:3b"
   url: "http://localhost:11434"
-  categories: ["World", "Sports", "Business", "Sci/Tech"]
 
 tier3:
   human_error_rate: 0.05
   annotation_cost_weight: 0.05   # λ_cost — relative cost of one unit of human effort vs accuracy gain
 
 data:
-  dataset_name: "ag_news"
+  dataset_name: "dbpedia_14"
   train_samples: 2500
   test_samples: 1000
+
+datasets_config:
+  ag_news:
+    threshold_entropy: 1.00
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 1.80
+  dbpedia_14:
+    threshold_entropy: 0.40
+    threshold_confidence: 0.95
+    threshold_extreme_entropy: 1.60
+  imdb:
+    threshold_entropy: 0.35
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 0.90
+  amazon_polarity:
+    threshold_entropy: 0.35
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 0.90
+  yelp_polarity:
+    threshold_entropy: 0.35
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 0.90
+  sst2:
+    threshold_entropy: 0.35
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 0.90
+  glue/sst2:
+    threshold_entropy: 0.35
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 0.90
+  emotion:
+    threshold_entropy: 0.85
+    threshold_confidence: 0.65
+    threshold_extreme_entropy: 2.30
 
 paths:
   logs_dir: "./logs"

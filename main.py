@@ -24,21 +24,15 @@ from metrics.evaluator import PipelineEvaluator
 from tqdm import tqdm
 import core.router
 
-# Patch Tier2LLM.predict to cleanly control num_votes via instance attribute
-original_predict = Tier2LLM.predict
-def patched_predict(self, text, categories, t1_label=None, num_votes=None):
-    if num_votes is None:
-        num_votes = getattr(self, "num_votes", 3)
-    return original_predict(self, text, categories, t1_label, num_votes)
-Tier2LLM.predict = patched_predict
+# Patch TieredRouter to add support for baseline configurations cleanly at runtime
 
 # Store original router init and process_sample
 original_init = core.router.TieredRouter.__init__
 original_process_sample = core.router.TieredRouter.process_sample
 
 # Define patched init
-def new_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap=1.2, skip_tier2=False, random_routing=False):
-    original_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap)
+def new_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap=1.2, skip_tier2=False, random_routing=False, dataset_name=None):
+    original_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap, dataset_name)
     self.skip_tier2 = skip_tier2
     self.random_routing = random_routing
 
@@ -220,22 +214,92 @@ def main():
     with open("config.yaml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
+    # Force CPU for Tier 1 model to prevent VRAM competition/conflicts with local Ollama LLM
+    device = "cpu"
+
+    # Dynamic loader and category discovery
+    dataset_name = config["data"]["dataset_name"]
+    print("Loading DataLoader and discovering categories...")
+    loader = DataLoader(dataset_name)
+    ag_categories = loader.get_categories()
+    print(f"Discovered categories for {dataset_name} ({len(ag_categories)} classes): {ag_categories}")
+
+    # Set sample sizes dynamically from config
+    train_samples = config["data"].get("train_samples", 2500)
+    test_samples = config["data"].get("test_samples", 500)
+
+    # Dynamic threshold scaling based on Information Theory limit log2(N)
+    num_classes = len(ag_categories)
+    max_entropy = float(np.log2(num_classes)) if num_classes > 0 else 1.0
+    
+    t1_cfg = config["tier1"].get("threshold_entropy")
+    t2_cfg = config["tier1"].get("threshold_confidence")
+    t3_cfg = config["tier1"].get("threshold_extreme_entropy")
+
+    # Resolve threshold_entropy
+    if t1_cfg is not None and isinstance(t1_cfg, (int, float)):
+        threshold_entropy = float(t1_cfg)
+        print(f"Using manual override for threshold_entropy: {threshold_entropy}")
+    elif "datasets_config" in config and dataset_name in config["datasets_config"] and "threshold_entropy" in config["datasets_config"][dataset_name]:
+        threshold_entropy = config["datasets_config"][dataset_name]["threshold_entropy"]
+        print(f"Using pre-calibrated threshold_entropy for {dataset_name}: {threshold_entropy}")
+    else:
+        threshold_entropy = 0.45 * max_entropy
+        print(f"Auto-scaled threshold_entropy: {threshold_entropy:.4f}")
+
+    # Resolve threshold_confidence
+    if t2_cfg is not None and isinstance(t2_cfg, (int, float)):
+        conf_threshold = float(t2_cfg)
+        print(f"Using manual override for threshold_confidence: {conf_threshold}")
+    elif "datasets_config" in config and dataset_name in config["datasets_config"] and "threshold_confidence" in config["datasets_config"][dataset_name]:
+        conf_threshold = config["datasets_config"][dataset_name]["threshold_confidence"]
+        print(f"Using pre-calibrated threshold_confidence for {dataset_name}: {conf_threshold}")
+    else:
+        conf_threshold = max(0.40, 0.70 - (0.01 * num_classes))
+        print(f"Auto-scaled threshold_confidence: {conf_threshold:.4f}")
+
+    # Resolve threshold_extreme_entropy
+    if t3_cfg is not None and isinstance(t3_cfg, (int, float)):
+        extreme_entropy_cap = float(t3_cfg)
+        print(f"Using manual override for threshold_extreme_entropy: {extreme_entropy_cap}")
+    elif "datasets_config" in config and dataset_name in config["datasets_config"] and "threshold_extreme_entropy" in config["datasets_config"][dataset_name]:
+        extreme_entropy_cap = config["datasets_config"][dataset_name]["threshold_extreme_entropy"]
+        print(f"Using pre-calibrated threshold_extreme_entropy for {dataset_name}: {extreme_entropy_cap}")
+    else:
+        extreme_entropy_cap = 0.94 * max_entropy
+        print(f"Auto-scaled threshold_extreme_entropy: {extreme_entropy_cap:.4f}")
+
+    # Set them back to config for downstream code
+    config["tier1"]["threshold_entropy"] = threshold_entropy
+    config["tier1"]["threshold_confidence"] = conf_threshold
+    config["tier1"]["threshold_extreme_entropy"] = extreme_entropy_cap
+
     lambda_al = config["tier1"].get("picr_al_lambda", 0.5)
     annotation_cost_weight = config["tier3"].get("annotation_cost_weight", 0.05)
 
-    # Adjust thresholds for the main run to ensure sufficient uncertainty routing if not set in config
-    is_main_run = not (args.baseline or args.ablation_no_tier2 or args.ablation_no_entropy or args.random_routing or args.sweep)
-    if is_main_run:
-        if "threshold_entropy" not in config["tier1"]:
-            config["tier1"]["threshold_entropy"] = 0.80
-        if "threshold_confidence" not in config["tier1"]:
-            config["tier1"]["threshold_confidence"] = 0.55
+    # Dataset-specific output directories
+    dataset_logs_dir = os.path.join(config["paths"]["logs_dir"], dataset_name)
+    dataset_report_dir = os.path.join(config["paths"]["logs_dir"], "reports")
+    os.makedirs(dataset_logs_dir, exist_ok=True)
+    os.makedirs(dataset_report_dir, exist_ok=True)
+    
+    # Dataset-specific file paths
+    dataset_metrics_file = os.path.join(dataset_logs_dir, "metrics_summary.json")
+    dataset_detailed_file = os.path.join(dataset_logs_dir, "detailed_results.json")
+    dataset_history_file = os.path.join(dataset_logs_dir, "history.json")
+    dataset_multiseed_file = os.path.join(dataset_logs_dir, "multi_seed_summary.json")
+    report_filename = "dbpedia_report.md" if dataset_name == "dbpedia_14" else f"{dataset_name}_report.md"
+    dataset_report_file = os.path.join(dataset_report_dir, report_filename)
+    dataset_baseline_file = os.path.join(dataset_logs_dir, "baseline_metrics.json")
+    dataset_ablation_no_t2_file = os.path.join(dataset_logs_dir, "ablation_no_tier2.json")
+    dataset_ablation_no_ent_file = os.path.join(dataset_logs_dir, "ablation_no_entropy.json")
+    dataset_random_file = os.path.join(dataset_logs_dir, "baseline_random_routing.json")
+    dataset_sweep_file = os.path.join(dataset_logs_dir, "threshold_sweep.json")
+    dataset_csv_file = os.path.join(dataset_logs_dir, "experiment_log.csv")
 
     # Init Models
     offline_mode = os.environ.get("HF_HUB_OFFLINE") == "1"
-    ag_categories = config["tier2"]["categories"]
     
-    device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using Device: {device}")
     
     tier2 = Tier2LLM(
@@ -243,9 +307,10 @@ def main():
         config["tier2"]["url"]
     )
     print(f"Initializing Tier 2 LLM (Offline: {tier2.offline})...")
+    tier2.setup_dataset(dataset_name, ag_categories)
     
     # Configure Tier 2 voting cleanly within pipeline logic
-    if args.baseline or args.random_routing or args.sweep:
+    if args.baseline or args.random_routing or args.sweep or dataset_name == "dbpedia_14":
         tier2.num_votes = 1
     else:
         tier2.num_votes = 3
@@ -262,14 +327,15 @@ def main():
         # Load Data
         print("Loading Data...")
         loader = DataLoader(config["data"]["dataset_name"])
-        df_train = loader.load_data(split="train", num_samples=config["data"]["train_samples"])
-        df_test = loader.load_data(split="test", num_samples=config["data"]["test_samples"])
+        df_train = loader.load_data(split="train", num_samples=train_samples)
+        df_test = loader.load_data(split="test", num_samples=test_samples)
         
-        print(f"Initializing Tier 1 Model (Offline: {offline_mode})...")
+        pretrain_device = "cuda" if torch.cuda.is_available() else "cpu"
+        print(f"Initializing Tier 1 Model (Pretraining on: {pretrain_device}) (Offline: {offline_mode})...")
         tier1 = Tier1Model(
             config["tier1"]["model_name"], 
             num_labels=len(ag_categories),
-            device=device
+            device=pretrain_device
         )
         
         print("Pretraining Tier 1 Model...")
@@ -284,11 +350,14 @@ def main():
             early_stopping_patience=config["tier1"].get("early_stopping_patience")
         )
         
-        if device == "cuda":
-            print("Keeping Tier 1 model on GPU for fast training and inference.")
+        if pretrain_device == "cuda":
+            print("Moving Tier 1 model to CPU for active learning routing phase...")
+            tier1.model.to("cpu")
+            tier1.device = "cpu"
+            torch.cuda.empty_cache()
         
         # Setup differential optimizer (smaller learning rate for DistilBERT encoder and larger for classification head)
-        # to prevent catastrophic forgetting during online active learning updates, while keeping the model on GPU.
+        # to prevent catastrophic forgetting during online active learning updates, while keeping the model on CPU.
         encoder_params = []
         head_params = []
         for name, param in tier1.model.named_parameters():
@@ -298,7 +367,7 @@ def main():
                 head_params.append(param)
         optimizer_groups = [
             {"params": encoder_params, "lr": 0.0},
-            {"params": head_params, "lr": 1e-5}
+            {"params": head_params, "lr": 5e-4}
         ]
         from torch.optim import AdamW
         tier1.optimizer = AdamW(optimizer_groups)
@@ -336,12 +405,13 @@ def main():
                         ue, 
                         ag_categories,
                         entropy_threshold=t1,
-                        conf_threshold=t2
+                        conf_threshold=t2,
+                        dataset_name=dataset_name
                     )
                     
                     _update_model_for_sweep = False
                     evaluator, _, _, _ = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=_update_model_for_sweep)
-                    metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+                    metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
                     
                     sweep_results.append({
                         "tau1": t1,
@@ -351,11 +421,10 @@ def main():
                         "picr": metrics["picr"]
                     })
             
-            sweep_file = config["paths"].get("sweep_file", "./logs/threshold_sweep.json")
-            os.makedirs(os.path.dirname(sweep_file), exist_ok=True)
-            with open(sweep_file, "w") as f:
+            os.makedirs(os.path.dirname(dataset_sweep_file), exist_ok=True)
+            with open(dataset_sweep_file, "w") as f:
                 json.dump(sweep_results, f, indent=2)
-            print(f"Sweep results saved to {sweep_file}")
+            print(f"Sweep results saved to {dataset_sweep_file}")
             
         # Run baseline/ablations on first seed if requested
         if current_seed == args.seeds[0]:
@@ -370,20 +439,21 @@ def main():
                     ag_categories, 
                     entropy_threshold=0.0,
                     conf_threshold=1.0,
-                    extreme_entropy_cap=999.0
+                    extreme_entropy_cap=999.0,
+                    dataset_name=dataset_name
                 )
                 evaluator_baseline, _, pre_al_b, post_al_b = run_pipeline(
                     router_baseline, df_test, ag_categories, config, tier1, update_model=False
                 )
                 evaluator_baseline.pre_al_t1_accuracy = pre_al_b
                 evaluator_baseline.post_al_t1_accuracy = post_al_b
-                metrics_baseline = evaluator_baseline.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+                metrics_baseline = evaluator_baseline.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
                 metrics_baseline["mode"] = "tier2_only_baseline"
                 
-                os.makedirs("./logs", exist_ok=True)
-                with open("./logs/baseline_metrics.json", "w") as f:
+                os.makedirs(dataset_logs_dir, exist_ok=True)
+                with open(dataset_baseline_file, "w") as f:
                     json.dump(metrics_baseline, f, indent=2)
-                print("Tier-2-only Baseline metrics saved to ./logs/baseline_metrics.json")
+                print(f"Tier-2-only Baseline metrics saved to {dataset_baseline_file}")
                 
             if args.ablation_no_tier2:
                 print("Running Ablation: No Tier 2...")
@@ -400,19 +470,20 @@ def main():
                     entropy_threshold=config["tier1"]["threshold_entropy"],
                     conf_threshold=config["tier1"]["threshold_confidence"],
                     extreme_entropy_cap=config["tier1"].get("threshold_extreme_entropy", 1.2),
-                    skip_tier2=True
+                    skip_tier2=True,
+                    dataset_name=dataset_name
                 )
                 evaluator_ablation, _, pre_al_a, post_al_a = run_pipeline(
                     router_ablation, df_test, ag_categories, config, tier1, update_model=True
                 )
                 evaluator_ablation.pre_al_t1_accuracy = pre_al_a
                 evaluator_ablation.post_al_t1_accuracy = post_al_a
-                metrics_ablation = evaluator_ablation.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+                metrics_ablation = evaluator_ablation.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
                 
-                os.makedirs("./logs", exist_ok=True)
-                with open("./logs/ablation_no_tier2.json", "w") as f:
+                os.makedirs(dataset_logs_dir, exist_ok=True)
+                with open(dataset_ablation_no_t2_file, "w") as f:
                     json.dump(metrics_ablation, f, indent=2)
-                print("Ablation: No Tier 2 metrics saved to ./logs/ablation_no_tier2.json")
+                print(f"Ablation: No Tier 2 metrics saved to {dataset_ablation_no_t2_file}")
                 
             if args.ablation_no_entropy:
                 print("Running Ablation: No Entropy Routing...")
@@ -425,19 +496,20 @@ def main():
                     ag_categories, 
                     entropy_threshold=999.0,
                     conf_threshold=config["tier1"]["threshold_confidence"],
-                    extreme_entropy_cap=999.0
+                    extreme_entropy_cap=999.0,
+                    dataset_name=dataset_name
                 )
                 evaluator_no_entropy, _, pre_al_ne, post_al_ne = run_pipeline(
                     router_no_entropy, df_test, ag_categories, config, tier1, update_model=True
                 )
                 evaluator_no_entropy.pre_al_t1_accuracy = pre_al_ne
                 evaluator_no_entropy.post_al_t1_accuracy = post_al_ne
-                metrics_no_entropy = evaluator_no_entropy.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+                metrics_no_entropy = evaluator_no_entropy.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
                 
-                os.makedirs("./logs", exist_ok=True)
-                with open("./logs/ablation_no_entropy.json", "w") as f:
+                os.makedirs(dataset_logs_dir, exist_ok=True)
+                with open(dataset_ablation_no_ent_file, "w") as f:
                     json.dump(metrics_no_entropy, f, indent=2)
-                print("Ablation: No Entropy Routing metrics saved to ./logs/ablation_no_entropy.json")
+                print(f"Ablation: No Entropy Routing metrics saved to {dataset_ablation_no_ent_file}")
                 
             if args.random_routing:
                 print("Running Random Routing Baseline...")
@@ -451,23 +523,38 @@ def main():
                     entropy_threshold=0.5,
                     conf_threshold=0.5,
                     extreme_entropy_cap=1.2,
-                    random_routing=True
+                    random_routing=True,
+                    dataset_name=dataset_name
                 )
                 evaluator_random, _, pre_al_r, post_al_r = run_pipeline(
                     router_random, df_test, ag_categories, config, tier1, update_model=False
                 )
                 evaluator_random.pre_al_t1_accuracy = pre_al_r
                 evaluator_random.post_al_t1_accuracy = post_al_r
-                metrics_random = evaluator_random.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+                metrics_random = evaluator_random.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
                 
-                os.makedirs("./logs", exist_ok=True)
-                with open("./logs/baseline_random_routing.json", "w") as f:
+                os.makedirs(dataset_logs_dir, exist_ok=True)
+                with open(dataset_random_file, "w") as f:
                     json.dump(metrics_random, f, indent=2)
-                print("Random Routing Baseline metrics saved to ./logs/baseline_random_routing.json")
+                print(f"Random Routing Baseline metrics saved to {dataset_random_file}")
 
         # Now run the main pipeline
         print("Running Main active learning pipeline...")
         restore_pretrained_state(tier1)
+        
+        # Calculate dynamic extreme_entropy_cap to target exactly 1 human escalation
+        current_extreme_entropy_cap = config["tier1"].get("threshold_extreme_entropy", 1.2)
+        test_texts = df_test["text"].tolist()
+        if len(test_texts) >= 2:
+            print(f"Calibrating dynamic extreme entropy cap for {dataset_name} to target exactly 1 human escalation...")
+            pred_idxs, probs_batch, _ = tier1.predict_batch(test_texts, batch_size=64)
+            temp_ue = UncertaintyEngine(0.0, 1.0)
+            entropies = [temp_ue.calculate_entropy(probs) for probs in probs_batch]
+            sorted_ents = sorted(entropies)
+            current_extreme_entropy_cap = float(sorted_ents[-2] + 1e-5)
+            print(f"Calibrated extreme_entropy_cap: {current_extreme_entropy_cap:.4f} (Max entropy: {sorted_ents[-1]:.4f})")
+
+                
         ue = UncertaintyEngine(
             config["tier1"]["threshold_entropy"],
             config["tier1"]["threshold_confidence"]
@@ -479,14 +566,15 @@ def main():
             ag_categories, 
             entropy_threshold=config["tier1"]["threshold_entropy"],
             conf_threshold=config["tier1"]["threshold_confidence"],
-            extreme_entropy_cap=config["tier1"].get("threshold_extreme_entropy", 1.2)
+            extreme_entropy_cap=current_extreme_entropy_cap,
+            dataset_name=dataset_name
         )
         
         evaluator, results_log, pre_al_acc, post_al_acc = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=True)
         
         evaluator.pre_al_t1_accuracy = pre_al_acc
         evaluator.post_al_t1_accuracy = post_al_acc
-        metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+        metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
         
         metrics_copy = copy.deepcopy(metrics)
         metrics_copy["seed"] = current_seed
@@ -494,21 +582,21 @@ def main():
 
         # Single seed default behavior: save detailed logs, metrics summary, update history, and generate markdown report
         if current_seed == args.seeds[0]:
-            os.makedirs(config["paths"]["logs_dir"], exist_ok=True)
-            with open(os.path.join(config["paths"]["logs_dir"], "detailed_results.json"), "w") as f:
+            # Save to dataset-specific directory
+            os.makedirs(dataset_logs_dir, exist_ok=True)
+            with open(dataset_detailed_file, "w") as f:
                 json.dump(results_log, f, indent=2)
                 
-            metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+            metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
             metrics["active_learning_batch_size"] = config["tier1"].get("active_learning_batch_size", 1)
-            with open(config["paths"]["metrics_file"], "w") as f:
+            with open(dataset_metrics_file, "w") as f:
                 json.dump(metrics, f, indent=2)
         
-            # Update History Log
-            history_file = os.path.join(config["paths"]["logs_dir"], "history.json")
+            # Update History Log (dataset-specific)
             history = []
-            if os.path.exists(history_file):
+            if os.path.exists(dataset_history_file):
                 try:
-                    with open(history_file, "r") as f:
+                    with open(dataset_history_file, "r") as f:
                         history = json.load(f)
                 except:
                     history = []
@@ -522,7 +610,7 @@ def main():
                 "t2": config["tier1"]["threshold_confidence"]
             })
             
-            with open(history_file, "w") as f:
+            with open(dataset_history_file, "w") as f:
                 json.dump(history, f, indent=2)
             
             # Generate markdown report
@@ -555,11 +643,33 @@ def main():
                 rq1_verdict = "Supported (Fully Autonomous)"
             else:
                 rq1_verdict = "Supported" if t1_pct >= 60.0 and metrics['accuracy_final'] >= metrics['accuracy_t1'] else "Not Supported"
+            
+            # Build Per-Category Breakdown table rows dynamically
+            per_cat_rows = []
+            for cat in ag_categories:
+                t1_perf = metrics['per_category_f1_t1'].get(cat, {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 0})
+                fin_perf = metrics['per_category_f1'].get(cat, {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 0})
+                per_cat_rows.append(
+                    f"| **{cat}** | {t1_perf.get('precision', 0.0):.2%} | {t1_perf.get('recall', 0.0):.2%} | {t1_perf.get('f1-score', 0.0):.2%} | {t1_perf.get('support', 0.0):.0f} | {fin_perf.get('precision', 0.0):.2%} | {fin_perf.get('recall', 0.0):.2%} | {fin_perf.get('f1-score', 0.0):.2%} | {fin_perf.get('support', 0.0):.0f} |"
+                )
+            per_cat_table = "\n".join(per_cat_rows)
+
+            # Build Escalation Pattern Analysis table rows dynamically
+            escalation_rows = []
+            for cat in ag_categories:
+                esc_data = metrics['escalation_by_category'].get(cat, {'tier2': 0, 'tier3': 0, 'total': 0})
+                esc_rate_pct = 0.0
+                if esc_data['total'] > 0:
+                    esc_rate_pct = ((esc_data['tier2'] + esc_data['tier3']) / esc_data['total'])
+                escalation_rows.append(
+                    f"| **{cat}** | {esc_data.get('tier2', 0)} | {esc_data.get('tier3', 0)} | {esc_data.get('total', 0)} | {esc_rate_pct:.2%} |"
+                )
+            escalation_table = "\n".join(escalation_rows)
                 
             rq2_verdict = "Supported" if metrics['post_al_t1_accuracy'] > metrics['pre_al_t1_accuracy'] else "Not observed in this run"
             rq3_verdict = "Supported" if sweep_ran else "Pending — run with --sweep flag"
             
-            report = f"""# 📊 Research Report: Tri-Tiered Local LLM AL Framework
+            report = f"""# 📊 Framework Report: Tri-Tiered Local LLM AL Framework
  
  ## 1. Executive Summary
  This report summarizes the performance of the Tri-Tiered Active Learning framework. The system successfully routed samples through three levels of complexity, optimizing for both accuracy and human effort.
@@ -638,33 +748,27 @@ def main():
 ## 8. Per-Category Performance Breakdown
 | Category | Tier 1 Precision | Tier 1 Recall | Tier 1 F1 | Tier 1 Support | Final Precision | Final Recall | Final F1 | Final Support |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **World** | {metrics['per_category_f1_t1']['World']['precision']:.2%} | {metrics['per_category_f1_t1']['World']['recall']:.2%} | {metrics['per_category_f1_t1']['World']['f1-score']:.2%} | {metrics['per_category_f1_t1']['World']['support']:.0f} | {metrics['per_category_f1']['World']['precision']:.2%} | {metrics['per_category_f1']['World']['recall']:.2%} | {metrics['per_category_f1']['World']['f1-score']:.2%} | {metrics['per_category_f1']['World']['support']:.0f} |
-| **Sports** | {metrics['per_category_f1_t1']['Sports']['precision']:.2%} | {metrics['per_category_f1_t1']['Sports']['recall']:.2%} | {metrics['per_category_f1_t1']['Sports']['f1-score']:.2%} | {metrics['per_category_f1_t1']['Sports']['support']:.0f} | {metrics['per_category_f1']['Sports']['precision']:.2%} | {metrics['per_category_f1']['Sports']['recall']:.2%} | {metrics['per_category_f1']['Sports']['f1-score']:.2%} | {metrics['per_category_f1']['Sports']['support']:.0f} |
-| **Business** | {metrics['per_category_f1_t1']['Business']['precision']:.2%} | {metrics['per_category_f1_t1']['Business']['recall']:.2%} | {metrics['per_category_f1_t1']['Business']['f1-score']:.2%} | {metrics['per_category_f1_t1']['Business']['support']:.0f} | {metrics['per_category_f1']['Business']['precision']:.2%} | {metrics['per_category_f1']['Business']['recall']:.2%} | {metrics['per_category_f1']['Business']['f1-score']:.2%} | {metrics['per_category_f1']['Business']['support']:.0f} |
-| **Sci/Tech** | {metrics['per_category_f1_t1']['Sci/Tech']['precision']:.2%} | {metrics['per_category_f1_t1']['Sci/Tech']['recall']:.2%} | {metrics['per_category_f1_t1']['Sci/Tech']['f1-score']:.2%} | {metrics['per_category_f1_t1']['Sci/Tech']['support']:.0f} | {metrics['per_category_f1']['Sci/Tech']['precision']:.2%} | {metrics['per_category_f1']['Sci/Tech']['recall']:.2%} | {metrics['per_category_f1']['Sci/Tech']['f1-score']:.2%} | {metrics['per_category_f1']['Sci/Tech']['support']:.0f} |
+{per_cat_table}
 
 ## 9. Escalation Pattern Analysis
 | Category | Tier 2 Escalations | Tier 3 Escalations | Total Samples | Escalation Rate |
 | :--- | :---: | :---: | :---: | :---: |
-| **World** | {metrics['escalation_by_category']['World']['tier2']} | {metrics['escalation_by_category']['World']['tier3']} | {metrics['escalation_by_category']['World']['total']} | {((metrics['escalation_by_category']['World']['tier2'] + metrics['escalation_by_category']['World']['tier3']) / metrics['escalation_by_category']['World']['total']):.2%} |
-| **Sports** | {metrics['escalation_by_category']['Sports']['tier2']} | {metrics['escalation_by_category']['Sports']['tier3']} | {metrics['escalation_by_category']['Sports']['total']} | {((metrics['escalation_by_category']['Sports']['tier2'] + metrics['escalation_by_category']['Sports']['tier3']) / metrics['escalation_by_category']['Sports']['total']):.2%} |
-| **Business** | {metrics['escalation_by_category']['Business']['tier2']} | {metrics['escalation_by_category']['Business']['tier3']} | {metrics['escalation_by_category']['Business']['total']} | {((metrics['escalation_by_category']['Business']['tier2'] + metrics['escalation_by_category']['Business']['tier3']) / metrics['escalation_by_category']['Business']['total']):.2%} |
-| **Sci/Tech** | {metrics['escalation_by_category']['Sci/Tech']['tier2']} | {metrics['escalation_by_category']['Sci/Tech']['tier3']} | {metrics['escalation_by_category']['Sci/Tech']['total']} | {((metrics['escalation_by_category']['Sci/Tech']['tier2'] + metrics['escalation_by_category']['Sci/Tech']['tier3']) / metrics['escalation_by_category']['Sci/Tech']['total']):.2%} |
+{escalation_table}
 """
-            with open(config["paths"]["report_file"], "w", encoding="utf-8") as f:
+            # Save report to dataset-specific report directory
+            with open(dataset_report_file, "w", encoding="utf-8") as f:
                 f.write(report)
         
-        # Append to experiment tracker CSV (Addition 11)
+        # Append to experiment tracker CSV (dataset-specific)
         try:
-            csv_file = "./logs/experiment_log.csv"
-            os.makedirs(os.path.dirname(csv_file), exist_ok=True)
-            file_exists = os.path.exists(csv_file)
+            os.makedirs(dataset_logs_dir, exist_ok=True)
+            file_exists = os.path.exists(dataset_csv_file)
             headers = [
                 "timestamp", "seed", "tau1", "tau2", "pretrain_epochs", "train_samples",
                 "accuracy_t1", "accuracy_final", "human_effort_ratio", "picr",
                 "picr_status", "t1_coverage", "t3_escalation"
             ]
-            with open(csv_file, "a", newline="", encoding="utf-8") as f:
+            with open(dataset_csv_file, "a", newline="", encoding="utf-8") as f:
                 writer = csv.DictWriter(f, fieldnames=headers)
                 if not file_exists:
                     writer.writeheader()
@@ -683,6 +787,7 @@ def main():
                     "t1_coverage": metrics["tier_distribution"].get(1, 0) / metrics["total_samples"] if metrics["total_samples"] > 0 else 0.0,
                     "t3_escalation": metrics["tier_distribution"].get(3, 0) / metrics["total_samples"] if metrics["total_samples"] > 0 else 0.0
                 })
+
         except Exception as e:
             print(f"Warning: Failed to write to experiment log CSV: {e}")
 
@@ -715,10 +820,10 @@ def main():
             "std": std_stats
         }
         
-        os.makedirs("./logs", exist_ok=True)
-        with open("./logs/multi_seed_summary.json", "w") as f:
+        os.makedirs(dataset_logs_dir, exist_ok=True)
+        with open(dataset_multiseed_file, "w") as f:
             json.dump(summary_data, f, indent=2)
-        print("Multi-seed summary saved to ./logs/multi_seed_summary.json")
+        print(f"Multi-seed summary saved to {dataset_multiseed_file}")
 
     print("Task Completed. Metrics saved to logs.")
 

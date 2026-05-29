@@ -69,6 +69,24 @@ hr { border-color: rgba(99, 102, 241, 0.1) !important; }
 
 /* Dataframes */
 [data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; }
+
+/* Dataset badge */
+.dataset-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.dataset-badge-agnews {
+    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+    color: #fff;
+}
+.dataset-badge-dbpedia {
+    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    color: #fff;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -97,10 +115,31 @@ PLOT_LAYOUT = dict(
 )
 
 # Helper Functions
-LOGS_DIR = "./logs"
+BASE_LOGS_DIR = "./logs"
 
-def load_json(filename):
-    filepath = os.path.join(LOGS_DIR, filename)
+DATASET_DISPLAY_NAMES = {
+    "ag_news": "AG News (4-class)",
+    "dbpedia_14": "DBPedia-14 (14-class)",
+}
+
+def get_available_datasets():
+    """Scan the logs directory to find which datasets have results."""
+    available = []
+    if os.path.exists(BASE_LOGS_DIR):
+        for entry in os.listdir(BASE_LOGS_DIR):
+            entry_path = os.path.join(BASE_LOGS_DIR, entry)
+            if os.path.isdir(entry_path) and entry not in ["reports", "tier2_errors"]:
+                metrics_file = os.path.join(entry_path, "metrics_summary.json")
+                if os.path.exists(metrics_file):
+                    available.append(entry)
+    # Fallback: check if legacy logs/metrics_summary.json exists (no dataset subdirectory)
+    if not available:
+        if os.path.exists(os.path.join(BASE_LOGS_DIR, "metrics_summary.json")):
+            available.append("_legacy")
+    return available
+
+def load_json(filename, logs_dir):
+    filepath = os.path.join(logs_dir, filename)
     if os.path.exists(filepath):
         with open(filepath, "r") as f:
             return json.load(f)
@@ -114,8 +153,39 @@ def get_tier_counts(metrics):
         dist.get("3", dist.get(3, 0)),
     )
 
+
+# ===========================
+# SIDEBAR: Dataset Selector
+# ===========================
+available_datasets = get_available_datasets()
+
+with st.sidebar:
+    st.markdown("### 🗂️ Dataset Selector")
+    
+    if not available_datasets:
+        st.error("No dataset results found. Run `python main.py` first.")
+        st.stop()
+    
+    if len(available_datasets) == 1 and available_datasets[0] == "_legacy":
+        # Legacy mode - no dataset subdirectories
+        selected_dataset = "_legacy"
+        LOGS_DIR = BASE_LOGS_DIR
+        st.info("Using legacy logs directory (no dataset subdirectories found).")
+    else:
+        dataset_options = {DATASET_DISPLAY_NAMES.get(d, d.replace("_", " ").title()): d for d in available_datasets}
+        selected_display = st.selectbox(
+            "Select Dataset",
+            options=list(dataset_options.keys()),
+            index=0,
+            help="Switch between available dataset results"
+        )
+        selected_dataset = dataset_options[selected_display]
+        LOGS_DIR = os.path.join(BASE_LOGS_DIR, selected_dataset)
+    
+
 # Header
-st.markdown("""
+dataset_label = DATASET_DISPLAY_NAMES.get(selected_dataset, selected_dataset)
+st.markdown(f"""
 <div style="text-align:center; padding: 10px 0 5px 0;">
     <h1 style="color:#c7d2fe; font-size:2.2rem; font-weight:700; margin-bottom:0;">
         🛡️ Tri-Tiered Local LLM Framework
@@ -123,30 +193,33 @@ st.markdown("""
     <p style="color:#94a3b8; font-size:1rem; margin-top:4px;">
         Research Dashboard — Active Learning &amp; Automated Categorization
     </p>
+    <p style="color:#818cf8; font-size:0.9rem; margin-top:2px; font-weight:600;">
+        Dataset: {dataset_label}
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
 # Load Data
-metrics = load_json("metrics_summary.json")
-detailed_results = load_json("detailed_results.json")
+metrics = load_json("metrics_summary.json", LOGS_DIR)
+detailed_results = load_json("detailed_results.json", LOGS_DIR)
 
 if metrics is None:
-    st.error("⚠️ No metrics found. Please run `python main.py` first.")
+    st.error(f"⚠️ No metrics found for **{dataset_label}**. Please run `python main.py` with this dataset first.")
     st.stop()
 
 t1_count, t2_count, t3_count = get_tier_counts(metrics)
 total = metrics["total_samples"]
 
 # Load optional data
-baseline_metrics = load_json("baseline_metrics.json")
-ablation_no_tier2 = load_json("ablation_no_tier2.json")
-ablation_no_entropy = load_json("ablation_no_entropy.json")
-random_routing = load_json("baseline_random_routing.json")
-sweep_data = load_json("threshold_sweep.json")
-history_data = load_json("history.json")
-multi_seed = load_json("multi_seed_summary.json")
+baseline_metrics = load_json("baseline_metrics.json", LOGS_DIR)
+ablation_no_tier2 = load_json("ablation_no_tier2.json", LOGS_DIR)
+ablation_no_entropy = load_json("ablation_no_entropy.json", LOGS_DIR)
+random_routing = load_json("baseline_random_routing.json", LOGS_DIR)
+sweep_data = load_json("threshold_sweep.json", LOGS_DIR)
+history_data = load_json("history.json", LOGS_DIR)
+multi_seed = load_json("multi_seed_summary.json", LOGS_DIR)
 
-# Sidebar
+# Sidebar Run Summary
 with st.sidebar:
     st.markdown("### 📋 Run Summary")
     st.markdown(f"**Total Samples:** {total}")
@@ -173,7 +246,6 @@ with st.sidebar:
         icon = "✅" if available else "❌"
         st.markdown(f"{icon} {name}")
 
-# KPI Banner
 # KPI Banner
 st.markdown("### 📈 Core Performance Metrics")
 r1_1, r1_2, r1_3, r1_4 = st.columns(4)
@@ -470,7 +542,10 @@ with tab_overview:
 # TAB 2: PER-CATEGORY
 
 with tab_categories:
-    categories = ["World", "Sports", "Business", "Sci/Tech"]
+    if "per_category_f1" in metrics:
+        categories = list(metrics["per_category_f1"].keys())
+    else:
+        categories = ["World", "Sports", "Business", "Sci/Tech"]
 
     # ── Per-Category F1 Grouped Bar ──
     st.subheader("Per-Category F1 Score: Tier 1 vs Final")
@@ -607,7 +682,10 @@ with tab_calibration:
 
     # ── Confusion Matrices ──
     st.subheader("Confusion Matrices")
-    cm_labels = ["World", "Sports", "Business", "Sci/Tech"]
+    if "per_category_f1" in metrics:
+        cm_labels = list(metrics["per_category_f1"].keys())
+    else:
+        cm_labels = ["World", "Sports", "Business", "Sci/Tech"]
     cm_col1, cm_col2 = st.columns(2)
 
     with cm_col1:
@@ -781,6 +859,51 @@ with tab_comparison:
                 })
             st.dataframe(pd.DataFrame(agg_data), use_container_width=True, hide_index=True)
 
+    # ── Cross-Dataset Comparison (if multiple datasets available) ──
+    other_datasets = [d for d in available_datasets if d != selected_dataset]
+    cross_data = {}
+    cross_data[DATASET_DISPLAY_NAMES.get(selected_dataset, selected_dataset.replace("_", " ").title())] = metrics
+    for od in other_datasets:
+        od_metrics = load_json("metrics_summary.json", os.path.join(BASE_LOGS_DIR, od))
+        if od_metrics:
+            cross_data[DATASET_DISPLAY_NAMES.get(od, od.replace("_", " ").title())] = od_metrics
+    
+    if len(cross_data) > 1:
+        st.markdown("---")
+        st.subheader("🔀 Cross-Dataset Comparison")
+        cross_names = list(cross_data.keys())
+        
+        cd_col1, cd_col2, cd_col3, cd_col4 = st.columns(4)
+        for i, name in enumerate(cross_names):
+            m = cross_data[name]
+            col = [cd_col1, cd_col2, cd_col3, cd_col4][i % 4]
+            col.markdown(f"**{name}**")
+            col.metric("Final Accuracy", f"{m['accuracy_final']:.2%}")
+            col.metric("PICR", m.get('picr_display', 'N/A'))
+            col.metric("Human Effort", f"{m['human_effort_ratio']:.2%}")
+        
+        # Comparison bar chart
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=cross_names,
+            y=[cross_data[n]["accuracy_final"] for n in cross_names],
+            name="Final Accuracy",
+            marker_color=[COLORS["primary"], COLORS["success"]][:len(cross_names)],
+            text=[f"{cross_data[n]['accuracy_final']:.2%}" for n in cross_names],
+            textposition="outside"
+        ))
+        fig.add_trace(go.Bar(
+            x=cross_names,
+            y=[cross_data[n]["accuracy_t1"] for n in cross_names],
+            name="T1 Accuracy",
+            marker_color=[COLORS["slate"]] * len(cross_names),
+            text=[f"{cross_data[n]['accuracy_t1']:.2%}" for n in cross_names],
+            textposition="outside"
+        ))
+        fig.update_layout(**PLOT_LAYOUT, barmode="group", yaxis_title="Accuracy", yaxis_tickformat=".0%",
+                          yaxis_range=[0, 1.1], height=400)
+        st.plotly_chart(fig, use_container_width=True)
+
 
 # TAB 5: EXPERIMENT HISTORY
 
@@ -832,7 +955,7 @@ with tab_history:
             fig.update_layout(**PLOT_LAYOUT, xaxis_title="Run #", yaxis_title="Ratio", yaxis_tickformat=".0%")
             st.plotly_chart(fig, use_container_width=True)
     else:
-        st.info("No experiment log CSV found. Run the pipeline to generate experiment history.")
+        st.info(f"No experiment log CSV found for **{dataset_label}**. Run the pipeline to generate experiment history.")
 
     # ── History JSON ──
     if history_data and len(history_data) > 1:
@@ -905,9 +1028,9 @@ with tab_logs:
 
 # Footer
 st.markdown("---")
-st.markdown("""
+st.markdown(f"""
 <div style="text-align:center; color:#64748b; font-size:0.85rem; padding: 10px 0;">
     🛡️ Tri-Tiered Local LLM AL Framework — IEEE Conference Submission Dashboard<br/>
-    Built with Streamlit • Plotly • scikit-learn • HuggingFace Transformers • Ollama
+    Dataset: {dataset_label} • Built with Streamlit • Plotly • scikit-learn • HuggingFace Transformers • Ollama
 </div>
 """, unsafe_allow_html=True)

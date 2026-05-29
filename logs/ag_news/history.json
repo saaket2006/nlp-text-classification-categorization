@@ -1,0 +1,74 @@
+[
+  {
+    "timestamp": "2026-05-26T19:10:01.355206",
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.002,
+    "picr": 1.0000000000000009,
+    "t1": 1.6,
+    "t2": 0.5
+  },
+  {
+    "timestamp": "2026-05-26T19:29:06.910625",
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.002,
+    "picr": 1.0000000000000009,
+    "t1": 1.6,
+    "t2": 0.5
+  },
+  {
+    "timestamp": "2026-05-26T19:38:33.170161",
+    "accuracy": 0.888,
+    "human_effort_ratio": 0.058,
+    "picr": 0.6206896551724144,
+    "t1": 0.85,
+    "t2": 0.55
+  },
+  {
+    "timestamp": "2026-05-26T19:48:49.067308",
+    "accuracy": 0.88,
+    "human_effort_ratio": 0.032,
+    "picr": 0.6250000000000006,
+    "t1": 0.85,
+    "t2": 0.55
+  },
+  {
+    "timestamp": "2026-05-26T19:59:46.451368",
+    "accuracy": 0.88,
+    "human_effort_ratio": 0.032,
+    "picr": 0.6250000000000006,
+    "t1": 0.85,
+    "t2": 0.55
+  },
+  {
+    "timestamp": "2026-05-26T22:55:05.979060",
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.0,
+    "picr": null,
+    "t1": 0.65,
+    "t2": 0.7
+  },
+  {
+    "timestamp": "2026-05-26T23:11:31.258243",
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.0,
+    "picr": null,
+    "t1": 0.65,
+    "t2": 0.7
+  },
+  {
+    "timestamp": "2026-05-26T23:48:41.294858",
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.0,
+    "picr": null,
+    "t1": 1.6,
+    "t2": 0.5
+  },
+  {
+    "timestamp": "2026-05-27T17:20:12.561867",
+    "accuracy": 0.89,
+    "human_effort_ratio": 0.002,
+    "picr": 9.000000000000007,
+    "t1": 1.0,
+    "t2": 0.75
+  }
+]

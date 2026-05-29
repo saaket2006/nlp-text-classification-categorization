@@ -1,0 +1,37 @@
+{
+  "runs": [
+    {
+      "seed": 42,
+      "accuracy_final": 0.89,
+      "accuracy_t1": 0.872,
+      "human_effort_ratio": 0.002,
+      "picr": 9.000000000000007
+    },
+    {
+      "seed": 123,
+      "accuracy_final": 0.894,
+      "accuracy_t1": 0.88,
+      "human_effort_ratio": 0.004,
+      "picr": 3.500000000000003
+    },
+    {
+      "seed": 7,
+      "accuracy_final": 0.892,
+      "accuracy_t1": 0.876,
+      "human_effort_ratio": 0.002,
+      "picr": 8.000000000000007
+    }
+  ],
+  "mean": {
+    "accuracy_final": 0.892,
+    "accuracy_t1": 0.876,
+    "human_effort_ratio": 0.0026666666666666666,
+    "picr": 6.833333333333339
+  },
+  "std": {
+    "accuracy_final": 0.0020000000000000018,
+    "accuracy_t1": 0.0040000000000000036,
+    "human_effort_ratio": 0.0011547005383792516,
+    "picr": 2.92973263854116
+  }
+}

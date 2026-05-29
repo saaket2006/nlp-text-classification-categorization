@@ -12,7 +12,12 @@ class Tier1Model:
         self.device = device
         self.model.to(self.device)
         self.model.eval()
-        self.optimizer = AdamW(self.model.parameters(), lr=2e-5)
+        # Freeze encoder parameters to make training extremely fast on CPU
+        for name, param in self.model.named_parameters():
+            if "classifier" not in name and "pre_classifier" not in name:
+                param.requires_grad = False
+                
+        self.optimizer = AdamW(filter(lambda p: p.requires_grad, self.model.parameters()), lr=2e-3)
 
     def predict(self, text: str):
         self.model.eval()

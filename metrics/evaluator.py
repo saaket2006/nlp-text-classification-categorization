@@ -15,7 +15,7 @@ class PipelineEvaluator:
             "ground_truth": ground_truth
         })
 
-    def calculate_metrics(self, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05):
+    def calculate_metrics(self, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05, categories: list = None):
         if not self.results:
             return {}
 
@@ -42,13 +42,19 @@ class PipelineEvaluator:
         ece = calculate_ece(confidences, correctness, np.ones_like(correctness))
 
         # Confusion Matrices
-        labels_order = ["World", "Sports", "Business", "Sci/Tech"]
+        if categories is None:
+            labels_order = ["World", "Sports", "Business", "Sci/Tech"]
+        else:
+            labels_order = categories
         confusion_matrix_t1 = confusion_matrix(y_true, y_t1, labels=labels_order).tolist()
         confusion_matrix_final = confusion_matrix(y_true, y_final, labels=labels_order).tolist()
         
         y_true_escalated = [r["ground_truth"] for r in self.results if r["prediction"]["tier"] > 1]
         y_final_escalated = [r["prediction"]["final_label"][0] if r["prediction"]["final_label"] else None for r in self.results if r["prediction"]["tier"] > 1]
-        confusion_matrix_escalated = confusion_matrix(y_true_escalated, y_final_escalated, labels=labels_order).tolist()
+        if len(y_true_escalated) > 0:
+            confusion_matrix_escalated = confusion_matrix(y_true_escalated, y_final_escalated, labels=labels_order).tolist()
+        else:
+            confusion_matrix_escalated = np.zeros((len(labels_order), len(labels_order))).tolist()
 
         # Per-Category F1
         report_final = classification_report(y_true, y_final, labels=labels_order, output_dict=True, zero_division=0)
@@ -183,8 +189,8 @@ class PipelineEvaluator:
 
         return metrics
 
-    def save_report(self, filepath: str, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05):
-        metrics = self.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight)
+    def save_report(self, filepath: str, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05, categories: list = None):
+        metrics = self.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=categories)
         with open(filepath, "w") as f:
             json.dump(metrics, f, indent=2)
         return metrics
