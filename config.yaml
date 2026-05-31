@@ -22,17 +22,21 @@ tier3:
 data:
   dataset_name: "dbpedia_14"
   train_samples: 2500
-  test_samples: 1000
+  test_samples: 500
 
 datasets_config:
   ag_news:
     threshold_entropy: 1.00
     threshold_confidence: 0.75
     threshold_extreme_entropy: 1.80
+    train_samples: 2500
+    test_samples: 500
   dbpedia_14:
     threshold_entropy: 0.40
     threshold_confidence: 0.95
     threshold_extreme_entropy: 1.60
+    train_samples: 2500
+    test_samples: 1000
   imdb:
     threshold_entropy: 0.35
     threshold_confidence: 0.75

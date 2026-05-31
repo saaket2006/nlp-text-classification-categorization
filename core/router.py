@@ -17,7 +17,7 @@ class TieredRouter:
         self.cat_to_id = {cat: i for i, cat in enumerate(categories)}
         self.dataset_name = dataset_name
 
-    def process_sample(self, text: str) -> dict:
+    def process_sample(self, text: str, sample_idx: int = None) -> dict:
         t1_idx, t1_probs, t1_conf = self.tier1.predict(text)
         t1_label = self.id_to_cat[t1_idx]
         t1_entropy = self.uncertainty_engine.calculate_entropy(t1_probs)
@@ -43,7 +43,7 @@ class TieredRouter:
         # 2. Uncertainty Window: Potential Tier 2 / Tier 3
         if t1_entropy > self.entropy_threshold or t1_conf < self.conf_threshold:
             # Escalate to Tier 2
-            t2_res, raw_res = self.llm.predict(text, self.categories, t1_label=t1_label)
+            t2_res, raw_res = self.llm.predict(text, self.categories, t1_label=t1_label, sample_idx=sample_idx)
             
             if t2_res:
                 t2_labels = t2_res.get("labels", [])
@@ -79,7 +79,7 @@ class TieredRouter:
                         
                         # Do not override Film to other creative works unless the text prefix mentions plays/books
                         is_film_confusion = False
-                        if t1_label == "Film" and t2_label in ["Album", "WrittenWork"] and t1_conf >= 0.60:
+                        if t1_label == "Film" and t2_label in ["Album", "WrittenWork"]:
                             prefix_lower = text[:50].lower()
                             allowed_written_words = ["play", "book", "novel", "magazine", "journal", "written", "published", "author"]
                             if not any(w in prefix_lower for w in allowed_written_words):

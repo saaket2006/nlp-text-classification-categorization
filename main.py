@@ -37,7 +37,7 @@ def new_init(self, tier1, tier2, uncertainty_engine, categories, entropy_thresho
     self.random_routing = random_routing
 
 # Define patched process_sample
-def new_process_sample(self, text: str) -> dict:
+def new_process_sample(self, text: str, sample_idx: int = None) -> dict:
     if getattr(self, "random_routing", False):
         t1_idx, t1_probs, t1_conf = self.tier1.predict(text)
         t1_label = self.id_to_cat[t1_idx]
@@ -63,7 +63,7 @@ def new_process_sample(self, text: str) -> dict:
         elif r < 0.90:
             # Tier 2: LLM
             output["tier"] = 2
-            t2_res, raw_res = self.llm.predict(text, self.categories, t1_label=t1_label)
+            t2_res, raw_res = self.llm.predict(text, self.categories, t1_label=t1_label, sample_idx=sample_idx)
             if t2_res:
                 t2_labels = t2_res.get("labels", [])
                 t2_conf = t2_res.get("confidence", 0.5)
@@ -114,7 +114,7 @@ def new_process_sample(self, text: str) -> dict:
         return output
 
     else:
-        return original_process_sample(self, text)
+        return original_process_sample(self, text, sample_idx=sample_idx)
 
 # Apply patches
 core.router.TieredRouter.__init__ = new_init
@@ -128,6 +128,9 @@ def set_seed(seed=42):
         torch.cuda.manual_seed_all(seed)
 
 def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=False):
+    # Reset LLM sample counter at start of each evaluation run to align cache indexes
+    if hasattr(router, "llm") and hasattr(router.llm, "sample_counter"):
+        router.llm.sample_counter = 0
     # Evaluate pre-AL Tier 1 accuracy
     test_texts = df_test["text"].tolist()
     test_gts = df_test["label"].tolist()
@@ -150,11 +153,11 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
     human_error_rate = config.get("tier3", {}).get("human_error_rate", 0.0)
     al_batch_size = config.get("tier1", {}).get("active_learning_batch_size", 4)
     
-    for _, row in tqdm(df_test.iterrows(), total=len(df_test)):
+    for idx, row in tqdm(df_test.iterrows(), total=len(df_test)):
         text = row["text"]
         gt = row["label"]
         
-        prediction = router.process_sample(text)
+        prediction = router.process_sample(text, sample_idx=idx)
         
 
         if prediction["tier"] == 3:
@@ -214,8 +217,8 @@ def main():
     with open("config.yaml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
-    # Force CPU for Tier 1 model to prevent VRAM competition/conflicts with local Ollama LLM
-    device = "cpu"
+    # Use GPU if available to make routing phase extremely fast
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Dynamic loader and category discovery
     dataset_name = config["data"]["dataset_name"]
@@ -224,9 +227,10 @@ def main():
     ag_categories = loader.get_categories()
     print(f"Discovered categories for {dataset_name} ({len(ag_categories)} classes): {ag_categories}")
 
-    # Set sample sizes dynamically from config
-    train_samples = config["data"].get("train_samples", 2500)
-    test_samples = config["data"].get("test_samples", 500)
+    # Set sample sizes dynamically from config (preferring dataset-specific settings)
+    dataset_cfg = config.get("datasets_config", {}).get(dataset_name, {})
+    train_samples = dataset_cfg.get("train_samples", config["data"].get("train_samples", 2500))
+    test_samples = dataset_cfg.get("test_samples", config["data"].get("test_samples", 500))
 
     # Dynamic threshold scaling based on Information Theory limit log2(N)
     num_classes = len(ag_categories)
@@ -323,6 +327,7 @@ def main():
         print(f"RUNNING PIPELINE WITH SEED: {current_seed}")
         print(f"==========================================")
         set_seed(current_seed)
+        tier2.current_seed = current_seed
         
         # Load Data
         print("Loading Data...")
@@ -350,7 +355,7 @@ def main():
             early_stopping_patience=config["tier1"].get("early_stopping_patience")
         )
         
-        if pretrain_device == "cuda":
+        if pretrain_device == "cuda" and device == "cpu":
             print("Moving Tier 1 model to CPU for active learning routing phase...")
             tier1.model.to("cpu")
             tier1.device = "cpu"
@@ -778,7 +783,7 @@ def main():
                     "tau1": config["tier1"]["threshold_entropy"],
                     "tau2": config["tier1"]["threshold_confidence"],
                     "pretrain_epochs": config["tier1"].get("pretrain_epochs", 7),
-                    "train_samples": config["data"]["train_samples"],
+                    "train_samples": train_samples,
                     "accuracy_t1": metrics["accuracy_t1"],
                     "accuracy_final": metrics["accuracy_final"],
                     "human_effort_ratio": metrics["human_effort_ratio"],

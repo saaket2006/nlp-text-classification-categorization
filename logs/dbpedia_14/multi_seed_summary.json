@@ -9,29 +9,29 @@
     },
     {
       "seed": 123,
-      "accuracy_final": 0.986,
+      "accuracy_final": 0.983,
       "accuracy_t1": 0.982,
       "human_effort_ratio": 0.001,
-      "picr": 4.0000000000000036
+      "picr": 1.0000000000000009
     },
     {
       "seed": 7,
-      "accuracy_final": 0.982,
+      "accuracy_final": 0.983,
       "accuracy_t1": 0.974,
       "human_effort_ratio": 0.001,
-      "picr": 8.000000000000007
+      "picr": 9.000000000000007
     }
   ],
   "mean": {
-    "accuracy_final": 0.984,
+    "accuracy_final": 0.9833333333333334,
     "accuracy_t1": 0.977,
     "human_effort_ratio": 0.001,
-    "picr": 7.000000000000006
+    "picr": 6.333333333333338
   },
   "std": {
-    "accuracy_final": 0.0020000000000000018,
+    "accuracy_final": 0.0005773502691896263,
     "accuracy_t1": 0.004358898943540678,
     "human_effort_ratio": 0.0,
-    "picr": 2.6457513110645925
+    "picr": 4.618802153517009
   }
 }
