@@ -1,0 +1,100 @@
+{
+  "total_samples": 500,
+  "tier_distribution": {
+    "1": 288,
+    "2": 160,
+    "3": 52
+  },
+  "accuracy_t1": 0.794,
+  "accuracy_final": 0.816,
+  "f1_weighted": 0.8157731341371636,
+  "ece": 0.015722489595413187,
+  "human_effort_ratio": 0.104,
+  "picr": 0.21153846153846068,
+  "picr_display": "0.2115",
+  "picr_status": "BELOW_TARGET",
+  "picr_negative_warning": false,
+  "tier2_autonomous_gain": 0.02199999999999991,
+  "human_labels_count": 52,
+  "confusion_matrix_t1": [
+    [
+      190,
+      64
+    ],
+    [
+      39,
+      207
+    ]
+  ],
+  "confusion_matrix_final": [
+    [
+      197,
+      57
+    ],
+    [
+      35,
+      211
+    ]
+  ],
+  "confusion_matrix_escalated": [
+    [
+      92,
+      13
+    ],
+    [
+      16,
+      91
+    ]
+  ],
+  "per_category_f1": {
+    "neg": {
+      "precision": 0.8491379310344828,
+      "recall": 0.7755905511811023,
+      "f1-score": 0.8106995884773662,
+      "support": 254.0
+    },
+    "pos": {
+      "precision": 0.7873134328358209,
+      "recall": 0.8577235772357723,
+      "f1-score": 0.8210116731517509,
+      "support": 246.0
+    }
+  },
+  "per_category_f1_t1": {
+    "neg": {
+      "precision": 0.8296943231441049,
+      "recall": 0.7480314960629921,
+      "f1-score": 0.7867494824016563,
+      "support": 254.0
+    },
+    "pos": {
+      "precision": 0.7638376383763837,
+      "recall": 0.8414634146341463,
+      "f1-score": 0.8007736943907157,
+      "support": 246.0
+    }
+  },
+  "escalation_by_category": {
+    "neg": {
+      "tier2": 80,
+      "tier3": 25,
+      "total": 254
+    },
+    "pos": {
+      "tier2": 80,
+      "tier3": 27,
+      "total": 246
+    }
+  },
+  "picr_al": 0.2095,
+  "picr_al_display": "0.2095",
+  "picr_al_status": "BELOW_TARGET",
+  "picr_al_lambda": 0.5,
+  "delta_acc_al": 0.0,
+  "net_utility": 0.0168,
+  "net_utility_display": "0.0168",
+  "net_utility_status": "POSITIVE",
+  "annotation_cost_weight": 0.05,
+  "pre_al_t1_accuracy": 0.794,
+  "post_al_t1_accuracy": 0.794
+}

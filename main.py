@@ -314,7 +314,7 @@ def main():
     tier2.setup_dataset(dataset_name, ag_categories)
     
     # Configure Tier 2 voting cleanly within pipeline logic
-    if args.baseline or args.random_routing or args.sweep or dataset_name == "dbpedia_14":
+    if args.baseline or args.random_routing or args.sweep or dataset_name in ["dbpedia_14", "imdb"]:
         tier2.num_votes = 1
     else:
         tier2.num_votes = 3

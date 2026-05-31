@@ -87,6 +87,10 @@ hr { border-color: rgba(99, 102, 241, 0.1) !important; }
     background: linear-gradient(135deg, #34d399 0%, #059669 100%);
     color: #fff;
 }
+.dataset-badge-imdb {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    color: #fff;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -120,6 +124,11 @@ BASE_LOGS_DIR = "./logs"
 DATASET_DISPLAY_NAMES = {
     "ag_news": "AG News (4-class)",
     "dbpedia_14": "DBPedia-14 (14-class)",
+    "imdb": "IMDb (Binary Sentiment)",
+    "amazon_polarity": "Amazon Polarity (Binary)",
+    "yelp_polarity": "Yelp Polarity (Binary)",
+    "sst2": "SST-2 (Binary)",
+    "emotion": "Emotion (6-class)",
 }
 
 def get_available_datasets():

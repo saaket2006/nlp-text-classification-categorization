@@ -94,7 +94,10 @@ class TieredRouter:
                             not is_film_confusion
                         )
                     else:
-                        should_override = (t1_conf < conf_floor and t1_entropy < entropy_ceiling and t2_vote_agreement >= 0.6)
+                        if num_classes == 2:
+                            should_override = (t1_conf < conf_floor and t2_vote_agreement >= 0.6)
+                        else:
+                            should_override = (t1_conf < conf_floor and t1_entropy < entropy_ceiling and t2_vote_agreement >= 0.6)
                         
                     override_reason = f"T2 Override (T1 conf {t1_conf:.2f}, T2 agreement {t2_vote_agreement:.2f}). Trusting T2."
 

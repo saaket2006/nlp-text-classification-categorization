@@ -20,7 +20,7 @@ tier3:
   annotation_cost_weight: 0.05   # λ_cost — relative cost of one unit of human effort vs accuracy gain
 
 data:
-  dataset_name: "dbpedia_14"
+  dataset_name: "imdb"
   train_samples: 2500
   test_samples: 500
 
@@ -38,9 +38,11 @@ datasets_config:
     train_samples: 2500
     test_samples: 1000
   imdb:
-    threshold_entropy: 0.35
+    threshold_entropy: 0.72
     threshold_confidence: 0.75
-    threshold_extreme_entropy: 0.90
+    threshold_extreme_entropy: 0.95
+    train_samples: 2500
+    test_samples: 500
   amazon_polarity:
     threshold_entropy: 0.35
     threshold_confidence: 0.75

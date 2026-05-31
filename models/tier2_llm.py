@@ -30,7 +30,19 @@ class Tier2LLM:
         self.examples = ""
         self.sample_counter = 0
         self.prep_cache = {}
+        self.cache = {}
         
+        # Load local text-based cache if available
+        os.makedirs(f"logs/{dataset_name}", exist_ok=True)
+        local_cache_path = f"logs/{dataset_name}/llm_cache.json"
+        if os.path.exists(local_cache_path):
+            try:
+                with open(local_cache_path, "r", encoding="utf-8") as f:
+                    self.cache = json.load(f)
+                print(f"Loaded persistent LLM cache for {dataset_name} ({len(self.cache)} entries).")
+            except Exception as e:
+                print(f"Warning: Failed to load local LLM cache: {e}")
+
         # Load pre-populated cache if available
         if dataset_name == "dbpedia_14":
             cache_path = r"C:\Users\ASUS\.gemini\antigravity-ide\brain\d22251e4-ef19-426f-9d6f-71e1c9b721a3\scratch\caches_dbpedia_1000.json"
@@ -387,6 +399,44 @@ Output (structured key-value format):
         return result
 
 
+    def normalize_label(self, label: str, categories: list) -> str:
+        label_clean = label.strip().lower()
+        # 1. Exact match (case insensitive)
+        for cat in categories:
+            if cat.lower() == label_clean:
+                return cat
+                
+        # 2. Sentiment specific mapping (positive/pos, negative/neg)
+        sentiment_pos = ["positive", "pos", "positive sentiment", "p"]
+        sentiment_neg = ["negative", "neg", "negative sentiment", "n"]
+        
+        if label_clean in sentiment_pos:
+            for cat in categories:
+                if cat.lower() in sentiment_pos:
+                    return cat
+        if label_clean in sentiment_neg:
+            for cat in categories:
+                if cat.lower() in sentiment_neg:
+                    return cat
+                    
+        # 3. Fallback: prefix/substring match
+        for cat in categories:
+            if cat.lower().startswith(label_clean) or label_clean.startswith(cat.lower()):
+                return cat
+                
+        return label  # keep original if no match
+
+
+    def save_cache(self):
+        if not hasattr(self, "dataset_name") or not self.dataset_name:
+            return
+        local_cache_path = f"logs/{self.dataset_name}/llm_cache.json"
+        try:
+            with open(local_cache_path, "w", encoding="utf-8") as f:
+                json.dump(self.cache, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"Warning: Failed to save LLM cache: {e}")
+
     def predict(self, text: str, categories: list, t1_label: str = None, sample_idx: int = None, num_votes: int = None):
         if sample_idx is not None:
             idx = sample_idx
@@ -411,6 +461,7 @@ Output (structured key-value format):
         # 3. Call actual prediction
         res = self._real_predict(text, categories, t1_label, num_votes)
         self.cache[text] = res
+        self.save_cache()
         return res
 
     def _real_predict(self, text: str, categories: list, t1_label: str = None, num_votes: int = None):
@@ -435,11 +486,12 @@ Output (structured key-value format):
         if not votes:
             return None, "All votes failed"
             
-        # Majority Vote Logic
+        # Majority Vote Logic with Label Normalization
         label_counts = {}
         for v in votes:
             for lbl in v["labels"]:
-                label_counts[lbl] = label_counts.get(lbl, 0) + 1
+                norm_lbl = self.normalize_label(lbl, categories)
+                label_counts[norm_lbl] = label_counts.get(norm_lbl, 0) + 1
         
         if not label_counts:
             return None, "No labels found in votes"
@@ -447,8 +499,12 @@ Output (structured key-value format):
         # Pick top label
         best_label = max(label_counts, key=label_counts.get)
         
-        # Calculate average confidence of votes for that label
-        avg_conf = np.mean([v.get("confidence", 0.5) for v in votes if best_label in v["labels"]])
+        # Calculate average confidence of votes for that label (considering normalized matches)
+        avg_conf = np.mean([
+            v.get("confidence", 0.5) 
+            for v in votes 
+            if any(self.normalize_label(x, categories) == best_label for x in v["labels"])
+        ])
         
         final_result = {
             "labels": [best_label],

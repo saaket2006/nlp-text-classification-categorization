@@ -1,0 +1,101 @@
+{
+  "total_samples": 500,
+  "tier_distribution": {
+    "1": 0,
+    "2": 500,
+    "3": 0
+  },
+  "accuracy_t1": 0.794,
+  "accuracy_final": 0.876,
+  "f1_weighted": 0.875559499123949,
+  "ece": 0.06160182905197144,
+  "human_effort_ratio": 0.0,
+  "picr": null,
+  "picr_display": "N/A",
+  "picr_status": "AUTONOMOUS",
+  "picr_negative_warning": false,
+  "tier2_autonomous_gain": 0.08199999999999996,
+  "human_labels_count": 0,
+  "confusion_matrix_t1": [
+    [
+      190,
+      64
+    ],
+    [
+      39,
+      207
+    ]
+  ],
+  "confusion_matrix_final": [
+    [
+      236,
+      18
+    ],
+    [
+      44,
+      202
+    ]
+  ],
+  "confusion_matrix_escalated": [
+    [
+      236,
+      18
+    ],
+    [
+      44,
+      202
+    ]
+  ],
+  "per_category_f1": {
+    "neg": {
+      "precision": 0.8428571428571429,
+      "recall": 0.9291338582677166,
+      "f1-score": 0.8838951310861424,
+      "support": 254.0
+    },
+    "pos": {
+      "precision": 0.9181818181818182,
+      "recall": 0.8211382113821138,
+      "f1-score": 0.8669527896995708,
+      "support": 246.0
+    }
+  },
+  "per_category_f1_t1": {
+    "neg": {
+      "precision": 0.8296943231441049,
+      "recall": 0.7480314960629921,
+      "f1-score": 0.7867494824016563,
+      "support": 254.0
+    },
+    "pos": {
+      "precision": 0.7638376383763837,
+      "recall": 0.8414634146341463,
+      "f1-score": 0.8007736943907157,
+      "support": 246.0
+    }
+  },
+  "escalation_by_category": {
+    "neg": {
+      "tier2": 254,
+      "tier3": 0,
+      "total": 254
+    },
+    "pos": {
+      "tier2": 246,
+      "tier3": 0,
+      "total": 246
+    }
+  },
+  "picr_al": 82.0,
+  "picr_al_display": "82.0000",
+  "picr_al_status": "STRONG",
+  "picr_al_lambda": 0.5,
+  "delta_acc_al": 0.0,
+  "net_utility": 0.082,
+  "net_utility_display": "0.0820",
+  "net_utility_status": "POSITIVE",
+  "annotation_cost_weight": 0.05,
+  "pre_al_t1_accuracy": 0.794,
+  "post_al_t1_accuracy": 0.794,
+  "mode": "tier2_only_baseline"
+}
