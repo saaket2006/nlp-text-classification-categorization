@@ -4,6 +4,9 @@
 
 The **Tri-Tiered Local LLM Active Learning (AL) Framework** is a performance-optimized system designed for high-accuracy text classification while minimizing computational costs and human intervention. By combining fast encoder models with powerful local LLMs and human-in-the-loop escalation, it achieves an optimal balance between efficiency and reliability.
 
+> [!TIP]
+> **Dynamic Dataset Support & Recent Execution Results**: For a detailed walkthrough of the dynamic dataset support architectural changes, zero-shot dynamic prompt configurations, and latest multi-seed execution results on **AG News**, **DBpedia-14**, and **IMDb**, please refer to the [walkthrough.md](./walkthrough.md) file.
+
 ---
 
 ## 🚀 Key Features
@@ -33,7 +36,7 @@ The **Tri-Tiered Local LLM Active Learning (AL) Framework** is a performance-opt
 │   ├── tier1_model.py      # DistilBERT encoder with online fine-tuning
 │   └── tier2_llm.py        # Ollama LLM with majority-vote and Tier 1 hint
 ├── data/                   # Data loading and preprocessing utilities
-│   └── loader.py           # AG News dataset loader
+│   └── loader.py           # Dataset loader (dynamic dataset/category support)
 ├── metrics/                # Pipeline evaluation and report generation
 │   └── evaluator.py        # PipelineEvaluator — PICR, F1, confusion matrices
 ├── ui/                     # Streamlit-based visualization dashboard
@@ -42,6 +45,7 @@ The **Tri-Tiered Local LLM Active Learning (AL) Framework** is a performance-opt
 ├── config.yaml             # Centralized configuration (models, thresholds, data)
 ├── main.py                 # Main entry point with CLI flags for all modes
 ├── run_dashboard.bat       # One-click dashboard launcher (Windows)
+├── walkthrough.md          # Architectural walkthrough and verification results
 └── requirements.txt        # Project dependencies
 ```
 
@@ -193,26 +197,47 @@ tier1:
   model_name: "distilbert-base-uncased"
   max_length: 128
   batch_size: 16
-  threshold_entropy: 0.80   # τ₁ — entropy threshold for Tier 2 escalation
-  threshold_confidence: 0.75    # τ₂ — confidence threshold for Tier 2 
-  threshold_extreme_entropy: 1.80
-  active_learning_batch_size: 4
+  active_learning_batch_size: 1
   pretrain_epochs: 7
-  early_stopping_patience: 7
+  early_stopping_patience: 0    # 0 = disabled; set to 2 to enable
+  picr_al_lambda: 0.5           # λ — AL progression weight for PICR-AL
+  # threshold_entropy: 0.72     # optional manual override for τ₁
+  # threshold_confidence: 0.75  # optional manual override for τ₂
 
 tier2:
   ollama_model: "qwen2.5:3b"
   url: "http://localhost:11434"
-  categories: ["World", "Sports", "Business", "Sci/Tech"]
 
 tier3:
   human_error_rate: 0.05
+  annotation_cost_weight: 0.05  # λ_cost — annotation cost weight
 
 data:
-  dataset_name: "ag_news"
+  dataset_name: "imdb"
   train_samples: 2500
-  test_samples: 1000
+  test_samples: 500
+
+datasets_config:
+  ag_news:
+    threshold_entropy: 1.00
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 1.80
+    train_samples: 2500
+    test_samples: 500
+  dbpedia_14:
+    threshold_entropy: 0.40
+    threshold_confidence: 0.95
+    threshold_extreme_entropy: 1.60
+    train_samples: 2500
+    test_samples: 1000
+  imdb:
+    threshold_entropy: 0.72
+    threshold_confidence: 0.75
+    threshold_extreme_entropy: 0.95
+    train_samples: 2500
+    test_samples: 500
 ```
+
 
 ### Key Parameters
 | Parameter | Description |
@@ -222,25 +247,30 @@ data:
 | `threshold_extreme_entropy` | Absolute cap for direct Tier 3 escalation |
 | `pretrain_epochs` | Number of pretraining epochs for the DistilBERT encoder |
 | `human_error_rate` | Simulated human annotation error rate for Tier 3 |
-| `train_samples` / `test_samples` | Dataset split sizes |
+| `train_samples` / `test_samples` | Default dataset split sizes |
+| `datasets_config` | Dataset-specific configuration mappings (thresholds, samples) |
+| `annotation_cost_weight` | Relative cost of human effort in Net Utility calculations (λ_cost) |
+| `picr_al_lambda` | Active learning progression weight in PICR-AL calculations (λ) |
 
 ---
 
 ## 📄 Output Files
 
-| File | Description |
+The framework organizes execution logs dynamically under dataset-specific directories to support concurrent dataset evaluations:
+
+| File Pattern | Description |
 | :--- | :--- |
-| `logs/metrics_summary.json` | Core metrics (accuracy, F1, PICR, confusion matrices, per-category F1) |
-| `logs/detailed_results.json` | Per-sample prediction details with tier, labels, confidence, entropy, rationale |
-| `logs/research_report.md` | Auto-generated IEEE-style research report with RQ analysis |
-| `logs/experiment_log.csv` | Experiment tracker with timestamps, configs, and key metrics |
-| `logs/history.json` | Historical trial log for efficiency frontier visualization |
-| `logs/baseline_metrics.json` | Tier-2-only baseline results |
-| `logs/ablation_no_tier2.json` | No-Tier-2 ablation results |
-| `logs/ablation_no_entropy.json` | No-entropy-routing ablation results |
-| `logs/baseline_random_routing.json` | Random routing baseline results |
-| `logs/threshold_sweep.json` | Threshold sweep grid results |
-| `logs/multi_seed_summary.json` | Multi-seed aggregated statistics (mean, std) |
+| `logs/<dataset_name>/metrics_summary.json` | Core metrics (accuracy, F1, PICR, Net Utility, confusion matrices) |
+| `logs/<dataset_name>/detailed_results.json` | Per-sample details (tier, prediction, confidence, entropy, rationale) |
+| `logs/reports/<dataset_name>_report.md` | Auto-generated markdown research report with Research Questions (RQ) analysis |
+| `logs/<dataset_name>/experiment_log.csv` | Historical run tracker with timestamps, threshold settings, and key outcomes |
+| `logs/<dataset_name>/history.json` | Historical trial log for the efficiency frontier plotting |
+| `logs/<dataset_name>/baseline_metrics.json` | Baseline metrics from Tier-2-only evaluation |
+| `logs/<dataset_name>/ablation_no_tier2.json` | Ablation results with no Tier 2 reasoning |
+| `logs/<dataset_name>/ablation_no_entropy.json` | Ablation results with entropy routing disabled |
+| `logs/<dataset_name>/baseline_random_routing.json` | Baseline results with random routing |
+| `logs/<dataset_name>/threshold_sweep.json` | Swept threshold configurations over the search grid |
+| `logs/<dataset_name>/multi_seed_summary.json` | Aggregated statistics (mean and standard deviation) across multi-seed runs |
 
 ---
 
