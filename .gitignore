@@ -3,3 +3,4 @@ __pycache__
 dataset
 logs/tier2_errors
 .vscode
+logs/*/llm_cache.json

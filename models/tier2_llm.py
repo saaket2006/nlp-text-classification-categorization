@@ -14,7 +14,6 @@ class Tier2LLM:
         self.definitions = ""
         self.examples = ""
         self.cache = {}
-        self.prep_cache = {}
         self.sample_counter = 0
         self.current_seed = None
         try:
@@ -29,7 +28,6 @@ class Tier2LLM:
         self.definitions = ""
         self.examples = ""
         self.sample_counter = 0
-        self.prep_cache = {}
         self.cache = {}
         
         # Load local text-based cache if available
@@ -43,16 +41,7 @@ class Tier2LLM:
             except Exception as e:
                 print(f"Warning: Failed to load local LLM cache: {e}")
 
-        # Load pre-populated cache if available
-        if dataset_name == "dbpedia_14":
-            cache_path = r"C:\Users\ASUS\.gemini\antigravity-ide\brain\d22251e4-ef19-426f-9d6f-71e1c9b721a3\scratch\caches_dbpedia_1000.json"
-            if os.path.exists(cache_path):
-                try:
-                    with open(cache_path, "r", encoding="utf-8") as f:
-                        self.prep_cache = json.load(f)
-                    print(f"Loaded pre-populated cache for dbpedia_14 with seeds: {list(self.prep_cache.keys())}")
-                except Exception as e:
-                    print(f"Warning: Failed to load pre-populated cache: {e}")
+
         
         # 1. Check if we have pre-defined config
         if dataset_name == "ag_news":
@@ -444,17 +433,7 @@ Output (structured key-value format):
             self.sample_counter += 1
             idx = self.sample_counter - 1
         
-        # 1. Check pre-populated cache first (e.g. for dbpedia_14)
-        seed_key = str(getattr(self, "current_seed", 42))
-        if getattr(self, "dataset_name", "") == "dbpedia_14" and seed_key in self.prep_cache:
-            seed_data = self.prep_cache[seed_key]
-            if idx < len(seed_data):
-                cached_item = seed_data[idx]
-                t2_res = cached_item.get("t2_res")
-                if t2_res is not None:
-                    return t2_res, "Cached response"
-        
-        # 2. Check in-memory cache keyed by text (e.g. for ag_news or missing dbpedia entries)
+        # Check in-memory cache keyed by text
         if text in self.cache:
             return self.cache[text]
             
