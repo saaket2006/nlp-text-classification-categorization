@@ -1,7 +1,8 @@
 import numpy as np
 import json
-from sklearn.metrics import f1_score, accuracy_score, confusion_matrix, classification_report, brier_score_loss
+from sklearn.metrics import f1_score, accuracy_score, confusion_matrix, classification_report
 from core.calibration import calculate_ece
+from scipy.stats import t
 
 class PipelineEvaluator:
     def __init__(self):
@@ -15,7 +16,7 @@ class PipelineEvaluator:
             "ground_truth": ground_truth
         })
 
-    def calculate_metrics(self, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05, categories: list = None):
+    def calculate_metrics(self, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05, categories: list = None, cost_t1: float = 1.0, cost_t2: float = 200.0, cost_t3: float = 3000.0):
         if not self.results:
             return {}
 
@@ -42,17 +43,66 @@ class PipelineEvaluator:
         correctness_t1 = np.array([1 if y_t == y_gt else 0 for y_t, y_gt in zip(y_t1, y_true)])
         ece_t1 = calculate_ece(t1_confidences, correctness_t1, np.ones_like(correctness_t1))
 
-        # Final System Confidence & ECE & Brier Score
+        # Final System Confidence & ECE
         final_confidences = np.array([r["prediction"].get("confidence", 0.5) for r in self.results])
         correctness_final = np.array([1 if y_f == y_gt else 0 for y_f, y_gt in zip(y_final, y_true)])
         ece_final = calculate_ece(final_confidences, correctness_final, np.ones_like(correctness_final))
-        brier_score = float(np.mean((final_confidences - correctness_final) ** 2))
+
+        # Latency & Cost Calculations
+        total_latency = sum(r["prediction"].get("latency", 0.0) for r in self.results)
+        average_latency = total_latency / total if total > 0 else 0.0
+        
+        t1_count = tier_counts[1]
+        t2_count = tier_counts[2]
+        t3_count = tier_counts[3]
+        total_compute_cost = (t1_count * cost_t1) + (t2_count * cost_t2) + (t3_count * cost_t3)
+        average_compute_cost = total_compute_cost / total if total > 0 else 0.0
 
         # Confusion Matrices
         if categories is None:
             labels_order = ["World", "Sports", "Business", "Sci/Tech"]
         else:
             labels_order = categories
+            
+        cat_to_id = {cat: i for i, cat in enumerate(labels_order)}
+        
+        # One-hot ground truth matrix and probability vectors for standard multiclass Brier score
+        y_true_ids = [cat_to_id[gt] if gt in cat_to_id else 0 for gt in y_true]
+        K = len(labels_order)
+        y_true_one_hot = np.zeros((total, K))
+        for i, val_id in enumerate(y_true_ids):
+            y_true_one_hot[i, val_id] = 1.0
+
+        t1_probs_list = []
+        final_probs_list = []
+        for r in self.results:
+            pred = r["prediction"]
+            # Tier 1 probs
+            if "t1_probs" in pred:
+                t1_probs_list.append(pred["t1_probs"])
+            else:
+                probs = [0.0] * K
+                t1_lbl = pred.get("t1_label")
+                if t1_lbl in cat_to_id:
+                    probs[cat_to_id[t1_lbl]] = float(pred.get("t1_confidence", 1.0))
+                t1_probs_list.append(probs)
+                
+            # Final probs
+            if "final_probs" in pred:
+                final_probs_list.append(pred["final_probs"])
+            else:
+                probs = [0.0] * K
+                fin_lbl = pred.get("final_label", [None])[0]
+                if fin_lbl in cat_to_id:
+                    probs[cat_to_id[fin_lbl]] = float(pred.get("confidence", 1.0))
+                final_probs_list.append(probs)
+                
+        t1_probs_matrix = np.array(t1_probs_list)
+        final_probs_matrix = np.array(final_probs_list)
+        
+        brier_score_t1 = float(np.mean(np.sum((t1_probs_matrix - y_true_one_hot) ** 2, axis=1)))
+        brier_score_final = float(np.mean(np.sum((final_probs_matrix - y_true_one_hot) ** 2, axis=1)))
+
         confusion_matrix_t1 = confusion_matrix(y_true, y_t1, labels=labels_order).tolist()
         confusion_matrix_final = confusion_matrix(y_true, y_final, labels=labels_order).tolist()
 
@@ -169,7 +219,13 @@ class PipelineEvaluator:
             "ece": float(ece_final),
             "ece_t1": float(ece_t1),
             "ece_final": float(ece_final),
-            "brier_score": float(brier_score),
+            "brier_score": float(brier_score_final),
+            "brier_score_t1": float(brier_score_t1),
+            "brier_score_final": float(brier_score_final),
+            "total_latency": float(total_latency),
+            "average_latency": float(average_latency),
+            "total_compute_cost": float(total_compute_cost),
+            "average_compute_cost": float(average_compute_cost),
             "human_effort_ratio": float(raw_human_effort_ratio),
             "picr": picr,
             "picr_display": picr_display,
@@ -201,16 +257,22 @@ class PipelineEvaluator:
 
         return metrics
 
-    def save_report(self, filepath: str, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05, categories: list = None):
-        metrics = self.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=categories)
+    def save_report(self, filepath: str, lambda_al: float = 0.5, annotation_cost_weight: float = 0.05, categories: list = None, cost_t1: float = 1.0, cost_t2: float = 200.0, cost_t3: float = 3000.0):
+        metrics = self.calculate_metrics(
+            lambda_al=lambda_al, 
+            annotation_cost_weight=annotation_cost_weight, 
+            categories=categories,
+            cost_t1=cost_t1,
+            cost_t2=cost_t2,
+            cost_t3=cost_t3
+        )
         with open(filepath, "w") as f:
             json.dump(metrics, f, indent=2)
         return metrics
 
 def calculate_multi_seed_stats(runs: list):
     """
-    Computes rigorous multi-seed summary statistics including 95% Confidence Intervals and Medians.
-    Does not drop zero-effort runs silently.
+    Computes rigorous multi-seed summary statistics including 95% Confidence Intervals (using Student-t) and Medians.
     """
     if not runs:
         return {}
@@ -225,14 +287,17 @@ def calculate_multi_seed_stats(runs: list):
             "picr": r.get("picr")
         })
 
-    keys = ["accuracy_final", "accuracy_t1", "human_effort_ratio", "f1_macro", "f1_weighted", "ece_final", "net_utility"]
+    keys = [
+        "accuracy_final", "accuracy_t1", "human_effort_ratio", "f1_macro", 
+        "f1_weighted", "ece_final", "ece_t1", "brier_score_final", "brier_score_t1", 
+        "net_utility", "total_latency", "average_latency", "total_compute_cost", "average_compute_cost"
+    ]
     mean_stats = {}
     std_stats = {}
     median_stats = {}
     ci95_stats = {}
 
     n_runs = len(runs)
-    z95 = 1.96
 
     for key in keys:
         vals = [r[key] for r in runs if key in r and r[key] is not None]
@@ -241,7 +306,11 @@ def calculate_multi_seed_stats(runs: list):
             m = float(np.mean(arr))
             s = float(np.std(arr, ddof=1)) if len(arr) > 1 else 0.0
             med = float(np.median(arr))
-            ci = float(z95 * (s / np.sqrt(len(arr)))) if len(arr) > 1 else 0.0
+            
+            # Use Student-t distribution critical value for 95% Confidence Interval
+            df = len(arr) - 1
+            t_val = float(t.ppf(0.975, df)) if df > 0 else 1.96
+            ci = float(t_val * (s / np.sqrt(len(arr)))) if len(arr) > 1 else 0.0
 
             mean_stats[key] = m
             std_stats[key] = s
@@ -260,7 +329,10 @@ def calculate_multi_seed_stats(runs: list):
         mean_stats["picr"] = float(np.mean(arr_p))
         std_stats["picr"] = float(np.std(arr_p, ddof=1)) if len(arr_p) > 1 else 0.0
         median_stats["picr"] = float(np.median(arr_p))
-        ci95_stats["picr"] = float(z95 * (std_stats["picr"] / np.sqrt(len(arr_p)))) if len(arr_p) > 1 else 0.0
+        
+        df_p = len(arr_p) - 1
+        t_val_p = float(t.ppf(0.975, df_p)) if df_p > 0 else 1.96
+        ci95_stats["picr"] = float(t_val_p * (std_stats["picr"] / np.sqrt(len(arr_p)))) if len(arr_p) > 1 else 0.0
     else:
         mean_stats["picr"] = None
         std_stats["picr"] = 0.0

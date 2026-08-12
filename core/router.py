@@ -19,8 +19,45 @@ class TieredRouter:
         self.dataset_name = dataset_name
         self.mode = mode.upper()
         self.budget_ratios = budget_ratios  # (p1, p2, p3) for BUDGET_MATCHED_RANDOM mode
+        
+        # Thresholds for AL Baselines (calibrated dynamically to match escalation rates)
+        self.al_budget_prob = 0.10
+        self.al_least_conf_threshold = 0.5
+        self.al_entropy_threshold = 0.5
+        self.al_margin_threshold = 0.1
 
     def process_sample(self, text: str, sample_idx: int = None) -> dict:
+        import time
+        start_time = time.perf_counter()
+        output = self._process_sample_core(text, sample_idx)
+        output["latency"] = time.perf_counter() - start_time
+        
+        # Construct final probability vector for calibration and Brier score metrics
+        t1_probs = output.get("t1_probs", [])
+        tier = output["tier"]
+        final_label = output["final_label"][0] if output["final_label"] else None
+        
+        if tier == 1:
+            output["final_probs"] = t1_probs
+        elif tier == 2:
+            c = output["confidence"]
+            K = len(self.categories)
+            probs = [(1.0 - c) / (K - 1) if K > 1 else 0.0] * K
+            if final_label in self.cat_to_id:
+                probs[self.cat_to_id[final_label]] = c
+            output["final_probs"] = probs
+        elif tier == 3:
+            K = len(self.categories)
+            probs = [0.0] * K
+            if final_label in self.cat_to_id:
+                probs[self.cat_to_id[final_label]] = 1.0
+            else:
+                probs[0] = 1.0
+            output["final_probs"] = probs
+            
+        return output
+
+    def _process_sample_core(self, text: str, sample_idx: int = None) -> dict:
         t1_idx, t1_probs, t1_conf = self.tier1.predict(text)
         t1_label = self.id_to_cat[t1_idx]
         t1_entropy = self.uncertainty_engine.calculate_entropy(t1_probs)
@@ -35,7 +72,8 @@ class TieredRouter:
             "entropy": float(t1_entropy),
             "disagreement": False,
             "final_label": [t1_label],
-            "rationale": "Tier 1 classified with high confidence."
+            "rationale": "Tier 1 classified with high confidence.",
+            "t1_probs": [float(p) for p in t1_probs]
         }
 
         # --- MODE 1: BUDGET_MATCHED_RANDOM ---
@@ -103,6 +141,51 @@ class TieredRouter:
                     output["tier"] = 3
                     output["confidence"] = 1.0
                     output["rationale"] = "Tier 2 failed. Escalating to Tier 3."
+            return output
+
+        # --- ACTIVE LEARNING BASELINE MODES ---
+        if self.mode == "AL_RANDOM":
+            r = random.random()
+            if r < self.al_budget_prob:
+                output["tier"] = 3
+                output["confidence"] = 1.0
+                output["rationale"] = "Active Learning Random Selection Baseline (Tier 3)"
+            else:
+                output["tier"] = 1
+                output["rationale"] = "Active Learning Random Selection Baseline (Tier 1)"
+            return output
+
+        if self.mode == "AL_LEAST_CONFIDENCE":
+            if t1_conf < self.al_least_conf_threshold:
+                output["tier"] = 3
+                output["confidence"] = 1.0
+                output["rationale"] = f"Least Confidence AL Baseline: T1 confidence {t1_conf:.2f} below threshold."
+            else:
+                output["tier"] = 1
+                output["rationale"] = f"Least Confidence AL Baseline: T1 confidence {t1_conf:.2f} above threshold."
+            return output
+
+        if self.mode == "AL_ENTROPY":
+            if t1_entropy > self.al_entropy_threshold:
+                output["tier"] = 3
+                output["confidence"] = 1.0
+                output["rationale"] = f"Entropy AL Baseline: T1 entropy {t1_entropy:.2f} above threshold."
+            else:
+                output["tier"] = 1
+                output["rationale"] = f"Entropy AL Baseline: T1 entropy {t1_entropy:.2f} below threshold."
+            return output
+
+        if self.mode == "AL_MARGIN":
+            sorted_probs = sorted(t1_probs, reverse=True)
+            margin = sorted_probs[0] - sorted_probs[1] if len(sorted_probs) > 1 else 1.0
+            output["margin"] = float(margin)
+            if margin < self.al_margin_threshold:
+                output["tier"] = 3
+                output["confidence"] = 1.0
+                output["rationale"] = f"Margin AL Baseline: T1 margin {margin:.2f} below threshold."
+            else:
+                output["tier"] = 1
+                output["rationale"] = f"Margin AL Baseline: T1 margin {margin:.2f} above threshold."
             return output
 
         # --- MODE 5: STANDARD (Tri-Tiered Active Learning Router) ---

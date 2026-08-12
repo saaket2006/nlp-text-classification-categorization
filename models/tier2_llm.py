@@ -16,6 +16,7 @@ class Tier2LLM:
         self.cache = {}
         self.sample_counter = 0
         self.current_seed = None
+        self.cache_key_prefix = ""
         try:
             self.client.list()
             self.offline = False
@@ -84,7 +85,6 @@ Output:
 labels: Business
 confidence: 0.96
 reasoning: This is a corporate acquisition and cash purchase of a business unit, which falls under 'Business' in the corpus."""
-            return
 
         elif dataset_name == "dbpedia_14":
             self.definitions = """- Company: Companies, startups, corporations, businesses, and commercial entities (e.g., Microsoft, Ford, retail shops).
@@ -124,7 +124,6 @@ Output:
 labels: WrittenWork
 confidence: 0.98
 reasoning: It is a fantasy novel, which is a written work."""
-            return
 
         elif dataset_name in ["imdb", "amazon_polarity", "yelp_polarity", "sst2", "glue/sst2"]:
             self.definitions = """- negative: Expresses dissatisfaction, bad experiences, criticism, disappointment, or overall negative sentiment.
@@ -140,7 +139,6 @@ Output:
 labels: positive
 confidence: 0.99
 reasoning: The user praises the movie with words like "absolutely brilliant" and "stunning", which is highly positive."""
-            return
 
         elif dataset_name == "emotion":
             self.definitions = """- sadness: Expresses grief, sorrow, disappointment, depression, or feeling down.
@@ -172,13 +170,14 @@ Output:
 labels: fear
 confidence: 0.99
 reasoning: Mentions a pounding heart and being "terrified", which are classic physiological and emotional signs of fear."""
-            return
 
-        # 2. Dynamic generation using Ollama if online
-        if not self.offline:
-            try:
-                print(f"Generating dynamic prompt definitions and examples for dataset '{dataset_name}' using {self.model_name}...")
-                gen_prompt = f"""You are an expert AI data annotator.
+        else:
+            # 2. Dynamic generation using Ollama if online
+            generated_successfully = False
+            if not self.offline:
+                try:
+                    print(f"Generating dynamic prompt definitions and examples for dataset '{dataset_name}' using {self.model_name}...")
+                    gen_prompt = f"""You are an expert AI data annotator.
 We need to classify texts into the following categories: {categories}.
 Please write a concise 1-sentence definition/description for each category to help a classifier.
 Then, write 1 typical short example sentence (text) and its correct classification for any 2 of the categories.
@@ -202,34 +201,63 @@ labels: <CategoryB>
 confidence: 0.95
 reasoning: <Brief explanation>
 """
-                response = self.client.generate(model=self.model_name, prompt=gen_prompt, options={"temperature": 0.1})
-                response_text = response['response']
+                    response = self.client.generate(model=self.model_name, prompt=gen_prompt, options={"temperature": 0.1})
+                    response_text = response['response']
+                    
+                    # Parse the response text to split DEFINITIONS and EXAMPLES
+                    if "DEFINITIONS:" in response_text and "EXAMPLES:" in response_text:
+                        parts = response_text.split("EXAMPLES:")
+                        self.definitions = parts[0].replace("DEFINITIONS:", "").strip()
+                        self.examples = parts[1].strip()
+                        print(f"Successfully generated dynamic definitions and examples!")
+                        generated_successfully = True
+                except Exception as e:
+                    print(f"Failed to dynamically generate definitions via Ollama: {e}")
+                    
+            if not generated_successfully:
+                # 3. Fallback: Generic generation
+                print("Using generic fallback for definitions and examples.")
+                defs = []
+                for cat in categories:
+                    defs.append(f"- {cat}: Texts that belong to or are related to the category '{cat}'.")
+                self.definitions = "\n".join(defs)
                 
-                # Parse the response text to split DEFINITIONS and EXAMPLES
-                if "DEFINITIONS:" in response_text and "EXAMPLES:" in response_text:
-                    parts = response_text.split("EXAMPLES:")
-                    self.definitions = parts[0].replace("DEFINITIONS:", "").strip()
-                    self.examples = parts[1].strip()
-                    print(f"Successfully generated dynamic definitions and examples!")
-                    return
-            except Exception as e:
-                print(f"Failed to dynamically generate definitions via Ollama: {e}")
-                
-        # 3. Fallback: Generic generation
-        print("Using generic fallback for definitions and examples.")
-        defs = []
-        for cat in categories:
-            defs.append(f"- {cat}: Texts that belong to or are related to the category '{cat}'.")
-        self.definitions = "\n".join(defs)
-        
-        exs = []
-        for cat in categories[:2]:
-            exs.append(f"""Input Text: "This is a representative example text specifically about {cat} and its related topics."
+                exs = []
+                for cat in categories[:2]:
+                    exs.append(f"""Input Text: "This is a representative example text specifically about {cat} and its related topics."
 Output:
 labels: {cat}
 confidence: 0.95
 reasoning: The text explicitly mentions and focuses on topics related to {cat}.""")
-        self.examples = "\n\n".join(exs)
+                self.examples = "\n\n".join(exs)
+
+        self._compute_cache_prefix()
+
+        # Dynamically migrate old un-prefixed cache keys to use the new prompt prefix to prevent cache misses
+        migrated_cache = {}
+        migration_count = 0
+        for k, v in self.cache.items():
+            is_prefixed = False
+            if ":" in k:
+                prefix_part = k.split(":", 1)[0]
+                if len(prefix_part) == 32 and all(c in "0123456789abcdef" for c in prefix_part):
+                    is_prefixed = True
+            
+            if not is_prefixed:
+                new_key = f"{self.cache_key_prefix}:{k}"
+                migrated_cache[new_key] = v
+                migration_count += 1
+            else:
+                migrated_cache[k] = v
+        if migration_count > 0:
+            self.cache = migrated_cache
+            print(f"Migrated {migration_count} legacy cache keys to prefix '{self.cache_key_prefix}' to prevent cache misses.")
+            self.save_cache()
+
+    def _compute_cache_prefix(self):
+        import hashlib
+        meta_str = f"{self.dataset_name}_{self.model_name}_votes{self.num_votes}_{self.definitions}_{self.examples}"
+        self.cache_key_prefix = hashlib.md5(meta_str.encode('utf-8')).hexdigest()
 
     def generate_prompt(self, text: str, categories: list, t1_label: str = None):
         t1_note = ""
@@ -433,9 +461,10 @@ Output (structured key-value format):
             self.sample_counter += 1
             idx = self.sample_counter - 1
         
-        # Check in-memory cache keyed by text
-        if text in self.cache:
-            val = self.cache[text]
+        # Check in-memory cache keyed by prefix + text
+        cache_key = f"{self.cache_key_prefix}:{text}"
+        if cache_key in self.cache:
+            val = self.cache[cache_key]
             if isinstance(val, (list, tuple)) and len(val) == 2:
                 return val[0], val[1]
             elif isinstance(val, dict):
@@ -444,7 +473,7 @@ Output (structured key-value format):
         # 3. Call actual prediction
         res, raw = self._real_predict(text, categories, t1_label, num_votes)
         if res is not None and raw != "Offline Fallback":
-            self.cache[text] = [res, raw]
+            self.cache[cache_key] = [res, raw]
             self.save_cache()
         return res, raw
 

@@ -18,6 +18,10 @@ tier2:
 tier3:
   human_error_rate: 0.05
   annotation_cost_weight: 0.05   # λ_cost — relative cost of one unit of human effort vs accuracy gain
+  extreme_entropy_percentile: 0.98
+  cost_t1: 1.0
+  cost_t2: 200.0
+  cost_t3: 3000.0
 
 data:
   dataset_name: "imdb"

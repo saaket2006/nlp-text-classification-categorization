@@ -1,0 +1,10 @@
+[
+  {
+    "human_annotations": 0,
+    "test_accuracy": 0.886
+  },
+  {
+    "human_annotations": 10,
+    "test_accuracy": 0.864
+  }
+]

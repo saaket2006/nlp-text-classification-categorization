@@ -8,6 +8,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 import yaml
 import json
+import sys
 import torch
 import random
 import argparse
@@ -54,6 +55,9 @@ def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=Fal
                 pre_al_correct += 1
     pre_al_accuracy = pre_al_correct / len(eval_set) if len(eval_set) > 0 else 0.0
 
+    evaluator = PipelineEvaluator()
+    evaluator.al_learning_curve = []
+
     # 2. Optional Active Learning Adaptation Loop on Unlabeled AL Pool (Train Split)
     human_error_rate = config.get("tier3", {}).get("human_error_rate", 0.0)
     al_batch_size = config.get("tier1", {}).get("active_learning_batch_size", 1)
@@ -61,13 +65,21 @@ def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=Fal
     if update_model and df_al_pool is not None:
         al_texts = []
         al_labels = []
+        human_annotations_count = 0
+        
+        # Add initial point to learning curve
+        evaluator.al_learning_curve.append({
+            "human_annotations": 0,
+            "test_accuracy": pre_al_accuracy
+        })
+        
         for idx, row in df_al_pool.iterrows():
             text = row["text"]
             gt = row["label"]
 
             prediction = router.process_sample(text, sample_idx=idx)
             if prediction["tier"] == 3:
-                # Simulated oracle/human annotation
+                human_annotations_count += 1
                 if random.random() < human_error_rate:
                     wrong_labels = [c for c in ag_categories if c != gt]
                     simulated_label = random.choice(wrong_labels)
@@ -81,12 +93,26 @@ def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=Fal
                     tier1.train_on_batch(al_texts, al_labels)
                     al_texts = []
                     al_labels = []
+                    
+                # Evaluate model at regular intervals of 10 human annotations
+                if human_annotations_count % 10 == 0:
+                    current_test_correct = 0
+                    if len(test_texts) > 0:
+                        pred_idxs, _, _ = tier1.predict_batch(test_texts, batch_size=64)
+                        for p_idx, p_gt in zip(pred_idxs, test_gts):
+                            t1_label = router.id_to_cat[p_idx]
+                            if t1_label == p_gt:
+                                current_test_correct += 1
+                    current_acc = current_test_correct / len(eval_set) if len(eval_set) > 0 else 0.0
+                    evaluator.al_learning_curve.append({
+                        "human_annotations": human_annotations_count,
+                        "test_accuracy": current_acc
+                    })
 
     # 3. Final System Evaluation on untouched Test Set
-    evaluator = PipelineEvaluator()
     results_log = []
 
-    for idx, row in tqdm(eval_set.iterrows(), total=len(eval_set), desc=desc, disable=disable_tqdm):
+    for idx, row in tqdm(eval_set.iterrows(), total=len(eval_set), desc=desc, disable=disable_tqdm, file=sys.stdout):
         text = row["text"]
         gt = row["label"]
 
@@ -119,6 +145,14 @@ def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=Fal
             if t1_label == gt:
                 post_al_correct += 1
     post_al_accuracy = post_al_correct / len(eval_set) if len(eval_set) > 0 else 0.0
+    
+    # Append final post-AL accuracy to learning curve if update_model was active
+    if update_model and df_al_pool is not None:
+        if not evaluator.al_learning_curve or evaluator.al_learning_curve[-1]["human_annotations"] != human_annotations_count:
+            evaluator.al_learning_curve.append({
+                "human_annotations": human_annotations_count,
+                "test_accuracy": post_al_accuracy
+            })
 
     return evaluator, results_log, pre_al_accuracy, post_al_accuracy
 
@@ -295,51 +329,144 @@ def main():
             t1_model.optimizer.load_state_dict(copy.deepcopy(pretrained_optimizer_state))
             t1_model.model.eval()
 
-        # --- 1. Threshold Sweep (Evaluated EXCLUSIVELY on Validation Calibration split) ---
-        if args.sweep and current_seed == args.seeds[0]:
-            print("Running Threshold Sweep on VALIDATION split (df_val_calib)...")
-            sweep_results = []
-            tau1_grid = [0.3, 0.5, 0.7, 0.8, 0.9]
-            tau2_grid = [0.4, 0.5, 0.6, 0.7]
-
-            config_tau1 = config["tier1"]["threshold_entropy"]
-            config_tau2 = config["tier1"]["threshold_confidence"]
-            if config_tau1 not in tau1_grid: tau1_grid.append(config_tau1)
-            if config_tau2 not in tau2_grid: tau2_grid.append(config_tau2)
-            tau1_grid.sort()
-            sweep_pairs = [(t1, t2) for t1 in tau1_grid for t2 in tau2_grid]
-            for t1, t2 in tqdm(sweep_pairs, desc="Validation Sweep Grid"):
-                restore_pretrained_state(tier1)
-                ue = UncertaintyEngine(t1, t2)
-                router = TieredRouter(
-                    tier1, tier2, ue, ag_categories,
-                    entropy_threshold=t1, conf_threshold=t2,
-                    dataset_name=dataset_name, mode="STANDARD"
-                )
-
-                evaluator_sw, _, _, _ = run_pipeline(
-                    router, df_val_calib, ag_categories, config, tier1,
-                    update_model=False, df_test=df_val_calib, disable_tqdm=True
-                )
-                metrics_sw = evaluator_sw.calculate_metrics(
-                    lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories
-                )
-
-                sweep_results.append({
-                    "tau1": t1,
-                    "tau2": t2,
-                    "accuracy": metrics_sw["accuracy_final"],
-                    "human_effort_ratio": metrics_sw["human_effort_ratio"],
-                    "picr": metrics_sw["picr"]
-                })
-
-            os.makedirs(os.path.dirname(dataset_sweep_file), exist_ok=True)
-            with open(dataset_sweep_file, "w") as f:
-                json.dump(sweep_results, f, indent=2)
-            print(f"Validation Threshold Sweep results saved to {dataset_sweep_file}")
-
-        # --- 2. Baselines & Ablations (Run on first seed) ---
+        # --- 1. Validation Calibration & Threshold Sweep ---
         if current_seed == args.seeds[0]:
+            val_texts = df_val_calib["text"].tolist()
+            
+            # Calibrate extreme entropy cap using percentile
+            percentile = config.get("tier3", {}).get("extreme_entropy_percentile", 0.98)
+            current_extreme_entropy_cap = config["tier1"].get("threshold_extreme_entropy", 1.2)
+            if len(val_texts) >= 2:
+                print(f"Calibrating dynamic extreme entropy cap on VALIDATION split for {dataset_name} at {percentile:.0%} percentile...")
+                _, probs_batch, _ = tier1.predict_batch(val_texts, batch_size=64)
+                temp_ue = UncertaintyEngine(0.0, 1.0)
+                entropies = [temp_ue.calculate_entropy(probs) for probs in probs_batch]
+                sorted_ents = sorted(entropies)
+                idx_p = min(int(percentile * len(sorted_ents)), len(sorted_ents) - 1)
+                current_extreme_entropy_cap = float(sorted_ents[idx_p])
+                print(f"Calibrated extreme_entropy_cap: {current_extreme_entropy_cap:.4f} (Max val entropy: {sorted_ents[-1]:.4f})")
+            config["tier1"]["threshold_extreme_entropy"] = current_extreme_entropy_cap
+            
+            if args.sweep:
+                print("Running Threshold Sweep on VALIDATION split (df_val_calib)...")
+                sweep_results = []
+                tau1_grid = [0.3, 0.5, 0.7, 0.8, 0.9]
+                tau2_grid = [0.4, 0.5, 0.6, 0.7]
+
+                config_tau1 = config["tier1"]["threshold_entropy"]
+                config_tau2 = config["tier1"]["threshold_confidence"]
+                if config_tau1 not in tau1_grid: tau1_grid.append(config_tau1)
+                if config_tau2 not in tau2_grid: tau2_grid.append(config_tau2)
+                tau1_grid.sort()
+                sweep_pairs = [(t1, t2) for t1 in tau1_grid for t2 in tau2_grid]
+                for t1, t2 in tqdm(sweep_pairs, desc="Validation Sweep Grid", file=sys.stdout):
+                    restore_pretrained_state(tier1)
+                    ue_s = UncertaintyEngine(t1, t2)
+                    router_s = TieredRouter(
+                        tier1, tier2, ue_s, ag_categories,
+                        entropy_threshold=t1, conf_threshold=t2,
+                        extreme_entropy_cap=current_extreme_entropy_cap,
+                        dataset_name=dataset_name, mode="STANDARD"
+                    )
+
+                    evaluator_sw, _, _, _ = run_pipeline(
+                        router_s, df_val_calib, ag_categories, config, tier1,
+                        update_model=False, df_test=df_val_calib, disable_tqdm=True
+                    )
+                    metrics_sw = evaluator_sw.calculate_metrics(
+                        lambda_al=lambda_al, 
+                        annotation_cost_weight=annotation_cost_weight, 
+                        categories=ag_categories,
+                        cost_t1=config["tier3"].get("cost_t1", 1.0),
+                        cost_t2=config["tier3"].get("cost_t2", 200.0),
+                        cost_t3=config["tier3"].get("cost_t3", 3000.0)
+                    )
+
+                    sweep_results.append({
+                        "tau1": t1,
+                        "tau2": t2,
+                        "accuracy": metrics_sw["accuracy_final"],
+                        "human_effort_ratio": metrics_sw["human_effort_ratio"],
+                        "picr": metrics_sw["picr"],
+                        "net_utility": metrics_sw["net_utility"]
+                    })
+
+                os.makedirs(os.path.dirname(dataset_sweep_file), exist_ok=True)
+                with open(dataset_sweep_file, "w") as f:
+                    json.dump(sweep_results, f, indent=2)
+                print(f"Validation Threshold Sweep results saved to {dataset_sweep_file}")
+                
+                # Select optimal operating point automatically based on Max Net Utility
+                best_sweep = max(sweep_results, key=lambda x: x["net_utility"])
+                config["tier1"]["threshold_entropy"] = best_sweep["tau1"]
+                config["tier1"]["threshold_confidence"] = best_sweep["tau2"]
+                print(f"Validation Sweep selected optimal thresholds (Max Net Utility on Validation Calib: {best_sweep['net_utility']:.4f}):")
+                print(f"  Optimal tau_1 (entropy): {best_sweep['tau1']}")
+                print(f"  Optimal tau_2 (confidence): {best_sweep['tau2']}")
+        else:
+            # Use thresholds calibrated from seed 0
+            pass
+
+        # --- 2. Main Active Learning Pipeline Run ---
+        print("Running Main Tri-Tiered Active Learning Pipeline...")
+        restore_pretrained_state(tier1)
+
+        ue = UncertaintyEngine(
+            config["tier1"]["threshold_entropy"],
+            config["tier1"]["threshold_confidence"]
+        )
+        router = TieredRouter(
+            tier1, tier2, ue, ag_categories,
+            entropy_threshold=config["tier1"]["threshold_entropy"],
+            conf_threshold=config["tier1"]["threshold_confidence"],
+            extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
+            dataset_name=dataset_name, mode="STANDARD"
+        )
+
+        evaluator, results_log, pre_al_acc, post_al_acc = run_pipeline(
+            router, df_test, ag_categories, config, tier1,
+            update_model=True, df_al_pool=df_al_pool, df_test=df_test, desc=f"Main Pipeline (Seed {current_seed})"
+        )
+
+        evaluator.pre_al_t1_accuracy = pre_al_acc
+        evaluator.post_al_t1_accuracy = post_al_acc
+        
+        cost_t1 = config["tier3"].get("cost_t1", 1.0)
+        cost_t2 = config["tier3"].get("cost_t2", 200.0)
+        cost_t3 = config["tier3"].get("cost_t3", 3000.0)
+        
+        metrics = evaluator.calculate_metrics(
+            lambda_al=lambda_al, 
+            annotation_cost_weight=annotation_cost_weight, 
+            categories=ag_categories,
+            cost_t1=cost_t1,
+            cost_t2=cost_t2,
+            cost_t3=cost_t3
+        )
+
+        metrics_copy = copy.deepcopy(metrics)
+        metrics_copy["seed"] = current_seed
+        runs.append(metrics_copy)
+        
+        # Save active learning learning curve history
+        learning_curve_path = os.path.join(dataset_logs_dir, f"learning_curve_seed{current_seed}.json")
+        with open(learning_curve_path, "w") as f:
+            json.dump(evaluator.al_learning_curve, f, indent=2)
+
+        # --- 3. Baselines & Ablations (Run on first seed after capturing the main run stats) ---
+        if current_seed == args.seeds[0]:
+            # Capture actual tier distribution from main pipeline seed 0
+            main_t1_count = metrics['tier_distribution'].get(1, 0)
+            main_t2_count = metrics['tier_distribution'].get(2, 0)
+            main_t3_count = metrics['tier_distribution'].get(3, 0)
+            main_total = metrics['total_samples']
+            
+            f1_ratio = main_t1_count / main_total if main_total > 0 else 0.60
+            f2_ratio = main_t2_count / main_total if main_total > 0 else 0.30
+            f3_ratio = main_t3_count / main_total if main_total > 0 else 0.10
+            budget_ratios = (f1_ratio, f2_ratio, f3_ratio)
+            print(f"Captured Main Seed 0 Tier Ratios: T1={f1_ratio:.2%}, T2={f2_ratio:.2%}, T3={f3_ratio:.2%}")
+
             if args.baseline:
                 print("Running Tier-2-only Baseline on Test Set...")
                 restore_pretrained_state(tier1)
@@ -355,7 +482,12 @@ def main():
                 )
                 eval_b.pre_al_t1_accuracy = pre_b
                 eval_b.post_al_t1_accuracy = post_b
-                m_b = eval_b.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                m_b = eval_b.calculate_metrics(
+                    lambda_al=lambda_al, 
+                    annotation_cost_weight=annotation_cost_weight, 
+                    categories=ag_categories,
+                    cost_t1=cost_t1, cost_t2=cost_t2, cost_t3=cost_t3
+                )
                 m_b["mode"] = "tier2_only_baseline"
                 with open(dataset_baseline_file, "w") as f:
                     json.dump(m_b, f, indent=2)
@@ -376,7 +508,12 @@ def main():
                 )
                 eval_a.pre_al_t1_accuracy = pre_a
                 eval_a.post_al_t1_accuracy = post_a
-                m_a = eval_a.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                m_a = eval_a.calculate_metrics(
+                    lambda_al=lambda_al, 
+                    annotation_cost_weight=annotation_cost_weight, 
+                    categories=ag_categories,
+                    cost_t1=cost_t1, cost_t2=cost_t2, cost_t3=cost_t3
+                )
                 with open(dataset_ablation_no_t2_file, "w") as f:
                     json.dump(m_a, f, indent=2)
 
@@ -395,19 +532,24 @@ def main():
                 )
                 eval_ne.pre_al_t1_accuracy = pre_ne
                 eval_ne.post_al_t1_accuracy = post_ne
-                m_ne = eval_ne.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                m_ne = eval_ne.calculate_metrics(
+                    lambda_al=lambda_al, 
+                    annotation_cost_weight=annotation_cost_weight, 
+                    categories=ag_categories,
+                    cost_t1=cost_t1, cost_t2=cost_t2, cost_t3=cost_t3
+                )
                 with open(dataset_ablation_no_ent_file, "w") as f:
                     json.dump(m_ne, f, indent=2)
 
             if args.random_routing:
-                print("Running Budget-Matched Random Routing Baseline on Test Set...")
+                print("Running Genuinely Budget-Matched Random Routing Baseline on Test Set...")
                 restore_pretrained_state(tier1)
                 ue_r = UncertaintyEngine(0.5, 0.5)
                 router_r = TieredRouter(
                     tier1, tier2, ue_r, ag_categories,
                     entropy_threshold=0.5, conf_threshold=0.5,
                     dataset_name=dataset_name, mode="BUDGET_MATCHED_RANDOM",
-                    budget_ratios=(0.95, 0.048, 0.002)
+                    budget_ratios=budget_ratios
                 )
                 eval_r, _, pre_r, post_r = run_pipeline(
                     router_r, df_test, ag_categories, config, tier1,
@@ -415,51 +557,115 @@ def main():
                 )
                 eval_r.pre_al_t1_accuracy = pre_r
                 eval_r.post_al_t1_accuracy = post_r
-                m_r = eval_r.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                m_r = eval_r.calculate_metrics(
+                    lambda_al=lambda_al, 
+                    annotation_cost_weight=annotation_cost_weight, 
+                    categories=ag_categories,
+                    cost_t1=cost_t1, cost_t2=cost_t2, cost_t3=cost_t3
+                )
                 with open(dataset_random_file, "w") as f:
                     json.dump(m_r, f, indent=2)
 
-        # --- 3. Main Active Learning Pipeline Run ---
-        print("Running Main Tri-Tiered Active Learning Pipeline...")
-        restore_pretrained_state(tier1)
+            # --- 4. Calibrate and Run Active Learning Baselines ---
+            print("Calibrating and Running Active Learning Baselines (Budget-Matched)...")
+            val_texts = df_val_calib["text"].tolist()
+            
+            # Get validation predictions under standard mode (first run on validation)
+            restore_pretrained_state(tier1)
+            ue_val = UncertaintyEngine(config["tier1"]["threshold_entropy"], config["tier1"]["threshold_confidence"])
+            router_val = TieredRouter(
+                tier1, tier2, ue_val, ag_categories,
+                entropy_threshold=config["tier1"]["threshold_entropy"],
+                conf_threshold=config["tier1"]["threshold_confidence"],
+                extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
+                dataset_name=dataset_name, mode="STANDARD"
+            )
+            eval_val, _, _, _ = run_pipeline(
+                router_val, df_val_calib, ag_categories, config, tier1,
+                update_model=False, df_test=df_val_calib, disable_tqdm=True
+            )
+            val_metrics = eval_val.calculate_metrics(
+                lambda_al=lambda_al, 
+                annotation_cost_weight=annotation_cost_weight, 
+                categories=ag_categories,
+                cost_t1=cost_t1,
+                cost_t2=cost_t2,
+                cost_t3=cost_t3
+            )
+            f3_val = val_metrics["human_effort_ratio"]
+            print(f"Validation human annotation rate to match: {f3_val:.2%}")
+            
+            # Gather T1 outputs on validation set for threshold calibration
+            _, val_probs_batch, _ = tier1.predict_batch(val_texts, batch_size=64)
+            val_confs = [float(np.max(p)) for p in val_probs_batch]
+            val_ents = [temp_ue.calculate_entropy(p) for p in val_probs_batch]
+            val_margins = []
+            for p in val_probs_batch:
+                s_p = sorted(p, reverse=True)
+                val_margins.append(s_p[0] - s_p[1] if len(s_p) > 1 else 1.0)
+                
+            # Calibrate Least Confidence threshold
+            s_confs = sorted(val_confs)
+            idx_c = min(int(f3_val * len(s_confs)), len(s_confs) - 1)
+            al_least_conf_threshold = float(s_confs[idx_c]) if len(s_confs) > 0 else 0.5
+            
+            # Calibrate Entropy threshold
+            s_ents = sorted(val_ents)
+            idx_e = min(int((1.0 - f3_val) * len(s_ents)), len(s_ents) - 1)
+            al_entropy_threshold = float(s_ents[idx_e]) if len(s_ents) > 0 else 0.5
+            
+            # Calibrate Margin threshold
+            s_margs = sorted(val_margins)
+            idx_m = min(int(f3_val * len(s_margs)), len(s_margs) - 1)
+            al_margin_threshold = float(s_margs[idx_m]) if len(s_margs) > 0 else 0.1
+            
+            print(f"Calibrated AL thresholds:")
+            print(f"  AL_RANDOM selection probability: {f3_val:.4f}")
+            print(f"  AL_LEAST_CONFIDENCE threshold: {al_least_conf_threshold:.4f}")
+            print(f"  AL_ENTROPY threshold: {al_entropy_threshold:.4f}")
+            print(f"  AL_MARGIN threshold: {al_margin_threshold:.4f}")
+            
+            # Run AL baselines
+            al_modes = ["AL_RANDOM", "AL_LEAST_CONFIDENCE", "AL_ENTROPY", "AL_MARGIN"]
+            for mode in al_modes:
+                print(f"Running AL baseline: {mode} on Test Set...")
+                restore_pretrained_state(tier1)
+                router_al = TieredRouter(
+                    tier1, tier2, ue_val, ag_categories,
+                    entropy_threshold=al_entropy_threshold,
+                    conf_threshold=al_least_conf_threshold,
+                    extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
+                    dataset_name=dataset_name, mode=mode
+                )
+                router_al.al_budget_prob = f3_val
+                router_al.al_least_conf_threshold = al_least_conf_threshold
+                router_al.al_entropy_threshold = al_entropy_threshold
+                router_al.al_margin_threshold = al_margin_threshold
+                
+                eval_al, _, pre_al, post_al = run_pipeline(
+                    router_al, df_test, ag_categories, config, tier1,
+                    update_model=True, df_al_pool=df_al_pool, df_test=df_test, desc=f"AL Baseline: {mode}"
+                )
+                eval_al.pre_al_t1_accuracy = pre_al
+                eval_al.post_al_t1_accuracy = post_al
+                m_al = eval_al.calculate_metrics(
+                    lambda_al=lambda_al, 
+                    annotation_cost_weight=annotation_cost_weight, 
+                    categories=ag_categories,
+                    cost_t1=cost_t1, cost_t2=cost_t2, cost_t3=cost_t3
+                )
+                
+                # Save AL baseline results
+                al_out_path = os.path.join(dataset_logs_dir, f"baseline_{mode.lower()}.json")
+                with open(al_out_path, "w") as f:
+                    json.dump(m_al, f, indent=2)
+                
+                # Save learning curve for baseline
+                al_lc_path = os.path.join(dataset_logs_dir, f"learning_curve_{mode.lower()}_seed{current_seed}.json")
+                with open(al_lc_path, "w") as f:
+                    json.dump(eval_al.al_learning_curve, f, indent=2)
 
-        # Dynamic Extreme Entropy Cap Calibration on VALIDATION split (df_val_calib)
-        val_texts = df_val_calib["text"].tolist()
-        current_extreme_entropy_cap = config["tier1"].get("threshold_extreme_entropy", 1.2)
-        if len(val_texts) >= 2:
-            print(f"Calibrating dynamic extreme entropy cap on VALIDATION split for {dataset_name}...")
-            _, probs_batch, _ = tier1.predict_batch(val_texts, batch_size=64)
-            temp_ue = UncertaintyEngine(0.0, 1.0)
-            entropies = [temp_ue.calculate_entropy(probs) for probs in probs_batch]
-            sorted_ents = sorted(entropies)
-            current_extreme_entropy_cap = float(sorted_ents[-2] + 1e-5)
-            print(f"Calibrated extreme_entropy_cap: {current_extreme_entropy_cap:.4f} (Max val entropy: {sorted_ents[-1]:.4f})")
-
-        ue = UncertaintyEngine(
-            config["tier1"]["threshold_entropy"],
-            config["tier1"]["threshold_confidence"]
-        )
-        router = TieredRouter(
-            tier1, tier2, ue, ag_categories,
-            entropy_threshold=config["tier1"]["threshold_entropy"],
-            conf_threshold=config["tier1"]["threshold_confidence"],
-            extreme_entropy_cap=current_extreme_entropy_cap,
-            dataset_name=dataset_name, mode="STANDARD"
-        )
-
-        evaluator, results_log, pre_al_acc, post_al_acc = run_pipeline(
-            router, df_test, ag_categories, config, tier1,
-            update_model=True, df_al_pool=df_al_pool, df_test=df_test, desc=f"Main Pipeline (Seed {current_seed})"
-        )
-
-        evaluator.pre_al_t1_accuracy = pre_al_acc
-        evaluator.post_al_t1_accuracy = post_al_acc
-        metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-
-        metrics_copy = copy.deepcopy(metrics)
-        metrics_copy["seed"] = current_seed
-        runs.append(metrics_copy)
-
+        # --- 5. Save results and logs for seed ---
         if current_seed == args.seeds[0]:
             os.makedirs(dataset_logs_dir, exist_ok=True)
             with open(dataset_detailed_file, "w") as f:
