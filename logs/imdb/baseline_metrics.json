@@ -6,15 +6,20 @@
     "3": 0
   },
   "accuracy_t1": 0.794,
-  "accuracy_final": 0.876,
-  "f1_weighted": 0.875559499123949,
-  "ece": 0.06160182905197144,
+  "accuracy_final": 0.892,
+  "f1_weighted": 0.8910007763975154,
+  "f1_macro": 0.890819099378882,
+  "f1_t1_macro": 0.7937615883961859,
+  "ece": 0.0717266666666667,
+  "ece_t1": 0.028977954387664828,
+  "ece_final": 0.0717266666666667,
+  "brier_score": 0.10077077777777776,
   "human_effort_ratio": 0.0,
   "picr": null,
   "picr_display": "N/A",
   "picr_status": "AUTONOMOUS",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.08199999999999996,
+  "tier2_autonomous_gain": 0.09799999999999998,
   "human_labels_count": 0,
   "confusion_matrix_t1": [
     [
@@ -28,35 +33,35 @@
   ],
   "confusion_matrix_final": [
     [
-      236,
-      18
+      249,
+      5
     ],
     [
-      44,
-      202
+      49,
+      197
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      236,
-      18
+      249,
+      5
     ],
     [
-      44,
-      202
+      49,
+      197
     ]
   ],
   "per_category_f1": {
     "neg": {
-      "precision": 0.8428571428571429,
-      "recall": 0.9291338582677166,
-      "f1-score": 0.8838951310861424,
+      "precision": 0.8355704697986577,
+      "recall": 0.9803149606299213,
+      "f1-score": 0.9021739130434783,
       "support": 254.0
     },
     "pos": {
-      "precision": 0.9181818181818182,
-      "recall": 0.8211382113821138,
-      "f1-score": 0.8669527896995708,
+      "precision": 0.9752475247524752,
+      "recall": 0.8008130081300813,
+      "f1-score": 0.8794642857142857,
       "support": 246.0
     }
   },
@@ -86,13 +91,13 @@
       "total": 246
     }
   },
-  "picr_al": 82.0,
-  "picr_al_display": "82.0000",
+  "picr_al": 98.0,
+  "picr_al_display": "98.0000",
   "picr_al_status": "STRONG",
   "picr_al_lambda": 0.5,
   "delta_acc_al": 0.0,
-  "net_utility": 0.082,
-  "net_utility_display": "0.0820",
+  "net_utility": 0.098,
+  "net_utility_display": "0.0980",
   "net_utility_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.794,

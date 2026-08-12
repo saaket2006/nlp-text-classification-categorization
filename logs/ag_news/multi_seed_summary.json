@@ -2,36 +2,65 @@
   "runs": [
     {
       "seed": 42,
-      "accuracy_final": 0.89,
-      "accuracy_t1": 0.872,
-      "human_effort_ratio": 0.002,
-      "picr": 9.000000000000007
+      "accuracy_final": 0.888,
+      "accuracy_t1": 0.87,
+      "human_effort_ratio": 0.0,
+      "picr": null
     },
     {
       "seed": 123,
-      "accuracy_final": 0.894,
-      "accuracy_t1": 0.88,
-      "human_effort_ratio": 0.004,
-      "picr": 3.500000000000003
+      "accuracy_final": 0.892,
+      "accuracy_t1": 0.896,
+      "human_effort_ratio": 0.0,
+      "picr": null
     },
     {
       "seed": 7,
-      "accuracy_final": 0.892,
-      "accuracy_t1": 0.876,
-      "human_effort_ratio": 0.002,
-      "picr": 8.000000000000007
+      "accuracy_final": 0.886,
+      "accuracy_t1": 0.884,
+      "human_effort_ratio": 0.0,
+      "picr": null
     }
   ],
+  "valid_picr_runs": "0/3",
   "mean": {
-    "accuracy_final": 0.892,
-    "accuracy_t1": 0.876,
-    "human_effort_ratio": 0.0026666666666666666,
-    "picr": 6.833333333333339
+    "accuracy_final": 0.8886666666666666,
+    "accuracy_t1": 0.8833333333333333,
+    "human_effort_ratio": 0.0,
+    "f1_macro": 0.8889800598458534,
+    "f1_weighted": 0.8888082415926023,
+    "ece_final": 0.07150598805348078,
+    "net_utility": 0.005333333333333333,
+    "picr": null
   },
   "std": {
-    "accuracy_final": 0.0020000000000000018,
-    "accuracy_t1": 0.0040000000000000036,
-    "human_effort_ratio": 0.0011547005383792516,
-    "picr": 2.92973263854116
+    "accuracy_final": 0.003055050463303896,
+    "accuracy_t1": 0.013012814197295436,
+    "human_effort_ratio": 0.0,
+    "f1_macro": 0.0023170623411214687,
+    "f1_weighted": 0.00298705597585452,
+    "ece_final": 0.005297007893868916,
+    "net_utility": 0.011372481406154654,
+    "picr": 0.0
+  },
+  "median": {
+    "accuracy_final": 0.888,
+    "accuracy_t1": 0.884,
+    "human_effort_ratio": 0.0,
+    "f1_macro": 0.889859563683358,
+    "f1_weighted": 0.888461770337642,
+    "ece_final": 0.06914021576881407,
+    "net_utility": 0.002,
+    "picr": null
+  },
+  "ci95": {
+    "accuracy_final": 0.0034571150464577345,
+    "accuracy_t1": 0.014725385488257284,
+    "human_effort_ratio": 0.0,
+    "f1_macro": 0.002622002870096224,
+    "f1_weighted": 0.0033801720406184117,
+    "ece_final": 0.0059941287095125915,
+    "net_utility": 0.01286917419434691,
+    "picr": 0.0
   }
 }

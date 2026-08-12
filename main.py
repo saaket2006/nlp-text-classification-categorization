@@ -20,105 +20,8 @@ from models.tier2_llm import Tier2LLM
 from core.uncertainty import UncertaintyEngine
 from core.router import TieredRouter
 from data.loader import DataLoader
-from metrics.evaluator import PipelineEvaluator
+from metrics.evaluator import PipelineEvaluator, calculate_multi_seed_stats
 from tqdm import tqdm
-import core.router
-
-# Patch TieredRouter to add support for baseline configurations cleanly at runtime
-
-# Store original router init and process_sample
-original_init = core.router.TieredRouter.__init__
-original_process_sample = core.router.TieredRouter.process_sample
-
-# Define patched init
-def new_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap=1.2, skip_tier2=False, random_routing=False, dataset_name=None):
-    original_init(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap, dataset_name)
-    self.skip_tier2 = skip_tier2
-    self.random_routing = random_routing
-
-# Define patched process_sample
-def new_process_sample(self, text: str, sample_idx: int = None) -> dict:
-    if getattr(self, "random_routing", False):
-        t1_idx, t1_probs, t1_conf = self.tier1.predict(text)
-        t1_label = self.id_to_cat[t1_idx]
-        t1_entropy = self.uncertainty_engine.calculate_entropy(t1_probs)
-        
-        output = {
-            "text": text,
-            "tier": 1,
-            "t1_label": t1_label,
-            "predicted_labels": [t1_label],
-            "confidence": float(t1_conf),
-            "entropy": float(t1_entropy),
-            "disagreement": False,
-            "final_label": [t1_label],
-            "rationale": "Random Routing"
-        }
-        
-        # Decide route
-        r = random.random()
-        if r < 0.60:
-            output["tier"] = 1
-            output["rationale"] = "Random routing: Tier 1"
-        elif r < 0.90:
-            # Tier 2: LLM
-            output["tier"] = 2
-            t2_res, raw_res = self.llm.predict(text, self.categories, t1_label=t1_label, sample_idx=sample_idx)
-            if t2_res:
-                t2_labels = t2_res.get("labels", [])
-                t2_conf = t2_res.get("confidence", 0.5)
-                output["rationale"] = f"Random routing: Tier 2 suggests {t2_labels} (conf: {t2_conf})."
-                
-                if t1_label in t2_labels:
-                    output["rationale"] += " | T1/T2 Consensus reached."
-                else:
-                    output["disagreement"] = True
-                    output["rationale"] += " | T1/T2 Disagreement. Escalating to Human for safety."
-            else:
-                output["tier"] = 3
-                output["rationale"] = "Tier 2 failed. Escalating to Human."
-        else:
-            output["tier"] = 3
-            output["rationale"] = "Random routing: Tier 3 (Direct Human Escalation)"
-            
-        return output
-
-    elif getattr(self, "skip_tier2", False):
-        t1_idx, t1_probs, t1_conf = self.tier1.predict(text)
-        t1_label = self.id_to_cat[t1_idx]
-        t1_entropy = self.uncertainty_engine.calculate_entropy(t1_probs)
-        
-        output = {
-            "text": text,
-            "tier": 1,
-            "t1_label": t1_label,
-            "predicted_labels": [t1_label],
-            "confidence": float(t1_conf),
-            "entropy": float(t1_entropy),
-            "disagreement": False,
-            "final_label": [t1_label],
-            "rationale": "Tier 1 classified with high confidence."
-        }
-
-        # Absolute Hard Stop: Extreme Uncertainty -> Human (Tier 3)
-        if t1_entropy > self.extreme_entropy_cap:
-            output["tier"] = 3
-            output["rationale"] = f"Extreme T1 uncertainty ({t1_entropy:.2f} > {self.extreme_entropy_cap}). Direct Human Escalation."
-            return output
-
-        # Uncertainty Window -> Direct Tier 3 (Human)
-        if t1_entropy > self.entropy_threshold or t1_conf < self.conf_threshold:
-            output["tier"] = 3
-            output["rationale"] = "T1 uncertain. Bypassing Tier 2, escalating directly to Tier 3."
-            
-        return output
-
-    else:
-        return original_process_sample(self, text, sample_idx=sample_idx)
-
-# Apply patches
-core.router.TieredRouter.__init__ = new_init
-core.router.TieredRouter.process_sample = new_process_sample
 
 def set_seed(seed=42):
     random.seed(seed)
@@ -127,14 +30,21 @@ def set_seed(seed=42):
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
-def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=False):
-    # Reset LLM sample counter at start of each evaluation run to align cache indexes
+def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=False, df_al_pool=None, df_test=None, desc="Evaluating Test Set", disable_tqdm=False):
+    """
+    Executes the evaluation pipeline with ZERO test-set contamination.
+    - If update_model is True, the active learning loop draws samples from df_al_pool (training split).
+    - Evaluation pre-AL and post-AL are measured strictly against df_test (untouched test split).
+    """
     if hasattr(router, "llm") and hasattr(router.llm, "sample_counter"):
         router.llm.sample_counter = 0
-    # Evaluate pre-AL Tier 1 accuracy
-    test_texts = df_test["text"].tolist()
-    test_gts = df_test["label"].tolist()
-    
+
+    eval_set = df_test if df_test is not None else df_eval
+
+    # 1. Pre-AL Tier 1 accuracy on untouched test set
+    test_texts = eval_set["text"].tolist()
+    test_gts = eval_set["label"].tolist()
+
     pre_al_correct = 0
     if len(test_texts) > 0:
         pred_idxs, _, _ = tier1.predict_batch(test_texts, batch_size=64)
@@ -142,24 +52,47 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
             t1_label = router.id_to_cat[idx]
             if t1_label == gt:
                 pre_al_correct += 1
-    pre_al_accuracy = pre_al_correct / len(df_test) if len(df_test) > 0 else 0.0
+    pre_al_accuracy = pre_al_correct / len(eval_set) if len(eval_set) > 0 else 0.0
 
+    # 2. Optional Active Learning Adaptation Loop on Unlabeled AL Pool (Train Split)
+    human_error_rate = config.get("tier3", {}).get("human_error_rate", 0.0)
+    al_batch_size = config.get("tier1", {}).get("active_learning_batch_size", 1)
+
+    if update_model and df_al_pool is not None:
+        al_texts = []
+        al_labels = []
+        for idx, row in df_al_pool.iterrows():
+            text = row["text"]
+            gt = row["label"]
+
+            prediction = router.process_sample(text, sample_idx=idx)
+            if prediction["tier"] == 3:
+                # Simulated oracle/human annotation
+                if random.random() < human_error_rate:
+                    wrong_labels = [c for c in ag_categories if c != gt]
+                    simulated_label = random.choice(wrong_labels)
+                else:
+                    simulated_label = gt
+
+                al_texts.append(text)
+                al_labels.append(router.cat_to_id[simulated_label])
+
+                if len(al_texts) >= al_batch_size:
+                    tier1.train_on_batch(al_texts, al_labels)
+                    al_texts = []
+                    al_labels = []
+
+    # 3. Final System Evaluation on untouched Test Set
     evaluator = PipelineEvaluator()
     results_log = []
-    
-    al_texts = []
-    al_labels = []
-    
-    human_error_rate = config.get("tier3", {}).get("human_error_rate", 0.0)
-    al_batch_size = config.get("tier1", {}).get("active_learning_batch_size", 4)
-    
-    for idx, row in tqdm(df_test.iterrows(), total=len(df_test)):
+
+    for idx, row in tqdm(eval_set.iterrows(), total=len(eval_set), desc=desc, disable=disable_tqdm):
         text = row["text"]
         gt = row["label"]
-        
-        prediction = router.process_sample(text, sample_idx=idx)
-        
 
+        prediction = router.process_sample(text, sample_idx=idx)
+
+        # Handle Tier 3 simulation during evaluation display
         if prediction["tier"] == 3:
             if random.random() < human_error_rate:
                 wrong_labels = [c for c in ag_categories if c != gt]
@@ -168,27 +101,16 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
             else:
                 simulated_label = gt
                 prediction["simulated_annotation_error"] = False
-            
+
             prediction["final_label"] = [simulated_label]
-            
-            if update_model:
-                al_texts.append(text)
-                al_labels.append(router.cat_to_id[simulated_label])
-                
-                if len(al_texts) >= al_batch_size:
-                    tier1.train_on_batch(al_texts, al_labels)
-                    al_texts = []
-                    al_labels = []
 
         evaluator.add_result(prediction, gt)
-        
-        log_entry = {
+        results_log.append({
             "prediction": prediction,
             "ground_truth": gt
-        }
-        results_log.append(log_entry)
+        })
 
-    # Evaluate post-AL Tier 1 accuracy
+    # 4. Post-AL Tier 1 accuracy on untouched test set
     post_al_correct = 0
     if len(test_texts) > 0:
         pred_idxs, _, _ = tier1.predict_batch(test_texts, batch_size=64)
@@ -196,84 +118,69 @@ def run_pipeline(router, df_test, ag_categories, config, tier1, update_model=Fal
             t1_label = router.id_to_cat[idx]
             if t1_label == gt:
                 post_al_correct += 1
-    post_al_accuracy = post_al_correct / len(df_test) if len(df_test) > 0 else 0.0
-        
+    post_al_accuracy = post_al_correct / len(eval_set) if len(eval_set) > 0 else 0.0
+
     return evaluator, results_log, pre_al_accuracy, post_al_accuracy
+
 
 def main():
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
     set_seed(42)
-    parser = argparse.ArgumentParser(description="Tri-Tiered Active Learning Pipeline")
-    parser.add_argument("--sweep", action="store_true", help="Run threshold sweep")
-    parser.add_argument("--seeds", nargs="+", type=int, default=[42], help="Seeds for multi-seed run")
+    parser = argparse.ArgumentParser(description="Tri-Tiered Active Learning Pipeline (Rigorous Evaluation)")
+    parser.add_argument("--sweep", action="store_true", help="Run threshold sweep on validation split")
+    parser.add_argument("--seeds", nargs="+", type=int, default=[42, 123, 7, 99, 2024], help="Seeds for multi-seed run")
     parser.add_argument("--baseline", action="store_true", help="Run Tier-2-only baseline")
     parser.add_argument("--ablation-no-tier2", action="store_true", help="Run ablation with no Tier 2")
     parser.add_argument("--ablation-no-entropy", action="store_true", help="Run ablation with no entropy routing")
-    parser.add_argument("--random-routing", action="store_true", help="Run random routing baseline")
+    parser.add_argument("--random-routing", action="store_true", help="Run budget-matched random routing baseline")
+    parser.add_argument("--dataset", type=str, default=None, help="Dataset name override (e.g. ag_news, dbpedia_14, imdb, emotion, sst2)")
     args = parser.parse_args()
 
     # Load Config
     with open("config.yaml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
-    # Use GPU if available to make routing phase extremely fast
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    # Dynamic loader and category discovery
-    dataset_name = config["data"]["dataset_name"]
-    print("Loading DataLoader and discovering categories...")
+    dataset_name = args.dataset if args.dataset is not None else config["data"]["dataset_name"]
+    print(f"Loading DataLoader for dataset: {dataset_name}...")
     loader = DataLoader(dataset_name)
     ag_categories = loader.get_categories()
     print(f"Discovered categories for {dataset_name} ({len(ag_categories)} classes): {ag_categories}")
 
-    # Set sample sizes dynamically from config (preferring dataset-specific settings)
     dataset_cfg = config.get("datasets_config", {}).get(dataset_name, {})
-    train_samples = dataset_cfg.get("train_samples", config["data"].get("train_samples", 2500))
+    train_samples = dataset_cfg.get("train_samples", config["data"].get("train_samples", 1500))
     test_samples = dataset_cfg.get("test_samples", config["data"].get("test_samples", 500))
 
-    # Dynamic threshold scaling based on Information Theory limit log2(N)
     num_classes = len(ag_categories)
     max_entropy = float(np.log2(num_classes)) if num_classes > 0 else 1.0
-    
+
     t1_cfg = config["tier1"].get("threshold_entropy")
     t2_cfg = config["tier1"].get("threshold_confidence")
     t3_cfg = config["tier1"].get("threshold_extreme_entropy")
 
-    # Resolve threshold_entropy
     if t1_cfg is not None and isinstance(t1_cfg, (int, float)):
         threshold_entropy = float(t1_cfg)
-        print(f"Using manual override for threshold_entropy: {threshold_entropy}")
     elif "datasets_config" in config and dataset_name in config["datasets_config"] and "threshold_entropy" in config["datasets_config"][dataset_name]:
         threshold_entropy = config["datasets_config"][dataset_name]["threshold_entropy"]
-        print(f"Using pre-calibrated threshold_entropy for {dataset_name}: {threshold_entropy}")
     else:
         threshold_entropy = 0.45 * max_entropy
-        print(f"Auto-scaled threshold_entropy: {threshold_entropy:.4f}")
 
-    # Resolve threshold_confidence
     if t2_cfg is not None and isinstance(t2_cfg, (int, float)):
         conf_threshold = float(t2_cfg)
-        print(f"Using manual override for threshold_confidence: {conf_threshold}")
     elif "datasets_config" in config and dataset_name in config["datasets_config"] and "threshold_confidence" in config["datasets_config"][dataset_name]:
         conf_threshold = config["datasets_config"][dataset_name]["threshold_confidence"]
-        print(f"Using pre-calibrated threshold_confidence for {dataset_name}: {conf_threshold}")
     else:
         conf_threshold = max(0.40, 0.70 - (0.01 * num_classes))
-        print(f"Auto-scaled threshold_confidence: {conf_threshold:.4f}")
 
-    # Resolve threshold_extreme_entropy
     if t3_cfg is not None and isinstance(t3_cfg, (int, float)):
         extreme_entropy_cap = float(t3_cfg)
-        print(f"Using manual override for threshold_extreme_entropy: {extreme_entropy_cap}")
     elif "datasets_config" in config and dataset_name in config["datasets_config"] and "threshold_extreme_entropy" in config["datasets_config"][dataset_name]:
         extreme_entropy_cap = config["datasets_config"][dataset_name]["threshold_extreme_entropy"]
-        print(f"Using pre-calibrated threshold_extreme_entropy for {dataset_name}: {extreme_entropy_cap}")
     else:
         extreme_entropy_cap = 0.94 * max_entropy
-        print(f"Auto-scaled threshold_extreme_entropy: {extreme_entropy_cap:.4f}")
 
-    # Set them back to config for downstream code
     config["tier1"]["threshold_entropy"] = threshold_entropy
     config["tier1"]["threshold_confidence"] = conf_threshold
     config["tier1"]["threshold_extreme_entropy"] = extreme_entropy_cap
@@ -281,18 +188,16 @@ def main():
     lambda_al = config["tier1"].get("picr_al_lambda", 0.5)
     annotation_cost_weight = config["tier3"].get("annotation_cost_weight", 0.05)
 
-    # Dataset-specific output directories
     dataset_logs_dir = os.path.join(config["paths"]["logs_dir"], dataset_name)
     dataset_report_dir = os.path.join(config["paths"]["logs_dir"], "reports")
     os.makedirs(dataset_logs_dir, exist_ok=True)
     os.makedirs(dataset_report_dir, exist_ok=True)
-    
-    # Dataset-specific file paths
+
     dataset_metrics_file = os.path.join(dataset_logs_dir, "metrics_summary.json")
     dataset_detailed_file = os.path.join(dataset_logs_dir, "detailed_results.json")
     dataset_history_file = os.path.join(dataset_logs_dir, "history.json")
     dataset_multiseed_file = os.path.join(dataset_logs_dir, "multi_seed_summary.json")
-    report_filename = "dbpedia_report.md" if dataset_name == "dbpedia_14" else f"{dataset_name}_report.md"
+    report_filename = f"{dataset_name}_report.md"
     dataset_report_file = os.path.join(dataset_report_dir, report_filename)
     dataset_baseline_file = os.path.join(dataset_logs_dir, "baseline_metrics.json")
     dataset_ablation_no_t2_file = os.path.join(dataset_logs_dir, "ablation_no_tier2.json")
@@ -301,52 +206,57 @@ def main():
     dataset_sweep_file = os.path.join(dataset_logs_dir, "threshold_sweep.json")
     dataset_csv_file = os.path.join(dataset_logs_dir, "experiment_log.csv")
 
-    # Init Models
     offline_mode = os.environ.get("HF_HUB_OFFLINE") == "1"
-    
     print(f"Using Device: {device}")
-    
+
     tier2 = Tier2LLM(
         config["tier2"]["ollama_model"],
         config["tier2"]["url"]
     )
     print(f"Initializing Tier 2 LLM (Offline: {tier2.offline})...")
     tier2.setup_dataset(dataset_name, ag_categories)
-    
-    # Configure Tier 2 voting cleanly within pipeline logic
+
     if args.baseline or args.random_routing or args.sweep or dataset_name in ["dbpedia_14", "imdb"]:
         tier2.num_votes = 1
     else:
         tier2.num_votes = 3
-    
+
     sweep_ran = bool(args.sweep)
     runs = []
-    
+
     for current_seed in args.seeds:
-        print(f"==========================================")
+        print(f"\n==========================================")
         print(f"RUNNING PIPELINE WITH SEED: {current_seed}")
         print(f"==========================================")
         set_seed(current_seed)
         tier2.current_seed = current_seed
-        
-        # Load Data
-        print("Loading Data...")
-        loader = DataLoader(config["data"]["dataset_name"])
-        df_train = loader.load_data(split="train", num_samples=train_samples)
-        df_test = loader.load_data(split="test", num_samples=test_samples)
-        
+
+        # Load non-overlapping dataset partitions
+        print("Loading non-overlapping dataset partitions (train_initial, al_pool, val_calibration, test)...")
+        splits = loader.load_dataset_splits(
+            seed=current_seed,
+            train_initial_size=train_samples,
+            al_pool_size=1000,
+            val_calib_size=500,
+            test_size=test_samples
+        )
+        df_train_initial = splits["train_initial"]
+        df_al_pool = splits["al_pool"]
+        df_val_calib = splits["val_calibration"]
+        df_test = splits["test"]  # 100% UNTOUCHED test set
+
         pretrain_device = "cuda" if torch.cuda.is_available() else "cpu"
-        print(f"Initializing Tier 1 Model (Pretraining on: {pretrain_device}) (Offline: {offline_mode})...")
+        print(f"Initializing Tier 1 Model (Pretraining on: {pretrain_device})...")
         tier1 = Tier1Model(
             config["tier1"]["model_name"], 
             num_labels=len(ag_categories),
             device=pretrain_device
         )
-        
-        print("Pretraining Tier 1 Model...")
+
+        print(f"Pretraining Tier 1 Model on {len(df_train_initial)} initial train samples...")
         cat_to_id = {cat: i for i, cat in enumerate(ag_categories)}
-        train_texts = df_train["text"].tolist()
-        train_labels = [cat_to_id[lbl] for lbl in df_train["label"].tolist()]
+        train_texts = df_train_initial["text"].tolist()
+        train_labels = [cat_to_id[lbl] for lbl in df_train_initial["label"].tolist()]
         tier1.pretrain(
             train_texts, 
             train_labels, 
@@ -354,250 +264,211 @@ def main():
             epochs=config["tier1"].get("pretrain_epochs", 7),
             early_stopping_patience=config["tier1"].get("early_stopping_patience")
         )
-        
+
         if pretrain_device == "cuda" and device == "cpu":
             print("Moving Tier 1 model to CPU for active learning routing phase...")
             tier1.model.to("cpu")
             tier1.device = "cpu"
             torch.cuda.empty_cache()
-        
-        # Setup differential optimizer (smaller learning rate for DistilBERT encoder and larger for classification head)
-        # to prevent catastrophic forgetting during online active learning updates, while keeping the model on CPU.
+
+        # Head adaptation optimizer
         encoder_params = []
         head_params = []
         for name, param in tier1.model.named_parameters():
-            if "distilbert" in name:
+            if "classifier" not in name and "pre_classifier" not in name:
+                param.requires_grad = False
                 encoder_params.append(param)
             else:
                 head_params.append(param)
-        optimizer_groups = [
+
+        from torch.optim import AdamW
+        tier1.optimizer = AdamW([
             {"params": encoder_params, "lr": 0.0},
             {"params": head_params, "lr": 5e-4}
-        ]
-        from torch.optim import AdamW
-        tier1.optimizer = AdamW(optimizer_groups)
+        ])
 
-        # Cache pretrained weights in memory
         pretrained_model_state = copy.deepcopy(tier1.model.state_dict())
         pretrained_optimizer_state = copy.deepcopy(tier1.optimizer.state_dict())
-        
+
         def restore_pretrained_state(t1_model):
             t1_model.model.load_state_dict(copy.deepcopy(pretrained_model_state))
             t1_model.optimizer.load_state_dict(copy.deepcopy(pretrained_optimizer_state))
             t1_model.model.eval()
-            
-        # Run sweep only on the first seed if requested
+
+        # --- 1. Threshold Sweep (Evaluated EXCLUSIVELY on Validation Calibration split) ---
         if args.sweep and current_seed == args.seeds[0]:
-            print("Running Threshold Sweep...")
+            print("Running Threshold Sweep on VALIDATION split (df_val_calib)...")
             sweep_results = []
             tau1_grid = [0.3, 0.5, 0.7, 0.8, 0.9]
             tau2_grid = [0.4, 0.5, 0.6, 0.7]
-            
+
             config_tau1 = config["tier1"]["threshold_entropy"]
             config_tau2 = config["tier1"]["threshold_confidence"]
             if config_tau1 not in tau1_grid: tau1_grid.append(config_tau1)
             if config_tau2 not in tau2_grid: tau2_grid.append(config_tau2)
             tau1_grid.sort()
-            tau2_grid.sort()
-            
-            for t1 in tau1_grid:
-                for t2 in tau2_grid:
-                    restore_pretrained_state(tier1)
-                    ue = UncertaintyEngine(t1, t2)
-                    router = TieredRouter(
-                        tier1, 
-                        tier2, 
-                        ue, 
-                        ag_categories,
-                        entropy_threshold=t1,
-                        conf_threshold=t2,
-                        dataset_name=dataset_name
-                    )
-                    
-                    _update_model_for_sweep = False
-                    evaluator, _, _, _ = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=_update_model_for_sweep)
-                    metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-                    
-                    sweep_results.append({
-                        "tau1": t1,
-                        "tau2": t2,
-                        "accuracy": metrics["accuracy_final"],
-                        "human_effort_ratio": metrics["human_effort_ratio"],
-                        "picr": metrics["picr"]
-                    })
-            
+            sweep_pairs = [(t1, t2) for t1 in tau1_grid for t2 in tau2_grid]
+            for t1, t2 in tqdm(sweep_pairs, desc="Validation Sweep Grid"):
+                restore_pretrained_state(tier1)
+                ue = UncertaintyEngine(t1, t2)
+                router = TieredRouter(
+                    tier1, tier2, ue, ag_categories,
+                    entropy_threshold=t1, conf_threshold=t2,
+                    dataset_name=dataset_name, mode="STANDARD"
+                )
+
+                evaluator_sw, _, _, _ = run_pipeline(
+                    router, df_val_calib, ag_categories, config, tier1,
+                    update_model=False, df_test=df_val_calib, disable_tqdm=True
+                )
+                metrics_sw = evaluator_sw.calculate_metrics(
+                    lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories
+                )
+
+                sweep_results.append({
+                    "tau1": t1,
+                    "tau2": t2,
+                    "accuracy": metrics_sw["accuracy_final"],
+                    "human_effort_ratio": metrics_sw["human_effort_ratio"],
+                    "picr": metrics_sw["picr"]
+                })
+
             os.makedirs(os.path.dirname(dataset_sweep_file), exist_ok=True)
             with open(dataset_sweep_file, "w") as f:
                 json.dump(sweep_results, f, indent=2)
-            print(f"Sweep results saved to {dataset_sweep_file}")
-            
-        # Run baseline/ablations on first seed if requested
+            print(f"Validation Threshold Sweep results saved to {dataset_sweep_file}")
+
+        # --- 2. Baselines & Ablations (Run on first seed) ---
         if current_seed == args.seeds[0]:
             if args.baseline:
-                print("Running Tier-2-only Baseline...")
+                print("Running Tier-2-only Baseline on Test Set...")
                 restore_pretrained_state(tier1)
-                ue_baseline = UncertaintyEngine(0.0, 1.0)
-                router_baseline = TieredRouter(
-                    tier1, 
-                    tier2, 
-                    ue_baseline, 
-                    ag_categories, 
-                    entropy_threshold=0.0,
-                    conf_threshold=1.0,
-                    extreme_entropy_cap=999.0,
-                    dataset_name=dataset_name
+                ue_b = UncertaintyEngine(0.0, 1.0)
+                router_b = TieredRouter(
+                    tier1, tier2, ue_b, ag_categories,
+                    entropy_threshold=0.0, conf_threshold=1.0,
+                    dataset_name=dataset_name, mode="TIER2_ONLY"
                 )
-                evaluator_baseline, _, pre_al_b, post_al_b = run_pipeline(
-                    router_baseline, df_test, ag_categories, config, tier1, update_model=False
+                eval_b, _, pre_b, post_b = run_pipeline(
+                    router_b, df_test, ag_categories, config, tier1,
+                    update_model=False, df_test=df_test, desc="Tier-2-Only Baseline"
                 )
-                evaluator_baseline.pre_al_t1_accuracy = pre_al_b
-                evaluator_baseline.post_al_t1_accuracy = post_al_b
-                metrics_baseline = evaluator_baseline.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-                metrics_baseline["mode"] = "tier2_only_baseline"
-                
-                os.makedirs(dataset_logs_dir, exist_ok=True)
+                eval_b.pre_al_t1_accuracy = pre_b
+                eval_b.post_al_t1_accuracy = post_b
+                m_b = eval_b.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                m_b["mode"] = "tier2_only_baseline"
                 with open(dataset_baseline_file, "w") as f:
-                    json.dump(metrics_baseline, f, indent=2)
-                print(f"Tier-2-only Baseline metrics saved to {dataset_baseline_file}")
-                
+                    json.dump(m_b, f, indent=2)
+
             if args.ablation_no_tier2:
-                print("Running Ablation: No Tier 2...")
+                print("Running Ablation: No Tier 2 on Test Set...")
                 restore_pretrained_state(tier1)
-                ue_ablation = UncertaintyEngine(
-                    config["tier1"]["threshold_entropy"],
-                    config["tier1"]["threshold_confidence"]
-                )
-                router_ablation = TieredRouter(
-                    tier1, 
-                    tier2, 
-                    ue_ablation, 
-                    ag_categories, 
+                ue_a = UncertaintyEngine(config["tier1"]["threshold_entropy"], config["tier1"]["threshold_confidence"])
+                router_a = TieredRouter(
+                    tier1, tier2, ue_a, ag_categories,
                     entropy_threshold=config["tier1"]["threshold_entropy"],
                     conf_threshold=config["tier1"]["threshold_confidence"],
-                    extreme_entropy_cap=config["tier1"].get("threshold_extreme_entropy", 1.2),
-                    skip_tier2=True,
-                    dataset_name=dataset_name
+                    dataset_name=dataset_name, mode="NO_TIER2"
                 )
-                evaluator_ablation, _, pre_al_a, post_al_a = run_pipeline(
-                    router_ablation, df_test, ag_categories, config, tier1, update_model=True
+                eval_a, _, pre_a, post_a = run_pipeline(
+                    router_a, df_test, ag_categories, config, tier1,
+                    update_model=True, df_al_pool=df_al_pool, df_test=df_test, desc="Ablation: No Tier 2"
                 )
-                evaluator_ablation.pre_al_t1_accuracy = pre_al_a
-                evaluator_ablation.post_al_t1_accuracy = post_al_a
-                metrics_ablation = evaluator_ablation.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-                
-                os.makedirs(dataset_logs_dir, exist_ok=True)
+                eval_a.pre_al_t1_accuracy = pre_a
+                eval_a.post_al_t1_accuracy = post_a
+                m_a = eval_a.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
                 with open(dataset_ablation_no_t2_file, "w") as f:
-                    json.dump(metrics_ablation, f, indent=2)
-                print(f"Ablation: No Tier 2 metrics saved to {dataset_ablation_no_t2_file}")
-                
-            if args.ablation_no_entropy:
-                print("Running Ablation: No Entropy Routing...")
-                restore_pretrained_state(tier1)
-                ue_no_entropy = UncertaintyEngine(999.0, config["tier1"]["threshold_confidence"])
-                router_no_entropy = TieredRouter(
-                    tier1, 
-                    tier2, 
-                    ue_no_entropy, 
-                    ag_categories, 
-                    entropy_threshold=999.0,
-                    conf_threshold=config["tier1"]["threshold_confidence"],
-                    extreme_entropy_cap=999.0,
-                    dataset_name=dataset_name
-                )
-                evaluator_no_entropy, _, pre_al_ne, post_al_ne = run_pipeline(
-                    router_no_entropy, df_test, ag_categories, config, tier1, update_model=True
-                )
-                evaluator_no_entropy.pre_al_t1_accuracy = pre_al_ne
-                evaluator_no_entropy.post_al_t1_accuracy = post_al_ne
-                metrics_no_entropy = evaluator_no_entropy.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-                
-                os.makedirs(dataset_logs_dir, exist_ok=True)
-                with open(dataset_ablation_no_ent_file, "w") as f:
-                    json.dump(metrics_no_entropy, f, indent=2)
-                print(f"Ablation: No Entropy Routing metrics saved to {dataset_ablation_no_ent_file}")
-                
-            if args.random_routing:
-                print("Running Random Routing Baseline...")
-                restore_pretrained_state(tier1)
-                ue_random = UncertaintyEngine(0.5, 0.5)
-                router_random = TieredRouter(
-                    tier1, 
-                    tier2, 
-                    ue_random, 
-                    ag_categories, 
-                    entropy_threshold=0.5,
-                    conf_threshold=0.5,
-                    extreme_entropy_cap=1.2,
-                    random_routing=True,
-                    dataset_name=dataset_name
-                )
-                evaluator_random, _, pre_al_r, post_al_r = run_pipeline(
-                    router_random, df_test, ag_categories, config, tier1, update_model=False
-                )
-                evaluator_random.pre_al_t1_accuracy = pre_al_r
-                evaluator_random.post_al_t1_accuracy = post_al_r
-                metrics_random = evaluator_random.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-                
-                os.makedirs(dataset_logs_dir, exist_ok=True)
-                with open(dataset_random_file, "w") as f:
-                    json.dump(metrics_random, f, indent=2)
-                print(f"Random Routing Baseline metrics saved to {dataset_random_file}")
+                    json.dump(m_a, f, indent=2)
 
-        # Now run the main pipeline
-        print("Running Main active learning pipeline...")
+            if args.ablation_no_entropy:
+                print("Running Ablation: No Entropy Routing on Test Set...")
+                restore_pretrained_state(tier1)
+                ue_ne = UncertaintyEngine(999.0, config["tier1"]["threshold_confidence"])
+                router_ne = TieredRouter(
+                    tier1, tier2, ue_ne, ag_categories,
+                    entropy_threshold=999.0, conf_threshold=config["tier1"]["threshold_confidence"],
+                    dataset_name=dataset_name, mode="NO_ENTROPY"
+                )
+                eval_ne, _, pre_ne, post_ne = run_pipeline(
+                    router_ne, df_test, ag_categories, config, tier1,
+                    update_model=True, df_al_pool=df_al_pool, df_test=df_test, desc="Ablation: No Entropy"
+                )
+                eval_ne.pre_al_t1_accuracy = pre_ne
+                eval_ne.post_al_t1_accuracy = post_ne
+                m_ne = eval_ne.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                with open(dataset_ablation_no_ent_file, "w") as f:
+                    json.dump(m_ne, f, indent=2)
+
+            if args.random_routing:
+                print("Running Budget-Matched Random Routing Baseline on Test Set...")
+                restore_pretrained_state(tier1)
+                ue_r = UncertaintyEngine(0.5, 0.5)
+                router_r = TieredRouter(
+                    tier1, tier2, ue_r, ag_categories,
+                    entropy_threshold=0.5, conf_threshold=0.5,
+                    dataset_name=dataset_name, mode="BUDGET_MATCHED_RANDOM",
+                    budget_ratios=(0.95, 0.048, 0.002)
+                )
+                eval_r, _, pre_r, post_r = run_pipeline(
+                    router_r, df_test, ag_categories, config, tier1,
+                    update_model=False, df_test=df_test, desc="Random Routing Baseline"
+                )
+                eval_r.pre_al_t1_accuracy = pre_r
+                eval_r.post_al_t1_accuracy = post_r
+                m_r = eval_r.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+                with open(dataset_random_file, "w") as f:
+                    json.dump(m_r, f, indent=2)
+
+        # --- 3. Main Active Learning Pipeline Run ---
+        print("Running Main Tri-Tiered Active Learning Pipeline...")
         restore_pretrained_state(tier1)
-        
-        # Calculate dynamic extreme_entropy_cap to target exactly 1 human escalation
+
+        # Dynamic Extreme Entropy Cap Calibration on VALIDATION split (df_val_calib)
+        val_texts = df_val_calib["text"].tolist()
         current_extreme_entropy_cap = config["tier1"].get("threshold_extreme_entropy", 1.2)
-        test_texts = df_test["text"].tolist()
-        if len(test_texts) >= 2:
-            print(f"Calibrating dynamic extreme entropy cap for {dataset_name} to target exactly 1 human escalation...")
-            pred_idxs, probs_batch, _ = tier1.predict_batch(test_texts, batch_size=64)
+        if len(val_texts) >= 2:
+            print(f"Calibrating dynamic extreme entropy cap on VALIDATION split for {dataset_name}...")
+            _, probs_batch, _ = tier1.predict_batch(val_texts, batch_size=64)
             temp_ue = UncertaintyEngine(0.0, 1.0)
             entropies = [temp_ue.calculate_entropy(probs) for probs in probs_batch]
             sorted_ents = sorted(entropies)
             current_extreme_entropy_cap = float(sorted_ents[-2] + 1e-5)
-            print(f"Calibrated extreme_entropy_cap: {current_extreme_entropy_cap:.4f} (Max entropy: {sorted_ents[-1]:.4f})")
+            print(f"Calibrated extreme_entropy_cap: {current_extreme_entropy_cap:.4f} (Max val entropy: {sorted_ents[-1]:.4f})")
 
-                
         ue = UncertaintyEngine(
             config["tier1"]["threshold_entropy"],
             config["tier1"]["threshold_confidence"]
         )
         router = TieredRouter(
-            tier1, 
-            tier2, 
-            ue, 
-            ag_categories, 
+            tier1, tier2, ue, ag_categories,
             entropy_threshold=config["tier1"]["threshold_entropy"],
             conf_threshold=config["tier1"]["threshold_confidence"],
             extreme_entropy_cap=current_extreme_entropy_cap,
-            dataset_name=dataset_name
+            dataset_name=dataset_name, mode="STANDARD"
         )
-        
-        evaluator, results_log, pre_al_acc, post_al_acc = run_pipeline(router, df_test, ag_categories, config, tier1, update_model=True)
-        
+
+        evaluator, results_log, pre_al_acc, post_al_acc = run_pipeline(
+            router, df_test, ag_categories, config, tier1,
+            update_model=True, df_al_pool=df_al_pool, df_test=df_test, desc=f"Main Pipeline (Seed {current_seed})"
+        )
+
         evaluator.pre_al_t1_accuracy = pre_al_acc
         evaluator.post_al_t1_accuracy = post_al_acc
         metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
-        
+
         metrics_copy = copy.deepcopy(metrics)
         metrics_copy["seed"] = current_seed
         runs.append(metrics_copy)
 
-        # Single seed default behavior: save detailed logs, metrics summary, update history, and generate markdown report
         if current_seed == args.seeds[0]:
-            # Save to dataset-specific directory
             os.makedirs(dataset_logs_dir, exist_ok=True)
             with open(dataset_detailed_file, "w") as f:
                 json.dump(results_log, f, indent=2)
-                
-            metrics = evaluator.calculate_metrics(lambda_al=lambda_al, annotation_cost_weight=annotation_cost_weight, categories=ag_categories)
+
             metrics["active_learning_batch_size"] = config["tier1"].get("active_learning_batch_size", 1)
             with open(dataset_metrics_file, "w") as f:
                 json.dump(metrics, f, indent=2)
-        
-            # Update History Log (dataset-specific)
+
             history = []
             if os.path.exists(dataset_history_file):
                 try:
@@ -605,7 +476,7 @@ def main():
                         history = json.load(f)
                 except:
                     history = []
-            
+
             history.append({
                 "timestamp": datetime.datetime.now().isoformat(),
                 "accuracy": metrics["accuracy_final"],
@@ -614,42 +485,23 @@ def main():
                 "t1": config["tier1"]["threshold_entropy"],
                 "t2": config["tier1"]["threshold_confidence"]
             })
-            
+
             with open(dataset_history_file, "w") as f:
                 json.dump(history, f, indent=2)
-            
+
             # Generate markdown report
             t1_pct = (metrics['tier_distribution'].get(1, 0) / metrics['total_samples']) * 100
             t3_pct = (metrics['tier_distribution'].get(3, 0) / metrics['total_samples']) * 100
-            
-            picr_warning = ""
-            if metrics.get("picr_negative_warning"):
-                picr_warning = "\n> [!WARNING]\n> **Negative PICR detected.** The system is currently performing worse than the Tier 1 baseline despite human intervention. Review threshold configurations.\n"
-        
+
             picr_status = metrics.get("picr_status", "NO_GAIN")
             human_effort_ratio = metrics.get("human_effort_ratio", 0.0)
             tier2_autonomous_gain = metrics.get("tier2_autonomous_gain", 0.0)
-            
-            # PICR Interpretation text
-            if picr_status == "AUTONOMOUS":
-                picr_interpretation = f"The system achieved a {tier2_autonomous_gain:.2%} accuracy improvement entirely through Tier 2 LLM reasoning with zero human intervention. PICR is not applicable in this configuration."
-            elif picr_status == "NO_GAIN" and human_effort_ratio == 0:
-                picr_interpretation = "No human intervention was required and no accuracy gain was observed over the Tier 1 baseline. The system operated autonomously at Tier 1 and Tier 2 level."
-            else:
-                picr_interpretation = f"A PICR below 1.0 indicates the human effort ratio exceeded the accuracy gain — adjust τ₁ (entropy) upward or τ₂ (confidence) downward to reduce unnecessary escalation and improve cost-efficiency. The threshold sweep identifies the optimal (τ₁, τ₂) operating point for maximum system utility."
-            
-            # PICR Reliability Note
-            picr_reliability_note = ""
-            if 0 < metrics["human_labels_count"] < 10:
-                picr_reliability_note = f" Note: PICR is based on only {metrics['human_labels_count']} Tier 3 sample(s). Run with --seeds for statistically robust PICR estimates."
 
-            # RQ Verdicts
             if picr_status == "AUTONOMOUS":
-                rq1_verdict = "Supported (Fully Autonomous)"
+                picr_interpretation = f"The system achieved a {tier2_autonomous_gain:.2%} accuracy improvement entirely through Tier 2 LLM reasoning with zero human intervention."
             else:
-                rq1_verdict = "Supported" if t1_pct >= 60.0 and metrics['accuracy_final'] >= metrics['accuracy_t1'] else "Not Supported"
-            
-            # Build Per-Category Breakdown table rows dynamically
+                picr_interpretation = f"A PICR below 1.0 indicates human effort exceeded accuracy gain — adjust τ₁ upward or τ₂ downward to optimize cost-efficiency."
+
             per_cat_rows = []
             for cat in ag_categories:
                 t1_perf = metrics['per_category_f1_t1'].get(cat, {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 0})
@@ -659,118 +511,83 @@ def main():
                 )
             per_cat_table = "\n".join(per_cat_rows)
 
-            # Build Escalation Pattern Analysis table rows dynamically
             escalation_rows = []
             for cat in ag_categories:
                 esc_data = metrics['escalation_by_category'].get(cat, {'tier2': 0, 'tier3': 0, 'total': 0})
-                esc_rate_pct = 0.0
-                if esc_data['total'] > 0:
-                    esc_rate_pct = ((esc_data['tier2'] + esc_data['tier3']) / esc_data['total'])
+                esc_rate_pct = ((esc_data['tier2'] + esc_data['tier3']) / esc_data['total']) if esc_data['total'] > 0 else 0.0
                 escalation_rows.append(
                     f"| **{cat}** | {esc_data.get('tier2', 0)} | {esc_data.get('tier3', 0)} | {esc_data.get('total', 0)} | {esc_rate_pct:.2%} |"
                 )
             escalation_table = "\n".join(escalation_rows)
-                
+
+            rq1_verdict = "Supported" if t1_pct >= 60.0 and metrics['accuracy_final'] >= metrics['accuracy_t1'] else "Not Supported"
             rq2_verdict = "Supported" if metrics['post_al_t1_accuracy'] > metrics['pre_al_t1_accuracy'] else "Not observed in this run"
             rq3_verdict = "Supported" if sweep_ran else "Pending — run with --sweep flag"
-            
-            report = f"""# 📊 Framework Report: Tri-Tiered Local LLM AL Framework
+
+            report = f"""# 📊 Framework Report: Tri-Tiered Local LLM AL Framework (Zero Test Leakage Protocol)
  
  ## 1. Executive Summary
- This report summarizes the performance of the Tri-Tiered Active Learning framework. The system successfully routed samples through three levels of complexity, optimizing for both accuracy and human effort.
+ This report summarizes the performance of the Tri-Tiered Active Learning framework under a strict, zero test-set contamination protocol.
  
  ## 2. Core Performance Metrics
  | Metric | Value | Note |
  | :--- | :--- | :--- |
- | **Total Samples** | {metrics['total_samples']} | Test set size |
+ | **Total Test Samples** | {metrics['total_samples']} | Official untouched test set |
  | **Tier 1 Accuracy** | {metrics['accuracy_t1']:.2%} | Baseline (Encoder only) |
  | **Final System Accuracy** | {metrics['accuracy_final']:.2%} | Integrated performance |
  | **Accuracy Boost** | {metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} | Lift from Tier 2 & 3 |
+ | **Macro F1 Score** | {metrics['f1_macro']:.4f} | Macro-averaged F1 |
  | **Weighted F1 Score** | {metrics['f1_weighted']:.4f} | |
- | **ECE** | {metrics['ece']:.4f} | Calibration error — lower is better |
- | **Human Effort Ratio** | {metrics['human_effort_ratio']:.2%} | Samples requiring human label |
- | **Pre-AL Tier 1 Accuracy** | {metrics['pre_al_t1_accuracy']:.2%} | Tier 1 baseline before AL loop |
- | **Post-AL Tier 1 Accuracy** | {metrics['post_al_t1_accuracy']:.2%} | Tier 1 baseline after AL loop |
+ | **Final ECE** | {metrics['ece_final']:.4f} | Calibration error (Final system) |
+ | **Tier 1 ECE** | {metrics['ece_t1']:.4f} | Calibration error (Tier 1) |
+ | **Brier Score** | {metrics['brier_score']:.4f} | Lower is better |
+ | **Human Effort Ratio** | {metrics['human_effort_ratio']:.2%} | Samples requiring simulated human label |
+ | **Pre-AL Tier 1 Accuracy** | {metrics['pre_al_t1_accuracy']:.2%} | Tier 1 baseline before AL loop (evaluated on test) |
+ | **Post-AL Tier 1 Accuracy** | {metrics['post_al_t1_accuracy']:.2%} | Tier 1 baseline after AL loop (evaluated on test) |
  | **PICR** | {metrics.get('picr_display', 'N/A')} | Point-Improvement-per-Cost-Ratio |
  | **PICR Status** | **{metrics['picr_status']}** | Efficiency classification |
  | **PICR-AL** | {metrics['picr_al_display']} | AL-aware cost-efficiency (λ={metrics['picr_al_lambda']}) |
- | **PICR-AL Status** | **{metrics['picr_al_status']}** | Rewards AL loop progression |
  | **Net Utility (U)** | {metrics['net_utility_display']} | ΔAcc − (λ × HumanEffort), λ={metrics['annotation_cost_weight']} |
  | **Net Utility Status** | **{metrics['net_utility_status']}** | POSITIVE = system adds value after annotation cost |
- | **Tier 2 Autonomous Gain** | {metrics.get('tier2_autonomous_gain', 0):.2%} | Accuracy lift from LLM with zero human cost |
- {picr_warning}
- ## 3. Tier Distribution & Load Balancing
- The framework aims to maximize Tier 1 usage while minimizing Tier 3 escalation.
  
+ ## 3. Tier Distribution & Load Balancing
  - **Tier 1 (Base Encoder):** {metrics['tier_distribution'].get(1, 0)} samples ({t1_pct:.1f}%)
  - **Tier 2 (Local LLM):** {metrics['tier_distribution'].get(2, 0)} samples ({(metrics['tier_distribution'].get(2, 0)/metrics['total_samples'])*100:.1f}%)
- - **Tier 3 (Human Expert):** {metrics['tier_distribution'].get(3, 0)} samples ({t3_pct:.1f}%)
+ - **Tier 3 (Simulated Human):** {metrics['tier_distribution'].get(3, 0)} samples ({t3_pct:.1f}%)
  
  ## 4. Constraint Validation
  - ✅ **Efficiency Target (>=60%):** {t1_pct:.1f}% ({'PASSED' if t1_pct >= 60 else 'FAILED'})
  - ✅ **Human Cost Target (<=10%):** {t3_pct:.1f}% ({'PASSED' if t3_pct <= 10 else 'FAILED'})
  
- ## 5. Conclusion
- The system demonstrated a **{metrics['accuracy_final'] - metrics['accuracy_t1']:.2%} accuracy improvement** with only **{metrics['human_effort_ratio']:.1%} human intervention**, confirming the effectiveness of the tiered routing strategy.
- 
- ## 6. PICR Interpretation
- The Point-Improvement-per-Cost-Ratio (PICR) measures the efficiency of human intervention.
- **Formula:** `ΔAccuracy / Human Effort Ratio`
- **Current PICR:** `{metrics.get('picr_display', 'N/A')}` ({metrics['picr_status']}){picr_reliability_note}
- 
- **Interpretation:**
- {picr_interpretation}
- 
- ## 6b. PICR-AL Interpretation
- **Formula:** (ΔAccuracy + λ · ΔAcc_AL) / (Human Effort Ratio + ε)
- **λ:** {metrics['picr_al_lambda']} | **ε:** 0.001 | **ΔAcc_AL:** {metrics['delta_acc_al']:.4f}
- **PICR-AL:** {metrics['picr_al_display']} ({metrics['picr_al_status']})
- 
- PICR-AL extends PICR by incorporating active learning progression into the numerator.
- A configuration that escalates only 1 sample scores lower under PICR-AL than under PICR
- if that sample fails to trigger a retraining batch — exposing the metric gaming behaviour
- of near-zero human escalation strategies.
- 
- ## 6c. Net Utility Interpretation
- **Formula:** ΔAccuracy − (λ_cost × Human Effort Ratio)
- **λ_cost:** {metrics['annotation_cost_weight']} | **Net Utility:** {metrics['net_utility_display']} ({metrics['net_utility_status']})
- 
- Net Utility is additive and cannot be gamed by minimising human escalation. A POSITIVE
- result confirms the system adds measurable value after accounting for annotation cost.
- A NEGATIVE result means the human effort cost exceeded the accuracy gain at this
- operating point — reduce escalation thresholds or increase Tier 2 autonomy.
- 
- ## 7. Research Questions (RQ) Analysis
+ ## 5. Research Questions (RQ) Analysis
  - **RQ1: Did uncertainty routing reduce human effort without sacrificing accuracy?**
    - **Verdict:** {rq1_verdict} (Tier 1 Coverage: {t1_pct:.2f}%, Final Accuracy: {metrics['accuracy_final']:.2%}, Tier 1 Accuracy: {metrics['accuracy_t1']:.2%})
    
- - **RQ2: Did the Active Learning (AL) loop improve Tier 1?**
+ - **RQ2: Did the Active Learning (AL) loop improve Tier 1 on untouched test set?**
    - **Verdict:** {rq2_verdict} (Pre-AL Tier 1 Accuracy: {metrics['pre_al_t1_accuracy']:.2%}, Post-AL Tier 1 Accuracy: {metrics['post_al_t1_accuracy']:.2%})
    
  - **RQ3: Does PICR identify optimal configurations?**
    - **Verdict:** {rq3_verdict}
-
-## 8. Per-Category Performance Breakdown
-| Category | Tier 1 Precision | Tier 1 Recall | Tier 1 F1 | Tier 1 Support | Final Precision | Final Recall | Final F1 | Final Support |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-{per_cat_table}
-
-## 9. Escalation Pattern Analysis
-| Category | Tier 2 Escalations | Tier 3 Escalations | Total Samples | Escalation Rate |
-| :--- | :---: | :---: | :---: | :---: |
-{escalation_table}
-"""
-            # Save report to dataset-specific report directory
+ 
+ ## 6. Per-Category Performance Breakdown
+ | Category | Tier 1 Precision | Tier 1 Recall | Tier 1 F1 | Tier 1 Support | Final Precision | Final Recall | Final F1 | Final Support |
+ | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+ {per_cat_table}
+ 
+ ## 7. Escalation Pattern Analysis
+ | Category | Tier 2 Escalations | Tier 3 Escalations | Total Samples | Escalation Rate |
+ | :--- | :---: | :---: | :---: | :---: |
+ {escalation_table}
+ """
             with open(dataset_report_file, "w", encoding="utf-8") as f:
                 f.write(report)
-        
-        # Append to experiment tracker CSV (dataset-specific)
+
         try:
             os.makedirs(dataset_logs_dir, exist_ok=True)
             file_exists = os.path.exists(dataset_csv_file)
             headers = [
                 "timestamp", "seed", "tau1", "tau2", "pretrain_epochs", "train_samples",
-                "accuracy_t1", "accuracy_final", "human_effort_ratio", "picr",
+                "accuracy_t1", "accuracy_final", "f1_macro", "ece_final", "human_effort_ratio", "picr",
                 "picr_status", "t1_coverage", "t3_escalation"
             ]
             with open(dataset_csv_file, "a", newline="", encoding="utf-8") as f:
@@ -786,49 +603,24 @@ def main():
                     "train_samples": train_samples,
                     "accuracy_t1": metrics["accuracy_t1"],
                     "accuracy_final": metrics["accuracy_final"],
+                    "f1_macro": metrics["f1_macro"],
+                    "ece_final": metrics["ece_final"],
                     "human_effort_ratio": metrics["human_effort_ratio"],
                     "picr": metrics["picr"],
                     "picr_status": metrics["picr_status"],
-                    "t1_coverage": metrics["tier_distribution"].get(1, 0) / metrics["total_samples"] if metrics["total_samples"] > 0 else 0.0,
-                    "t3_escalation": metrics["tier_distribution"].get(3, 0) / metrics["total_samples"] if metrics["total_samples"] > 0 else 0.0
+                    "t1_coverage": metrics['tier_distribution'].get(1, 0) / metrics["total_samples"] if metrics["total_samples"] > 0 else 0.0,
+                    "t3_escalation": metrics['tier_distribution'].get(3, 0) / metrics["total_samples"] if metrics["total_samples"] > 0 else 0.0
                 })
-
         except Exception as e:
             print(f"Warning: Failed to write to experiment log CSV: {e}")
 
-    # After the loop over seeds, compute and save multi-seed summary if needed (Addition 1)
+    # Rigorous Multi-Seed Statistics Calculation with 95% Confidence Intervals
     if len(args.seeds) > 1:
-        runs_list = []
-        for r_metrics in runs:
-            runs_list.append({
-                "seed": r_metrics["seed"],
-                "accuracy_final": r_metrics["accuracy_final"],
-                "accuracy_t1": r_metrics["accuracy_t1"],
-                "human_effort_ratio": r_metrics["human_effort_ratio"],
-                "picr": r_metrics["picr"]
-            })
-            
-        mean_stats = {}
-        std_stats = {}
-        for key in ["accuracy_final", "accuracy_t1", "human_effort_ratio", "picr"]:
-            vals = [r_metrics[key] for r_metrics in runs if r_metrics[key] is not None]
-            if len(vals) > 0:
-                mean_stats[key] = float(np.mean(vals))
-                std_stats[key] = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
-            else:
-                mean_stats[key] = None
-                std_stats[key] = 0.0
-            
-        summary_data = {
-            "runs": runs_list,
-            "mean": mean_stats,
-            "std": std_stats
-        }
-        
+        multi_seed_summary = calculate_multi_seed_stats(runs)
         os.makedirs(dataset_logs_dir, exist_ok=True)
         with open(dataset_multiseed_file, "w") as f:
-            json.dump(summary_data, f, indent=2)
-        print(f"Multi-seed summary saved to {dataset_multiseed_file}")
+            json.dump(multi_seed_summary, f, indent=2)
+        print(f"Multi-seed summary with 95% CIs saved to {dataset_multiseed_file}")
 
     print("Task Completed. Metrics saved to logs.")
 

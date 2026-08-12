@@ -1,0 +1,212 @@
+[
+  {
+    "tau1": 0.3,
+    "tau2": 0.4,
+    "accuracy": 0.906,
+    "human_effort_ratio": 0.766,
+    "picr": 0.45953002610966054
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.5,
+    "accuracy": 0.908,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4621409921671018
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.6,
+    "accuracy": 0.9,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4516971279373368
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.7,
+    "accuracy": 0.902,
+    "human_effort_ratio": 0.766,
+    "picr": 0.454308093994778
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.65,
+    "accuracy": 0.91,
+    "human_effort_ratio": 0.766,
+    "picr": 0.46475195822454307
+  },
+  {
+    "tau1": 0.5,
+    "tau2": 0.4,
+    "accuracy": 0.91,
+    "human_effort_ratio": 0.766,
+    "picr": 0.46475195822454307
+  },
+  {
+    "tau1": 0.5,
+    "tau2": 0.5,
+    "accuracy": 0.896,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44647519582245426
+  },
+  {
+    "tau1": 0.5,
+    "tau2": 0.6,
+    "accuracy": 0.9,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4516971279373368
+  },
+  {
+    "tau1": 0.5,
+    "tau2": 0.7,
+    "accuracy": 0.89,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4386422976501305
+  },
+  {
+    "tau1": 0.5,
+    "tau2": 0.65,
+    "accuracy": 0.908,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4621409921671018
+  },
+  {
+    "tau1": 0.7,
+    "tau2": 0.4,
+    "accuracy": 0.898,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44908616187989553
+  },
+  {
+    "tau1": 0.7,
+    "tau2": 0.5,
+    "accuracy": 0.912,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4673629242819843
+  },
+  {
+    "tau1": 0.7,
+    "tau2": 0.6,
+    "accuracy": 0.892,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44125326370757173
+  },
+  {
+    "tau1": 0.7,
+    "tau2": 0.7,
+    "accuracy": 0.91,
+    "human_effort_ratio": 0.766,
+    "picr": 0.46475195822454307
+  },
+  {
+    "tau1": 0.7,
+    "tau2": 0.65,
+    "accuracy": 0.904,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4569190600522193
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.4,
+    "accuracy": 0.89,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4386422976501305
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.5,
+    "accuracy": 0.908,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4621409921671018
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.6,
+    "accuracy": 0.898,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44908616187989553
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.7,
+    "accuracy": 0.906,
+    "human_effort_ratio": 0.766,
+    "picr": 0.45953002610966054
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.65,
+    "accuracy": 0.906,
+    "human_effort_ratio": 0.766,
+    "picr": 0.45953002610966054
+  },
+  {
+    "tau1": 0.85,
+    "tau2": 0.4,
+    "accuracy": 0.898,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44908616187989553
+  },
+  {
+    "tau1": 0.85,
+    "tau2": 0.5,
+    "accuracy": 0.896,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44647519582245426
+  },
+  {
+    "tau1": 0.85,
+    "tau2": 0.6,
+    "accuracy": 0.892,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44125326370757173
+  },
+  {
+    "tau1": 0.85,
+    "tau2": 0.7,
+    "accuracy": 0.9,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4516971279373368
+  },
+  {
+    "tau1": 0.85,
+    "tau2": 0.65,
+    "accuracy": 0.892,
+    "human_effort_ratio": 0.766,
+    "picr": 0.44125326370757173
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.4,
+    "accuracy": 0.9,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4516971279373368
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.5,
+    "accuracy": 0.9,
+    "human_effort_ratio": 0.766,
+    "picr": 0.4516971279373368
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.6,
+    "accuracy": 0.888,
+    "human_effort_ratio": 0.766,
+    "picr": 0.43603133159268925
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.7,
+    "accuracy": 0.914,
+    "human_effort_ratio": 0.766,
+    "picr": 0.46997389033942555
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.65,
+    "accuracy": 0.91,
+    "human_effort_ratio": 0.766,
+    "picr": 0.46475195822454307
+  }
+]

@@ -6,3 +6,4 @@ logs/tier2_errors
 logs/*/llm_cache.json
 .codegraph
 .gemini
+tests

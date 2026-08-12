@@ -192,8 +192,30 @@ with st.sidebar:
         LOGS_DIR = os.path.join(BASE_LOGS_DIR, selected_dataset)
     
 
+import datetime
+
+def get_last_run_timestamp(logs_dir):
+    history = load_json("history.json", logs_dir)
+    if history and isinstance(history, list) and len(history) > 0:
+        ts_str = history[-1].get("timestamp")
+        if ts_str:
+            try:
+                dt = datetime.datetime.fromisoformat(ts_str)
+                return dt.strftime("%b %d, %Y at %I:%M %p")
+            except Exception:
+                return ts_str
+    metrics_path = os.path.join(logs_dir, "metrics_summary.json")
+    if os.path.exists(metrics_path):
+        mtime = os.path.getmtime(metrics_path)
+        dt = datetime.datetime.fromtimestamp(mtime)
+        return dt.strftime("%b %d, %Y at %I:%M %p")
+    return None
+
 # Header
 dataset_label = DATASET_DISPLAY_NAMES.get(selected_dataset, selected_dataset)
+last_run_ts = get_last_run_timestamp(LOGS_DIR)
+timestamp_html = f'<span style="color:#94a3b8; font-weight:400; font-size:0.82rem; margin-left:8px;">(Last Run: 🕒 {last_run_ts})</span>' if last_run_ts else ""
+
 st.markdown(f"""
 <div style="text-align:center; padding: 10px 0 5px 0;">
     <h1 style="color:#c7d2fe; font-size:2.2rem; font-weight:700; margin-bottom:0;">
@@ -203,7 +225,7 @@ st.markdown(f"""
         Research Dashboard — Active Learning &amp; Automated Categorization
     </p>
     <p style="color:#818cf8; font-size:0.9rem; margin-top:2px; font-weight:600;">
-        Dataset: {dataset_label}
+        Dataset: {dataset_label} {timestamp_html}
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -861,10 +883,14 @@ with tab_comparison:
             st.markdown("**Aggregated Statistics**")
             agg_data = []
             for key in ["accuracy_final", "accuracy_t1", "human_effort_ratio", "picr"]:
+                val_mean = multi_seed.get("mean", {}).get(key)
+                val_std = multi_seed.get("std", {}).get(key)
+                mean_str = f"{val_mean:.4f}" if val_mean is not None else "N/A"
+                std_str = f"{val_std:.4f}" if val_std is not None else "N/A"
                 agg_data.append({
                     "Metric": key,
-                    "Mean": f"{multi_seed['mean'][key]:.4f}",
-                    "Std Dev": f"{multi_seed['std'][key]:.4f}",
+                    "Mean": mean_str,
+                    "Std Dev": std_str,
                 })
             st.dataframe(pd.DataFrame(agg_data), use_container_width=True, hide_index=True)
 
@@ -919,12 +945,20 @@ with tab_comparison:
 with tab_history:
     st.subheader("Experiment History")
 
-    # ── CSV Log ──
     csv_path = os.path.join(LOGS_DIR, "experiment_log.csv")
     if os.path.exists(csv_path):
-        df_csv = pd.read_csv(csv_path)
-        st.markdown("**Experiment Log (CSV)**")
-        st.dataframe(df_csv, use_container_width=True, hide_index=True)
+        df_csv = None
+        try:
+            df_csv = pd.read_csv(csv_path)
+        except Exception:
+            try:
+                df_csv = pd.read_csv(csv_path, on_bad_lines='skip')
+            except Exception:
+                df_csv = None
+
+        if df_csv is not None and not df_csv.empty:
+            st.markdown("**Experiment Log (CSV)**")
+            st.dataframe(df_csv, use_container_width=True, hide_index=True)
 
         if len(df_csv) > 1:
             hist_col1, hist_col2 = st.columns(2)
