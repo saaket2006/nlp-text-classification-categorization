@@ -75,23 +75,41 @@ class Tier1Model:
 
     def train_on_history(self, texts, labels, epochs=3, batch_size=8):
         """
-        Fine-tune the model on the accumulated history of active learning samples to prevent catastrophic forgetting.
+        Fine-tune the model on the accumulated history of active learning samples,
+        mixed with a random sample of the pretraining data (experience replay) to prevent catastrophic forgetting.
         """
         if not texts:
             return 0.0
             
         import random
         self.model.train()
-        total_loss = 0.0
         
+        # Reset learning rate for active learning fine-tuning
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = 2e-3
+            
+        # Experience replay: mix the escalated samples with a random selection of the initial pretraining data
+        combined_texts = list(texts)
+        combined_labels = list(labels)
+        
+        train_texts = getattr(self, "train_texts", [])
+        train_labels = getattr(self, "train_labels", [])
+        if train_texts and len(train_texts) > 0:
+            sample_size = min(len(train_texts), 64)
+            indices = random.sample(range(len(train_texts)), sample_size)
+            for idx in indices:
+                combined_texts.append(train_texts[idx])
+                combined_labels.append(train_labels[idx])
+                
+        total_loss = 0.0
         for epoch in range(epochs):
-            indices = list(range(len(texts)))
+            indices = list(range(len(combined_texts)))
             random.shuffle(indices)
             
-            for i in range(0, len(texts), batch_size):
+            for i in range(0, len(combined_texts), batch_size):
                 batch_indices = indices[i:i+batch_size]
-                batch_texts = [texts[idx] for idx in batch_indices]
-                batch_labels = [labels[idx] for idx in batch_indices]
+                batch_texts = [combined_texts[idx] for idx in batch_indices]
+                batch_labels = [combined_labels[idx] for idx in batch_indices]
                 
                 inputs = self.tokenizer(batch_texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
                 inputs.pop("token_type_ids", None)
@@ -108,6 +126,8 @@ class Tier1Model:
         return total_loss
 
     def pretrain(self, train_texts, train_labels, batch_size=16, epochs=3, early_stopping_patience=None):
+        self.train_texts = train_texts
+        self.train_labels = train_labels
         # Build simple dataset holding raw texts and labels
         class TextDataset(torch.utils.data.Dataset):
             def __init__(self, texts, labels):
