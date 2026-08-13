@@ -5,6 +5,6 @@
   },
   {
     "human_annotations": 8,
-    "test_accuracy": 0.933
+    "test_accuracy": 0.979
   }
 ]

@@ -12,6 +12,7 @@ class Tier1Model:
         self.device = device
         self.model.to(self.device)
         self.model.eval()
+        self.temperature = 1.0  # Initialize temperature scaling factor for probability calibration
         # Freeze encoder parameters to make training extremely fast on CPU
         for name, param in self.model.named_parameters():
             if "classifier" not in name and "pre_classifier" not in name:
@@ -25,12 +26,14 @@ class Tier1Model:
         inputs.pop("token_type_ids", None)
         with torch.no_grad():
             outputs = self.model(**inputs)
-            probabilities = F.softmax(outputs.logits, dim=-1).cpu().numpy()[0]
+            # Temperature scaling for probability calibration
+            logits = outputs.logits / self.temperature
+            probabilities = F.softmax(logits, dim=-1).cpu().numpy()[0]
         
         predicted_idx = np.argmax(probabilities)
         confidence = probabilities[predicted_idx]
         
-        return predicted_idx, probabilities, confidence
+        return predicted_idx, probabilities.tolist(), confidence
 
     def predict_batch(self, texts: list, batch_size: int = 64):
         self.model.eval()
@@ -44,7 +47,9 @@ class Tier1Model:
             inputs.pop("token_type_ids", None)
             with torch.no_grad():
                 outputs = self.model(**inputs)
-                probabilities = F.softmax(outputs.logits, dim=-1).cpu().numpy()
+                # Temperature scaling for probability calibration
+                logits = outputs.logits / self.temperature
+                probabilities = F.softmax(logits, dim=-1).cpu().numpy()
             
             predicted_idxs = np.argmax(probabilities, axis=-1)
             confidences = probabilities[np.arange(len(probabilities)), predicted_idxs]
@@ -55,11 +60,28 @@ class Tier1Model:
             
         return all_predicted_idxs, all_probabilities, all_confidences
 
+    def predict_logits_batch(self, texts: list, batch_size: int = 64):
+        self.model.eval()
+        all_logits = []
+        for i in range(0, len(texts), batch_size):
+            batch_texts = texts[i:i+batch_size]
+            inputs = self.tokenizer(batch_texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+            inputs.pop("token_type_ids", None)
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+                logits = outputs.logits.cpu().numpy()
+            all_logits.extend(logits.tolist())
+        return np.array(all_logits)
+
     def train_on_batch(self, texts, labels):
         """
         Online fine-tuning step.
         """
         self.model.train()
+        for param_group in self.optimizer.param_groups:
+            if param_group.get('initial_lr', 0) > 0 or param_group['lr'] > 0:
+                param_group['lr'] = 5e-4
+                
         inputs = self.tokenizer(texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
         inputs.pop("token_type_ids", None)
         labels_tensor = torch.tensor(labels).to(self.device)
@@ -84,9 +106,10 @@ class Tier1Model:
         import random
         self.model.train()
         
-        # Reset learning rate for active learning fine-tuning
+        # Reset learning rate for active learning fine-tuning (only for active head parameters)
         for param_group in self.optimizer.param_groups:
-            param_group['lr'] = 2e-3
+            if param_group.get('initial_lr', 0) > 0 or param_group['lr'] > 0:
+                param_group['lr'] = 5e-4
             
         # Experience replay: mix the escalated samples with a random selection of the initial pretraining data
         combined_texts = list(texts)

@@ -1,32 +1,32 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 429,
-    "2": 66,
-    "3": 5
+    "1": 422,
+    "2": 74,
+    "3": 4
   },
   "accuracy_t1": 0.874,
-  "accuracy_final": 0.876,
-  "f1_weighted": 0.876449217007136,
-  "f1_macro": 0.8781357351866401,
+  "accuracy_final": 0.874,
+  "f1_weighted": 0.8745181241681673,
+  "f1_macro": 0.875724355514167,
   "f1_t1_macro": 0.8758615632869504,
-  "ece": 0.04946844107389463,
-  "ece_t1": 0.04136771196126938,
-  "ece_final": 0.04946844107389463,
-  "brier_score": 0.18745470954432455,
-  "brier_score_t1": 0.18368954500465304,
-  "brier_score_final": 0.18745470954432455,
-  "total_latency": 3.9899011999914364,
-  "average_latency": 0.007979802399982873,
-  "total_compute_cost": 28629.0,
-  "average_compute_cost": 57.258,
-  "human_effort_ratio": 0.01,
-  "picr": 0.20000000000000018,
-  "picr_display": "0.2000",
-  "picr_status": "BELOW_TARGET",
+  "ece": 0.042325811419487096,
+  "ece_t1": 0.024478547453880294,
+  "ece_final": 0.042325811419487096,
+  "brier_score": 0.1933266307412311,
+  "brier_score_t1": 0.18061980024986762,
+  "brier_score_final": 0.1933266307412311,
+  "total_latency": 3.876638599996113,
+  "average_latency": 0.007753277199992226,
+  "total_compute_cost": 27222.0,
+  "average_compute_cost": 54.444,
+  "human_effort_ratio": 0.008,
+  "picr": 0.0,
+  "picr_display": "0.0000",
+  "picr_status": "NO_GAIN",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.0020000000000000018,
-  "human_labels_count": 5,
+  "tier2_autonomous_gain": 0.0,
+  "human_labels_count": 4,
   "al_human_annotations": 0,
   "confusion_matrix_t1": [
     [
@@ -56,79 +56,79 @@
   ],
   "confusion_matrix_final": [
     [
-      99,
+      98,
       3,
       10,
-      8
+      9
     ],
     [
-      0,
-      120,
+      3,
+      117,
       0,
       1
     ],
     [
       2,
       0,
-      110,
-      22
+      112,
+      20
     ],
     [
       5,
       0,
-      11,
-      109
+      10,
+      110
     ]
   ],
   "confusion_matrix_escalated": [
     [
       13,
-      1,
-      2,
-      0
-    ],
-    [
-      0,
-      14,
-      0,
-      0
-    ],
-    [
       0,
       0,
-      20,
       2
     ],
     [
+      1,
+      29,
+      0,
+      0
+    ],
+    [
       0,
       0,
-      2,
-      17
+      12,
+      7
+    ],
+    [
+      0,
+      0,
+      1,
+      13
     ]
   ],
   "per_category_f1": {
     "World": {
-      "precision": 0.9339622641509434,
-      "recall": 0.825,
-      "f1-score": 0.8761061946902655,
+      "precision": 0.9074074074074074,
+      "recall": 0.8166666666666667,
+      "f1-score": 0.8596491228070176,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.975609756097561,
-      "recall": 0.9917355371900827,
-      "f1-score": 0.9836065573770492,
+      "precision": 0.975,
+      "recall": 0.9669421487603306,
+      "f1-score": 0.970954356846473,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.8396946564885496,
-      "recall": 0.8208955223880597,
-      "f1-score": 0.8301886792452831,
+      "precision": 0.8484848484848485,
+      "recall": 0.835820895522388,
+      "f1-score": 0.8421052631578947,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.7785714285714286,
-      "recall": 0.872,
-      "f1-score": 0.8226415094339623,
+      "precision": 0.7857142857142857,
+      "recall": 0.88,
+      "f1-score": 0.8301886792452831,
       "support": 125.0
     }
   },
@@ -160,37 +160,37 @@
   },
   "escalation_by_category": {
     "World": {
-      "tier2": 16,
-      "tier3": 0,
+      "tier2": 12,
+      "tier3": 3,
       "total": 120
     },
     "Sports": {
-      "tier2": 13,
-      "tier3": 1,
+      "tier2": 30,
+      "tier3": 0,
       "total": 121
     },
     "Business": {
       "tier2": 19,
-      "tier3": 3,
+      "tier3": 0,
       "total": 134
     },
     "Sci/Tech": {
-      "tier2": 18,
+      "tier2": 13,
       "tier3": 1,
       "total": 125
     }
   },
-  "picr_al": 0.1818,
-  "picr_al_display": "0.1818",
-  "picr_al_status": "BELOW_TARGET",
+  "picr_al": 0.0,
+  "picr_al_display": "0.0000",
+  "picr_al_status": "NO_GAIN",
   "picr_al_lambda": 0.5,
   "delta_acc_al": 0.0,
-  "net_utility": 0.0015,
-  "net_utility_display": "0.0015",
-  "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.001,
-  "net_utility_cost_display": "0.0010",
-  "net_utility_cost_status": "POSITIVE",
+  "net_utility": -0.0004,
+  "net_utility_display": "-0.0004",
+  "net_utility_status": "NEGATIVE",
+  "net_utility_cost": -0.0009,
+  "net_utility_cost_display": "-0.0009",
+  "net_utility_cost_status": "NEGATIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.874,
   "post_al_t1_accuracy": 0.874

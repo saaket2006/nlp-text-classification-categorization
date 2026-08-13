@@ -1,87 +1,88 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 490,
+    "1": 489,
     "2": 0,
-    "3": 10
+    "3": 11
   },
-  "accuracy_t1": 0.754,
-  "accuracy_final": 0.766,
-  "f1_weighted": 0.7660140414041404,
-  "f1_macro": 0.765976597659766,
-  "f1_t1_macro": 0.7539517745478114,
-  "ece": 0.16395487022399902,
-  "ece_t1": 0.1657697838544846,
-  "ece_final": 0.16395487022399902,
-  "brier_score": 0.3979575792890573,
-  "brier_score_t1": 0.3800161836817841,
-  "brier_score_final": 0.3979575792890573,
-  "total_latency": 4.920397999985653,
-  "average_latency": 0.009840795999971307,
-  "total_compute_cost": 30490.0,
-  "average_compute_cost": 60.98,
-  "human_effort_ratio": 0.02,
-  "picr": 0.6000000000000005,
-  "picr_display": "0.6000",
+  "accuracy_t1": 0.77,
+  "accuracy_final": 0.778,
+  "f1_weighted": 0.7777574120105192,
+  "f1_macro": 0.7778498264827023,
+  "f1_t1_macro": 0.7699254558476947,
+  "ece": 0.08254055156707767,
+  "ece_t1": 0.08110988652706148,
+  "ece_final": 0.08254055156707767,
+  "brier_score": 0.3162515337076514,
+  "brier_score_t1": 0.312315580943471,
+  "brier_score_final": 0.3162515337076514,
+  "total_latency": 4.882168200016167,
+  "average_latency": 0.009764336400032334,
+  "total_compute_cost": 33489.0,
+  "average_compute_cost": 66.978,
+  "human_effort_ratio": 0.022,
+  "picr": 0.363636363636364,
+  "picr_display": "0.3636",
   "picr_status": "BELOW_TARGET",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.01200000000000001,
-  "human_labels_count": 10,
+  "tier2_autonomous_gain": 0.008000000000000007,
+  "human_labels_count": 11,
+  "al_human_annotations": 47,
   "confusion_matrix_t1": [
     [
-      192,
-      62
+      188,
+      66
     ],
     [
-      61,
-      185
+      49,
+      197
     ]
   ],
   "confusion_matrix_final": [
     [
-      194,
-      60
+      188,
+      66
     ],
     [
-      57,
-      189
+      45,
+      201
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      4,
-      2
+      6,
+      0
     ],
     [
       0,
-      4
+      5
     ]
   ],
   "per_category_f1": {
     "neg": {
-      "precision": 0.7729083665338645,
-      "recall": 0.7637795275590551,
-      "f1-score": 0.7683168316831683,
+      "precision": 0.8068669527896996,
+      "recall": 0.7401574803149606,
+      "f1-score": 0.7720739219712526,
       "support": 254.0
     },
     "pos": {
-      "precision": 0.7590361445783133,
-      "recall": 0.7682926829268293,
-      "f1-score": 0.7636363636363637,
+      "precision": 0.7528089887640449,
+      "recall": 0.8170731707317073,
+      "f1-score": 0.783625730994152,
       "support": 246.0
     }
   },
   "per_category_f1_t1": {
     "neg": {
-      "precision": 0.758893280632411,
-      "recall": 0.7559055118110236,
-      "f1-score": 0.757396449704142,
+      "precision": 0.7932489451476793,
+      "recall": 0.7401574803149606,
+      "f1-score": 0.7657841140529531,
       "support": 254.0
     },
     "pos": {
-      "precision": 0.7489878542510121,
-      "recall": 0.7520325203252033,
-      "f1-score": 0.7505070993914807,
+      "precision": 0.7490494296577946,
+      "recall": 0.8008130081300813,
+      "f1-score": 0.7740667976424361,
       "support": 246.0
     }
   },
@@ -93,22 +94,22 @@
     },
     "pos": {
       "tier2": 0,
-      "tier3": 4,
+      "tier3": 5,
       "total": 246
     }
   },
-  "picr_al": -0.381,
-  "picr_al_display": "-0.3810",
+  "picr_al": -0.1739,
+  "picr_al_display": "-0.1739",
   "picr_al_status": "NO_GAIN",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": -0.040000000000000036,
-  "net_utility": 0.011,
-  "net_utility_display": "0.0110",
+  "delta_acc_al": -0.02400000000000002,
+  "net_utility": 0.0069,
+  "net_utility_display": "0.0069",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.011,
-  "net_utility_cost_display": "0.0110",
+  "net_utility_cost": 0.0069,
+  "net_utility_cost_display": "0.0069",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.794,
-  "post_al_t1_accuracy": 0.754
+  "post_al_t1_accuracy": 0.77
 }

@@ -306,6 +306,30 @@ def main():
             early_stopping_patience=config["tier1"].get("early_stopping_patience")
         )
 
+        # Optimize temperature scaling factor for probability calibration on validation calibration data
+        if len(df_val_calib) >= 2:
+            print("Optimizing Tier 1 model temperature scaling on validation set...")
+            val_texts = df_val_calib["text"].tolist()
+            val_labels = [cat_to_id[lbl] for lbl in df_val_calib["label"].tolist()]
+            
+            # Predict raw validation logits
+            val_logits = tier1.predict_logits_batch(val_texts, batch_size=64)
+            
+            import scipy.optimize as opt
+            def nll_eval(t):
+                t = t[0]
+                scaled_logits = val_logits / t
+                max_logits = np.max(scaled_logits, axis=-1, keepdims=True)
+                exp_logits = np.exp(scaled_logits - max_logits)
+                probs = exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
+                nll = -np.mean(np.log(probs[np.arange(len(val_labels)), val_labels] + 1e-12))
+                return nll
+                
+            res = opt.minimize(nll_eval, x0=[1.5], bounds=[(0.1, 10.0)], method='L-BFGS-B')
+            optimal_temp = float(res.x[0])
+            tier1.temperature = optimal_temp
+            print(f"Optimal validation temperature: {optimal_temp:.4f}")
+
         if pretrain_device == "cuda" and device == "cpu":
             print("Moving Tier 1 model to CPU for active learning routing phase...")
             tier1.model.to("cpu")

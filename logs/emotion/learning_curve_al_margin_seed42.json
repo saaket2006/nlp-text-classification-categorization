@@ -4,7 +4,7 @@
     "test_accuracy": 0.588
   },
   {
-    "human_annotations": 8,
-    "test_accuracy": 0.268
+    "human_annotations": 9,
+    "test_accuracy": 0.546
   }
 ]

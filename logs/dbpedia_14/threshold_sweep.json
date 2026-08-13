@@ -2,6 +2,51 @@
   {
     "tau1": 0.3,
     "tau2": 0.4,
+    "accuracy": 0.99,
+    "human_effort_ratio": 0.002,
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.5,
+    "accuracy": 0.988,
+    "human_effort_ratio": 0.002,
+    "picr": 0.0,
+    "net_utility": -0.0001,
+    "net_utility_cost": -0.0003
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.6,
+    "accuracy": 0.99,
+    "human_effort_ratio": 0.002,
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.7,
+    "accuracy": 0.99,
+    "human_effort_ratio": 0.002,
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
+  },
+  {
+    "tau1": 0.3,
+    "tau2": 0.95,
+    "accuracy": 0.99,
+    "human_effort_ratio": 0.002,
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
+  },
+  {
+    "tau1": 0.4,
+    "tau2": 0.4,
     "accuracy": 0.988,
     "human_effort_ratio": 0.002,
     "picr": 0.0,
@@ -9,8 +54,26 @@
     "net_utility_cost": -0.0002
   },
   {
-    "tau1": 0.3,
+    "tau1": 0.4,
     "tau2": 0.5,
+    "accuracy": 0.988,
+    "human_effort_ratio": 0.002,
+    "picr": 0.0,
+    "net_utility": -0.0001,
+    "net_utility_cost": -0.0002
+  },
+  {
+    "tau1": 0.4,
+    "tau2": 0.6,
+    "accuracy": 0.988,
+    "human_effort_ratio": 0.002,
+    "picr": 0.0,
+    "net_utility": -0.0001,
+    "net_utility_cost": -0.0002
+  },
+  {
+    "tau1": 0.4,
+    "tau2": 0.7,
     "accuracy": 0.986,
     "human_effort_ratio": 0.002,
     "picr": -1.0000000000000009,
@@ -18,76 +81,13 @@
     "net_utility_cost": -0.0022
   },
   {
-    "tau1": 0.3,
-    "tau2": 0.6,
-    "accuracy": 0.988,
-    "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
-  },
-  {
-    "tau1": 0.3,
-    "tau2": 0.7,
-    "accuracy": 0.988,
-    "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
-  },
-  {
-    "tau1": 0.3,
-    "tau2": 0.95,
-    "accuracy": 0.988,
-    "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
-  },
-  {
-    "tau1": 0.4,
-    "tau2": 0.4,
-    "accuracy": 0.99,
-    "human_effort_ratio": 0.002,
-    "picr": 1.0000000000000009,
-    "net_utility": 0.0019,
-    "net_utility_cost": 0.0018
-  },
-  {
-    "tau1": 0.4,
-    "tau2": 0.5,
-    "accuracy": 0.99,
-    "human_effort_ratio": 0.002,
-    "picr": 1.0000000000000009,
-    "net_utility": 0.0019,
-    "net_utility_cost": 0.0018
-  },
-  {
-    "tau1": 0.4,
-    "tau2": 0.6,
-    "accuracy": 0.99,
-    "human_effort_ratio": 0.002,
-    "picr": 1.0000000000000009,
-    "net_utility": 0.0019,
-    "net_utility_cost": 0.0018
-  },
-  {
-    "tau1": 0.4,
-    "tau2": 0.7,
-    "accuracy": 0.988,
-    "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
-  },
-  {
     "tau1": 0.4,
     "tau2": 0.95,
-    "accuracy": 0.988,
+    "accuracy": 0.99,
     "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
   },
   {
     "tau1": 0.5,
@@ -128,11 +128,11 @@
   {
     "tau1": 0.5,
     "tau2": 0.95,
-    "accuracy": 0.988,
+    "accuracy": 0.99,
     "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
   },
   {
     "tau1": 0.7,
@@ -173,11 +173,11 @@
   {
     "tau1": 0.7,
     "tau2": 0.95,
-    "accuracy": 0.988,
+    "accuracy": 0.99,
     "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
   },
   {
     "tau1": 0.8,
@@ -218,11 +218,11 @@
   {
     "tau1": 0.8,
     "tau2": 0.95,
-    "accuracy": 0.988,
+    "accuracy": 0.99,
     "human_effort_ratio": 0.002,
-    "picr": 0.0,
-    "net_utility": -0.0001,
-    "net_utility_cost": -0.0002
+    "picr": 1.0000000000000009,
+    "net_utility": 0.0019,
+    "net_utility_cost": 0.0017
   },
   {
     "tau1": 0.9,
@@ -263,10 +263,10 @@
   {
     "tau1": 0.9,
     "tau2": 0.95,
-    "accuracy": 0.986,
+    "accuracy": 0.988,
     "human_effort_ratio": 0.002,
-    "picr": -1.0000000000000009,
-    "net_utility": -0.0021,
-    "net_utility_cost": -0.0022
+    "picr": 0.0,
+    "net_utility": -0.0001,
+    "net_utility_cost": -0.0003
   }
 ]

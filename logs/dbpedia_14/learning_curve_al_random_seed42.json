@@ -2,5 +2,9 @@
   {
     "human_annotations": 0,
     "test_accuracy": 0.976
+  },
+  {
+    "human_annotations": 3,
+    "test_accuracy": 0.969
   }
 ]
