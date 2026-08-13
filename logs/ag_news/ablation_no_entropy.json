@@ -16,8 +16,8 @@
   "brier_score": 0.1952523973833133,
   "brier_score_t1": 0.18368954500465304,
   "brier_score_final": 0.1952523973833133,
-  "total_latency": 3.3949999999936153,
-  "average_latency": 0.006789999999987231,
+  "total_latency": 4.860425200015015,
+  "average_latency": 0.009720850400030031,
   "total_compute_cost": 14828.0,
   "average_compute_cost": 29.656,
   "human_effort_ratio": 0.0,
@@ -27,6 +27,7 @@
   "picr_negative_warning": false,
   "tier2_autonomous_gain": 0.020000000000000018,
   "human_labels_count": 0,
+  "al_human_annotations": 0,
   "confusion_matrix_t1": [
     [
       98,

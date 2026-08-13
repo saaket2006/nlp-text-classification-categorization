@@ -1,40 +1,40 @@
 {
   "total_samples": 1000,
   "tier_distribution": {
-    "1": 997,
+    "1": 996,
     "2": 0,
-    "3": 3
+    "3": 4
   },
-  "accuracy_t1": 0.975,
-  "accuracy_final": 0.977,
-  "f1_weighted": 0.977005186430134,
-  "f1_macro": 0.9776723738592575,
-  "f1_t1_macro": 0.9758454186386845,
-  "ece": 0.01334654099345195,
-  "ece_t1": 0.013881386369466757,
-  "ece_final": 0.01334654099345195,
-  "brier_score": 0.042833981092984266,
-  "brier_score_t1": 0.041310520880294264,
-  "brier_score_final": 0.042833981092984266,
-  "total_latency": 7.286893800007874,
-  "average_latency": 0.007286893800007874,
-  "total_compute_cost": 9997.0,
-  "average_compute_cost": 9.997,
-  "human_effort_ratio": 0.003,
-  "picr": 0.6666666666666673,
-  "picr_display": "0.6667",
+  "accuracy_t1": 0.952,
+  "accuracy_final": 0.955,
+  "f1_weighted": 0.9544313590235517,
+  "f1_macro": 0.9570762603125306,
+  "f1_t1_macro": 0.9541503888087407,
+  "ece": 0.020597197520732864,
+  "ece_t1": 0.020701651424169513,
+  "ece_final": 0.020597197520732864,
+  "brier_score": 0.07399189434238151,
+  "brier_score_t1": 0.07132170969774741,
+  "brier_score_final": 0.07399189434238151,
+  "total_latency": 9.260161499995775,
+  "average_latency": 0.009260161499995775,
+  "total_compute_cost": 12996.0,
+  "average_compute_cost": 12.996,
+  "human_effort_ratio": 0.004,
+  "picr": 0.7500000000000007,
+  "picr_display": "0.7500",
   "picr_status": "BELOW_TARGET",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.0020000000000000018,
-  "human_labels_count": 3,
+  "tier2_autonomous_gain": 0.0030000000000000027,
+  "human_labels_count": 4,
   "confusion_matrix_t1": [
     [
-      81,
-      6,
+      79,
+      5,
       0,
       0,
       0,
-      0,
+      3,
       0,
       0,
       0,
@@ -63,9 +63,9 @@
     [
       0,
       0,
-      74,
-      1,
-      2,
+      53,
+      0,
+      24,
       0,
       0,
       0,
@@ -95,9 +95,9 @@
     [
       0,
       0,
-      1,
-      2,
-      77,
+      0,
+      0,
+      80,
       0,
       0,
       0,
@@ -130,9 +130,9 @@
       0,
       0,
       0,
-      0,
+      1,
       48,
-      2,
+      1,
       0,
       0,
       0,
@@ -148,10 +148,10 @@
       0,
       0,
       0,
-      80,
+      78,
       0,
-      0,
-      0,
+      1,
+      1,
       0,
       0,
       0
@@ -182,8 +182,8 @@
       0,
       0,
       0,
-      69,
-      0,
+      68,
+      1,
       0,
       0,
       0
@@ -255,12 +255,12 @@
   ],
   "confusion_matrix_final": [
     [
-      81,
-      6,
+      79,
+      5,
       0,
       0,
       0,
-      0,
+      3,
       0,
       0,
       0,
@@ -289,9 +289,9 @@
     [
       0,
       0,
-      75,
-      1,
-      1,
+      55,
+      0,
+      22,
       0,
       0,
       0,
@@ -321,15 +321,15 @@
     [
       0,
       0,
+      0,
+      0,
+      80,
+      0,
+      0,
+      0,
+      0,
+      0,
       1,
-      2,
-      78,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
       0,
       0,
       0
@@ -356,9 +356,9 @@
       0,
       0,
       0,
-      0,
+      1,
       48,
-      2,
+      1,
       0,
       0,
       0,
@@ -374,10 +374,10 @@
       0,
       0,
       0,
-      80,
+      79,
       0,
       0,
-      0,
+      1,
       0,
       0,
       0
@@ -408,8 +408,8 @@
       0,
       0,
       0,
-      69,
-      0,
+      68,
+      1,
       0,
       0,
       0
@@ -481,6 +481,23 @@
   ],
   "confusion_matrix_escalated": [
     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
       1,
       0,
       0,
@@ -493,6 +510,21 @@
       0,
       0,
       0,
+      0
+    ],
+    [
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0,
       0
     ],
@@ -513,94 +545,62 @@
       0
     ],
     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
       0,
       0,
       1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
       0,
       0,
       0,
@@ -707,39 +707,39 @@
   ],
   "per_category_f1": {
     "Company": {
-      "precision": 0.9878048780487805,
-      "recall": 0.9204545454545454,
-      "f1-score": 0.9529411764705882,
+      "precision": 0.9875,
+      "recall": 0.8977272727272727,
+      "f1-score": 0.9404761904761905,
       "support": 88.0
     },
     "EducationalInstitution": {
-      "precision": 0.9213483146067416,
+      "precision": 0.9318181818181818,
       "recall": 0.9879518072289156,
-      "f1-score": 0.9534883720930233,
+      "f1-score": 0.9590643274853801,
       "support": 83.0
     },
     "Artist": {
-      "precision": 0.9868421052631579,
-      "recall": 0.974025974025974,
-      "f1-score": 0.9803921568627451,
+      "precision": 1.0,
+      "recall": 0.7142857142857143,
+      "f1-score": 0.8333333333333334,
       "support": 77.0
     },
     "Athlete": {
-      "precision": 0.9552238805970149,
+      "precision": 1.0,
       "recall": 1.0,
-      "f1-score": 0.9770992366412213,
+      "f1-score": 1.0,
       "support": 64.0
     },
     "OfficeHolder": {
-      "precision": 0.9873417721518988,
-      "recall": 0.9629629629629629,
-      "f1-score": 0.975,
+      "precision": 0.7843137254901961,
+      "recall": 0.9876543209876543,
+      "f1-score": 0.8743169398907104,
       "support": 81.0
     },
     "MeanOfTransportation": {
-      "precision": 1.0,
+      "precision": 0.9402985074626866,
       "recall": 0.984375,
-      "f1-score": 0.9921259842519685,
+      "f1-score": 0.9618320610687023,
       "support": 64.0
     },
     "Building": {
@@ -749,9 +749,9 @@
       "support": 51.0
     },
     "NaturalPlace": {
-      "precision": 0.975609756097561,
-      "recall": 1.0,
-      "f1-score": 0.9876543209876543,
+      "precision": 0.9875,
+      "recall": 0.9875,
+      "f1-score": 0.9875,
       "support": 80.0
     },
     "Village": {
@@ -762,14 +762,14 @@
     },
     "Animal": {
       "precision": 1.0,
-      "recall": 1.0,
-      "f1-score": 1.0,
+      "recall": 0.9855072463768116,
+      "f1-score": 0.9927007299270073,
       "support": 69.0
     },
     "Plant": {
-      "precision": 1.0,
+      "precision": 0.9629629629629629,
       "recall": 1.0,
-      "f1-score": 1.0,
+      "f1-score": 0.9811320754716981,
       "support": 78.0
     },
     "Album": {
@@ -793,39 +793,39 @@
   },
   "per_category_f1_t1": {
     "Company": {
-      "precision": 0.9878048780487805,
-      "recall": 0.9204545454545454,
-      "f1-score": 0.9529411764705882,
+      "precision": 0.9875,
+      "recall": 0.8977272727272727,
+      "f1-score": 0.9404761904761905,
       "support": 88.0
     },
     "EducationalInstitution": {
-      "precision": 0.9213483146067416,
+      "precision": 0.9318181818181818,
       "recall": 0.9879518072289156,
-      "f1-score": 0.9534883720930233,
+      "f1-score": 0.9590643274853801,
       "support": 83.0
     },
     "Artist": {
-      "precision": 0.9866666666666667,
-      "recall": 0.961038961038961,
-      "f1-score": 0.9736842105263158,
+      "precision": 1.0,
+      "recall": 0.6883116883116883,
+      "f1-score": 0.8153846153846154,
       "support": 77.0
     },
     "Athlete": {
-      "precision": 0.9552238805970149,
+      "precision": 1.0,
       "recall": 1.0,
-      "f1-score": 0.9770992366412213,
+      "f1-score": 1.0,
       "support": 64.0
     },
     "OfficeHolder": {
-      "precision": 0.9746835443037974,
-      "recall": 0.9506172839506173,
-      "f1-score": 0.9625,
+      "precision": 0.7692307692307693,
+      "recall": 0.9876543209876543,
+      "f1-score": 0.8648648648648649,
       "support": 81.0
     },
     "MeanOfTransportation": {
-      "precision": 1.0,
+      "precision": 0.9402985074626866,
       "recall": 0.984375,
-      "f1-score": 0.9921259842519685,
+      "f1-score": 0.9618320610687023,
       "support": 64.0
     },
     "Building": {
@@ -835,9 +835,9 @@
       "support": 51.0
     },
     "NaturalPlace": {
-      "precision": 0.975609756097561,
-      "recall": 1.0,
-      "f1-score": 0.9876543209876543,
+      "precision": 0.9873417721518988,
+      "recall": 0.975,
+      "f1-score": 0.9811320754716981,
       "support": 80.0
     },
     "Village": {
@@ -847,15 +847,15 @@
       "support": 48.0
     },
     "Animal": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1-score": 1.0,
+      "precision": 0.9855072463768116,
+      "recall": 0.9855072463768116,
+      "f1-score": 0.9855072463768116,
       "support": 69.0
     },
     "Plant": {
-      "precision": 0.9873417721518988,
+      "precision": 0.9629629629629629,
       "recall": 1.0,
-      "f1-score": 0.9936305732484076,
+      "f1-score": 0.9811320754716981,
       "support": 78.0
     },
     "Album": {
@@ -880,17 +880,17 @@
   "escalation_by_category": {
     "Company": {
       "tier2": 0,
-      "tier3": 1,
+      "tier3": 0,
       "total": 88
     },
     "EducationalInstitution": {
       "tier2": 0,
-      "tier3": 0,
+      "tier3": 1,
       "total": 83
     },
     "Artist": {
       "tier2": 0,
-      "tier3": 1,
+      "tier3": 2,
       "total": 77
     },
     "Athlete": {
@@ -900,7 +900,7 @@
     },
     "OfficeHolder": {
       "tier2": 0,
-      "tier3": 1,
+      "tier3": 0,
       "total": 81
     },
     "MeanOfTransportation": {
@@ -915,7 +915,7 @@
     },
     "NaturalPlace": {
       "tier2": 0,
-      "tier3": 0,
+      "tier3": 1,
       "total": 80
     },
     "Village": {
@@ -949,18 +949,18 @@
       "total": 83
     }
   },
-  "picr_al": 0.375,
-  "picr_al_display": "0.3750",
-  "picr_al_status": "BELOW_TARGET",
+  "picr_al": -1.8,
+  "picr_al_display": "-1.8000",
+  "picr_al_status": "NO_GAIN",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": -0.0010000000000000009,
-  "net_utility": 0.0019,
-  "net_utility_display": "0.0019",
+  "delta_acc_al": -0.02400000000000002,
+  "net_utility": 0.0028,
+  "net_utility_display": "0.0028",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.0018,
-  "net_utility_cost_display": "0.0018",
+  "net_utility_cost": 0.0028,
+  "net_utility_cost_display": "0.0028",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.976,
-  "post_al_t1_accuracy": 0.975
+  "post_al_t1_accuracy": 0.952
 }

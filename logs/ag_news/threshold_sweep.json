@@ -2,271 +2,271 @@
   {
     "tau1": 0.3,
     "tau2": 0.4,
-    "accuracy": 0.87,
-    "human_effort_ratio": 0.02,
-    "picr": -0.20000000000000018,
-    "net_utility": -0.005,
-    "net_utility_cost": -0.0062
+    "accuracy": 0.866,
+    "human_effort_ratio": 0.008,
+    "picr": -1.0000000000000009,
+    "net_utility": -0.0084,
+    "net_utility_cost": -0.0096
   },
   {
     "tau1": 0.3,
     "tau2": 0.5,
-    "accuracy": 0.872,
-    "human_effort_ratio": 0.02,
-    "picr": -0.10000000000000009,
-    "net_utility": -0.003,
-    "net_utility_cost": -0.0042
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0076
   },
   {
     "tau1": 0.3,
     "tau2": 0.6,
-    "accuracy": 0.872,
-    "human_effort_ratio": 0.02,
-    "picr": -0.10000000000000009,
-    "net_utility": -0.003,
-    "net_utility_cost": -0.0042
+    "accuracy": 0.864,
+    "human_effort_ratio": 0.008,
+    "picr": -1.250000000000001,
+    "net_utility": -0.0104,
+    "net_utility_cost": -0.0116
   },
   {
     "tau1": 0.3,
     "tau2": 0.7,
-    "accuracy": 0.872,
-    "human_effort_ratio": 0.02,
-    "picr": -0.10000000000000009,
-    "net_utility": -0.003,
-    "net_utility_cost": -0.0042
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0076
   },
   {
     "tau1": 0.3,
     "tau2": 0.75,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0022
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0076
   },
   {
     "tau1": 0.5,
     "tau2": 0.4,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0018
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0073
   },
   {
     "tau1": 0.5,
     "tau2": 0.5,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0018
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0073
   },
   {
     "tau1": 0.5,
     "tau2": 0.6,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0018
+    "accuracy": 0.866,
+    "human_effort_ratio": 0.008,
+    "picr": -1.0000000000000009,
+    "net_utility": -0.0084,
+    "net_utility_cost": -0.0093
   },
   {
     "tau1": 0.5,
     "tau2": 0.7,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0018
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0073
   },
   {
     "tau1": 0.5,
     "tau2": 0.75,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0018
+    "accuracy": 0.866,
+    "human_effort_ratio": 0.008,
+    "picr": -1.0000000000000009,
+    "net_utility": -0.0084,
+    "net_utility_cost": -0.0093
   },
   {
     "tau1": 0.7,
     "tau2": 0.4,
-    "accuracy": 0.872,
-    "human_effort_ratio": 0.02,
-    "picr": -0.10000000000000009,
-    "net_utility": -0.003,
-    "net_utility_cost": -0.0036
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0071
   },
   {
     "tau1": 0.7,
     "tau2": 0.5,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0016
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0071
   },
   {
     "tau1": 0.7,
     "tau2": 0.6,
-    "accuracy": 0.872,
-    "human_effort_ratio": 0.02,
-    "picr": -0.10000000000000009,
-    "net_utility": -0.003,
-    "net_utility_cost": -0.0036
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0071
   },
   {
     "tau1": 0.7,
     "tau2": 0.7,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0016
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0071
   },
   {
     "tau1": 0.7,
     "tau2": 0.75,
-    "accuracy": 0.874,
-    "human_effort_ratio": 0.02,
-    "picr": 0.0,
-    "net_utility": -0.001,
-    "net_utility_cost": -0.0016
+    "accuracy": 0.868,
+    "human_effort_ratio": 0.008,
+    "picr": -0.7500000000000007,
+    "net_utility": -0.0064,
+    "net_utility_cost": -0.0071
   },
   {
     "tau1": 0.8,
     "tau2": 0.4,
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.008,
+    "picr": 0.0,
+    "net_utility": -0.0004,
+    "net_utility_cost": -0.0009
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.5,
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.008,
+    "picr": 0.0,
+    "net_utility": -0.0004,
+    "net_utility_cost": -0.0009
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.6,
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.008,
+    "picr": 0.0,
+    "net_utility": -0.0004,
+    "net_utility_cost": -0.0009
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.7,
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.008,
+    "picr": 0.0,
+    "net_utility": -0.0004,
+    "net_utility_cost": -0.0009
+  },
+  {
+    "tau1": 0.8,
+    "tau2": 0.75,
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.008,
+    "picr": 0.0,
+    "net_utility": -0.0004,
+    "net_utility_cost": -0.0009
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.4,
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0012
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.5,
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0012
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.6,
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0012
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.7,
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0012
+  },
+  {
+    "tau1": 0.9,
+    "tau2": 0.75,
     "accuracy": 0.878,
-    "human_effort_ratio": 0.02,
-    "picr": 0.20000000000000018,
-    "net_utility": 0.003,
-    "net_utility_cost": 0.0025
-  },
-  {
-    "tau1": 0.8,
-    "tau2": 0.5,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0045
-  },
-  {
-    "tau1": 0.8,
-    "tau2": 0.6,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0045
-  },
-  {
-    "tau1": 0.8,
-    "tau2": 0.7,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0045
-  },
-  {
-    "tau1": 0.8,
-    "tau2": 0.75,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0045
-  },
-  {
-    "tau1": 0.9,
-    "tau2": 0.4,
-    "accuracy": 0.882,
-    "human_effort_ratio": 0.02,
-    "picr": 0.40000000000000036,
-    "net_utility": 0.007,
-    "net_utility_cost": 0.0066
-  },
-  {
-    "tau1": 0.9,
-    "tau2": 0.5,
-    "accuracy": 0.882,
-    "human_effort_ratio": 0.02,
-    "picr": 0.40000000000000036,
-    "net_utility": 0.007,
-    "net_utility_cost": 0.0066
-  },
-  {
-    "tau1": 0.9,
-    "tau2": 0.6,
-    "accuracy": 0.882,
-    "human_effort_ratio": 0.02,
-    "picr": 0.40000000000000036,
-    "net_utility": 0.007,
-    "net_utility_cost": 0.0066
-  },
-  {
-    "tau1": 0.9,
-    "tau2": 0.7,
-    "accuracy": 0.882,
-    "human_effort_ratio": 0.02,
-    "picr": 0.40000000000000036,
-    "net_utility": 0.007,
-    "net_utility_cost": 0.0066
-  },
-  {
-    "tau1": 0.9,
-    "tau2": 0.75,
-    "accuracy": 0.884,
-    "human_effort_ratio": 0.02,
+    "human_effort_ratio": 0.008,
     "picr": 0.5000000000000004,
-    "net_utility": 0.009,
-    "net_utility_cost": 0.0086
+    "net_utility": 0.0036,
+    "net_utility_cost": 0.0032
   },
   {
     "tau1": 1.0,
     "tau2": 0.4,
-    "accuracy": 0.882,
-    "human_effort_ratio": 0.02,
-    "picr": 0.40000000000000036,
-    "net_utility": 0.007,
-    "net_utility_cost": 0.0067
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0013
   },
   {
     "tau1": 1.0,
     "tau2": 0.5,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0047
+    "accuracy": 0.874,
+    "human_effort_ratio": 0.008,
+    "picr": 0.0,
+    "net_utility": -0.0004,
+    "net_utility_cost": -0.0007
   },
   {
     "tau1": 1.0,
     "tau2": 0.6,
-    "accuracy": 0.882,
-    "human_effort_ratio": 0.02,
-    "picr": 0.40000000000000036,
-    "net_utility": 0.007,
-    "net_utility_cost": 0.0067
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0013
   },
   {
     "tau1": 1.0,
     "tau2": 0.7,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0046
+    "accuracy": 0.876,
+    "human_effort_ratio": 0.008,
+    "picr": 0.2500000000000002,
+    "net_utility": 0.0016,
+    "net_utility_cost": 0.0012
   },
   {
     "tau1": 1.0,
     "tau2": 0.75,
-    "accuracy": 0.88,
-    "human_effort_ratio": 0.02,
-    "picr": 0.30000000000000027,
-    "net_utility": 0.005,
-    "net_utility_cost": 0.0046
+    "accuracy": 0.878,
+    "human_effort_ratio": 0.008,
+    "picr": 0.5000000000000004,
+    "net_utility": 0.0036,
+    "net_utility_cost": 0.0032
   }
 ]

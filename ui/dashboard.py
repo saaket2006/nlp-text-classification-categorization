@@ -502,7 +502,7 @@ with tab_overview:
         al_col3.metric("AL Improvement", f"{delta:+.2%}")
 
         # Contextual explanation banners
-        human_labels = metrics.get("human_labels_count", 0)
+        human_labels = metrics.get("al_human_annotations", metrics.get("human_labels_count", 0))
         al_batch_size = metrics.get("active_learning_batch_size", 1)
         if delta == 0:
             if human_labels == 0:

@@ -1,171 +1,172 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 34,
+    "1": 364,
     "2": 0,
-    "3": 466
+    "3": 136
   },
-  "accuracy_t1": 0.594,
-  "accuracy_final": 0.948,
-  "f1_weighted": 0.9484302944315414,
-  "f1_macro": 0.919104616908764,
-  "f1_t1_macro": 0.3696858284564466,
-  "ece": 0.0013078006267548464,
-  "ece_t1": 0.060724352896213536,
-  "ece_final": 0.0013078006267548464,
-  "brier_score": 0.7664491083446375,
-  "brier_score_t1": 0.5470344919558964,
-  "brier_score_final": 0.7664491083446375,
-  "total_latency": 3.4612486000060017,
-  "average_latency": 0.006922497200012003,
-  "total_compute_cost": 1398034.0,
-  "average_compute_cost": 2796.068,
-  "human_effort_ratio": 0.932,
-  "picr": 0.37982832618025747,
-  "picr_display": "0.3798",
+  "accuracy_t1": 0.544,
+  "accuracy_final": 0.688,
+  "f1_weighted": 0.680377262272808,
+  "f1_macro": 0.5585621931789423,
+  "f1_t1_macro": 0.3431782160713565,
+  "ece": 0.2636452284097672,
+  "ece_t1": 0.32236384856700895,
+  "ece_final": 0.2636452284097672,
+  "brier_score": 0.852115711069303,
+  "brier_score_t1": 0.7865292651360289,
+  "brier_score_final": 0.852115711069303,
+  "total_latency": 3.886024700037524,
+  "average_latency": 0.007772049400075047,
+  "total_compute_cost": 408364.0,
+  "average_compute_cost": 816.728,
+  "human_effort_ratio": 0.272,
+  "picr": 0.5294117647058819,
+  "picr_display": "0.5294",
   "picr_status": "BELOW_TARGET",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.354,
-  "human_labels_count": 466,
+  "tier2_autonomous_gain": 0.1439999999999999,
+  "human_labels_count": 136,
+  "al_human_annotations": 397,
   "confusion_matrix_t1": [
     [
-      96,
-      22,
-      2,
-      19,
-      5,
-      0
-    ],
-    [
-      21,
-      157,
-      2,
-      10,
-      3,
-      0
-    ],
-    [
+      81,
+      29,
+      7,
       8,
       19,
-      2,
-      1,
-      0,
       0
     ],
     [
-      23,
-      6,
-      0,
-      30,
-      5,
-      0
+      19,
+      152,
+      7,
+      7,
+      7,
+      1
     ],
     [
-      18,
+      9,
       16,
+      3,
       1,
-      7,
-      12,
+      1,
       0
     ],
     [
-      7,
+      27,
+      5,
+      4,
+      17,
+      10,
+      1
+    ],
+    [
+      14,
+      12,
+      5,
+      3,
+      19,
+      1
+    ],
+    [
+      4,
       6,
-      0,
       2,
-      0,
+      1,
+      2,
       0
     ]
   ],
   "confusion_matrix_final": [
     [
-      139,
-      3,
-      0,
-      0,
-      2,
+      104,
+      14,
+      5,
+      5,
+      16,
       0
     ],
     [
-      1,
-      182,
+      16,
+      164,
+      3,
       4,
-      3,
-      0,
-      3
+      4,
+      2
     ],
     [
-      0,
+      5,
+      14,
+      8,
       1,
-      28,
-      1,
       0,
+      2
+    ],
+    [
+      21,
+      2,
+      2,
+      31,
+      8,
       0
     ],
     [
-      1,
-      1,
-      1,
-      58,
-      2,
+      8,
+      7,
+      3,
+      3,
+      32,
       1
     ],
     [
+      3,
+      5,
+      1,
       0,
-      0,
-      0,
-      0,
-      54,
-      0
-    ],
-    [
-      0,
-      2,
-      0,
-      0,
-      0,
-      13
+      1,
+      5
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      138,
-      3,
+      41,
       0,
       0,
-      2,
+      0,
+      1,
       0
     ],
     [
-      1,
-      151,
-      4,
-      3,
       0,
-      3
-    ],
-    [
+      36,
       0,
-      1,
-      28,
-      1,
       0,
-      0
-    ],
-    [
-      1,
-      1,
-      1,
-      58,
-      2,
+      0,
       1
     ],
     [
       0,
       0,
+      7,
       0,
       0,
-      54,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      20,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      22,
       0
     ],
     [
@@ -174,76 +175,76 @@
       0,
       0,
       0,
-      13
+      5
     ]
   ],
   "per_category_f1": {
     "sadness": {
-      "precision": 0.9858156028368794,
-      "recall": 0.9652777777777778,
-      "f1-score": 0.9754385964912281,
+      "precision": 0.6624203821656051,
+      "recall": 0.7222222222222222,
+      "f1-score": 0.6910299003322259,
       "support": 144.0
     },
     "joy": {
-      "precision": 0.9629629629629629,
-      "recall": 0.9430051813471503,
-      "f1-score": 0.9528795811518325,
+      "precision": 0.7961165048543689,
+      "recall": 0.8497409326424871,
+      "f1-score": 0.8220551378446115,
       "support": 193.0
     },
     "love": {
-      "precision": 0.8484848484848485,
-      "recall": 0.9333333333333333,
-      "f1-score": 0.8888888888888888,
+      "precision": 0.36363636363636365,
+      "recall": 0.26666666666666666,
+      "f1-score": 0.3076923076923077,
       "support": 30.0
     },
     "anger": {
-      "precision": 0.9354838709677419,
-      "recall": 0.90625,
-      "f1-score": 0.9206349206349206,
+      "precision": 0.7045454545454546,
+      "recall": 0.484375,
+      "f1-score": 0.5740740740740741,
       "support": 64.0
     },
     "fear": {
-      "precision": 0.9310344827586207,
-      "recall": 1.0,
-      "f1-score": 0.9642857142857143,
+      "precision": 0.5245901639344263,
+      "recall": 0.5925925925925926,
+      "f1-score": 0.5565217391304348,
       "support": 54.0
     },
     "surprise": {
-      "precision": 0.7647058823529411,
-      "recall": 0.8666666666666667,
-      "f1-score": 0.8125,
+      "precision": 0.5,
+      "recall": 0.3333333333333333,
+      "f1-score": 0.4,
       "support": 15.0
     }
   },
   "per_category_f1_t1": {
     "sadness": {
-      "precision": 0.5549132947976878,
-      "recall": 0.6666666666666666,
-      "f1-score": 0.6056782334384858,
+      "precision": 0.525974025974026,
+      "recall": 0.5625,
+      "f1-score": 0.5436241610738255,
       "support": 144.0
     },
     "joy": {
-      "precision": 0.6946902654867256,
-      "recall": 0.8134715025906736,
-      "f1-score": 0.7494033412887828,
+      "precision": 0.6909090909090909,
+      "recall": 0.7875647668393783,
+      "f1-score": 0.7360774818401937,
       "support": 193.0
     },
     "love": {
-      "precision": 0.2857142857142857,
-      "recall": 0.06666666666666667,
-      "f1-score": 0.10810810810810811,
+      "precision": 0.10714285714285714,
+      "recall": 0.1,
+      "f1-score": 0.10344827586206896,
       "support": 30.0
     },
     "anger": {
-      "precision": 0.43478260869565216,
-      "recall": 0.46875,
-      "f1-score": 0.45112781954887216,
+      "precision": 0.4594594594594595,
+      "recall": 0.265625,
+      "f1-score": 0.33663366336633666,
       "support": 64.0
     },
     "fear": {
-      "precision": 0.48,
-      "recall": 0.2222222222222222,
-      "f1-score": 0.3037974683544304,
+      "precision": 0.3275862068965517,
+      "recall": 0.35185185185185186,
+      "f1-score": 0.3392857142857143,
       "support": 54.0
     },
     "surprise": {
@@ -256,47 +257,47 @@
   "escalation_by_category": {
     "sadness": {
       "tier2": 0,
-      "tier3": 143,
+      "tier3": 42,
       "total": 144
     },
     "joy": {
       "tier2": 0,
-      "tier3": 162,
+      "tier3": 37,
       "total": 193
     },
     "love": {
       "tier2": 0,
-      "tier3": 30,
+      "tier3": 9,
       "total": 30
     },
     "anger": {
       "tier2": 0,
-      "tier3": 64,
+      "tier3": 20,
       "total": 64
     },
     "fear": {
       "tier2": 0,
-      "tier3": 54,
+      "tier3": 23,
       "total": 54
     },
     "surprise": {
       "tier2": 0,
-      "tier3": 13,
+      "tier3": 5,
       "total": 15
     }
   },
-  "picr_al": 0.3826,
-  "picr_al_display": "0.3826",
+  "picr_al": 0.4469,
+  "picr_al_display": "0.4469",
   "picr_al_status": "BELOW_TARGET",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": 0.006000000000000005,
-  "net_utility": 0.3074,
-  "net_utility_display": "0.3074",
+  "delta_acc_al": -0.04399999999999993,
+  "net_utility": 0.1304,
+  "net_utility_display": "0.1304",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.3074,
-  "net_utility_cost_display": "0.3074",
+  "net_utility_cost": 0.1304,
+  "net_utility_cost_display": "0.1304",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.588,
-  "post_al_t1_accuracy": 0.594
+  "post_al_t1_accuracy": 0.544
 }

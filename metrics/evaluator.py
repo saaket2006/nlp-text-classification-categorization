@@ -248,6 +248,7 @@ class PipelineEvaluator:
             "picr_negative_warning": picr_negative_warning,
             "tier2_autonomous_gain": float(delta_acc),
             "human_labels_count": human_labels_count,
+            "al_human_annotations": self.al_learning_curve[-1]["human_annotations"] if getattr(self, "al_learning_curve", None) else 0,
             "confusion_matrix_t1": confusion_matrix_t1,
             "confusion_matrix_final": confusion_matrix_final,
             "confusion_matrix_escalated": confusion_matrix_escalated,
@@ -302,13 +303,14 @@ def calculate_multi_seed_stats(runs: list):
             "accuracy_final": r.get("accuracy_final"),
             "accuracy_t1": r.get("accuracy_t1"),
             "human_effort_ratio": r.get("human_effort_ratio"),
-            "picr": r.get("picr")
+            "picr": r.get("picr"),
+            "al_human_annotations": r.get("al_human_annotations")
         })
 
     keys = [
         "accuracy_final", "accuracy_t1", "human_effort_ratio", "f1_macro", 
         "f1_weighted", "ece_final", "ece_t1", "brier_score_final", "brier_score_t1", 
-        "net_utility", "net_utility_cost", "total_latency", "average_latency", "total_compute_cost", "average_compute_cost"
+        "net_utility", "net_utility_cost", "al_human_annotations", "total_latency", "average_latency", "total_compute_cost", "average_compute_cost"
     ]
     mean_stats = {}
     std_stats = {}

@@ -1,166 +1,167 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 485,
+    "1": 490,
     "2": 0,
-    "3": 15
+    "3": 10
   },
-  "accuracy_t1": 0.878,
-  "accuracy_final": 0.892,
-  "f1_weighted": 0.8926579776038566,
-  "f1_macro": 0.8936625434116816,
-  "f1_t1_macro": 0.879864798280175,
-  "ece": 0.03863085579872131,
-  "ece_t1": 0.03954118883609771,
-  "ece_final": 0.03863085579872131,
-  "brier_score": 0.2056397046847738,
-  "brier_score_t1": 0.1903309156459498,
-  "brier_score_final": 0.2056397046847738,
-  "total_latency": 3.5203188000004957,
-  "average_latency": 0.007040637600000991,
-  "total_compute_cost": 45485.0,
-  "average_compute_cost": 90.97,
-  "human_effort_ratio": 0.03,
-  "picr": 0.4666666666666671,
-  "picr_display": "0.4667",
+  "accuracy_t1": 0.84,
+  "accuracy_final": 0.854,
+  "f1_weighted": 0.8531207561349056,
+  "f1_macro": 0.854745940094813,
+  "f1_t1_macro": 0.8409116339109421,
+  "ece": 0.08047848212718971,
+  "ece_t1": 0.0838408432602882,
+  "ece_final": 0.08047848212718971,
+  "brier_score": 0.25379938998750123,
+  "brier_score_t1": 0.23581259279722594,
+  "brier_score_final": 0.25379938998750123,
+  "total_latency": 3.751766299979863,
+  "average_latency": 0.007503532599959726,
+  "total_compute_cost": 30490.0,
+  "average_compute_cost": 60.98,
+  "human_effort_ratio": 0.02,
+  "picr": 0.7000000000000006,
+  "picr_display": "0.7000",
   "picr_status": "BELOW_TARGET",
   "picr_negative_warning": false,
   "tier2_autonomous_gain": 0.014000000000000012,
-  "human_labels_count": 15,
+  "human_labels_count": 10,
+  "al_human_annotations": 18,
   "confusion_matrix_t1": [
     [
-      98,
-      2,
-      12,
-      8
-    ],
-    [
-      3,
-      117,
-      0,
-      1
-    ],
-    [
-      2,
-      0,
-      114,
-      18
-    ],
-    [
+      99,
       4,
+      10,
+      7
+    ],
+    [
       0,
+      121,
+      0,
+      0
+    ],
+    [
+      12,
+      1,
+      100,
+      21
+    ],
+    [
       11,
-      110
+      0,
+      14,
+      100
     ]
   ],
   "confusion_matrix_final": [
     [
       100,
-      1,
-      10,
-      9
-    ],
-    [
-      3,
-      117,
-      0,
-      1
-    ],
-    [
-      1,
-      0,
-      117,
-      16
-    ],
-    [
       4,
-      0,
       9,
-      112
+      7
+    ],
+    [
+      0,
+      121,
+      0,
+      0
+    ],
+    [
+      9,
+      1,
+      104,
+      20
+    ],
+    [
+      12,
+      0,
+      11,
+      102
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      4,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      5,
+      0
+    ],
+    [
       1,
       0,
-      1
-    ],
-    [
       0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      6,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      3
+      2
     ]
   ],
   "per_category_f1": {
     "World": {
-      "precision": 0.9259259259259259,
+      "precision": 0.8264462809917356,
       "recall": 0.8333333333333334,
-      "f1-score": 0.8771929824561403,
+      "f1-score": 0.8298755186721992,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.9915254237288136,
-      "recall": 0.9669421487603306,
-      "f1-score": 0.9790794979079498,
+      "precision": 0.9603174603174603,
+      "recall": 1.0,
+      "f1-score": 0.979757085020243,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.8602941176470589,
-      "recall": 0.8731343283582089,
-      "f1-score": 0.8666666666666667,
+      "precision": 0.8387096774193549,
+      "recall": 0.7761194029850746,
+      "f1-score": 0.8062015503875969,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.8115942028985508,
-      "recall": 0.896,
-      "f1-score": 0.8517110266159695,
+      "precision": 0.7906976744186046,
+      "recall": 0.816,
+      "f1-score": 0.8031496062992126,
       "support": 125.0
     }
   },
   "per_category_f1_t1": {
     "World": {
-      "precision": 0.9158878504672897,
-      "recall": 0.8166666666666667,
-      "f1-score": 0.8634361233480177,
+      "precision": 0.8114754098360656,
+      "recall": 0.825,
+      "f1-score": 0.8181818181818182,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.9831932773109243,
-      "recall": 0.9669421487603306,
-      "f1-score": 0.975,
+      "precision": 0.9603174603174603,
+      "recall": 1.0,
+      "f1-score": 0.979757085020243,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.8321167883211679,
-      "recall": 0.8507462686567164,
-      "f1-score": 0.8413284132841329,
+      "precision": 0.8064516129032258,
+      "recall": 0.746268656716418,
+      "f1-score": 0.7751937984496124,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.8029197080291971,
-      "recall": 0.88,
-      "f1-score": 0.8396946564885496,
+      "precision": 0.78125,
+      "recall": 0.8,
+      "f1-score": 0.7905138339920948,
       "support": 125.0
     }
   },
   "escalation_by_category": {
     "World": {
       "tier2": 0,
-      "tier3": 6,
+      "tier3": 2,
       "total": 120
     },
     "Sports": {
@@ -170,7 +171,7 @@
     },
     "Business": {
       "tier2": 0,
-      "tier3": 6,
+      "tier3": 5,
       "total": 134
     },
     "Sci/Tech": {
@@ -179,18 +180,18 @@
       "total": 125
     }
   },
-  "picr_al": 0.5161,
-  "picr_al_display": "0.5161",
-  "picr_al_status": "BELOW_TARGET",
+  "picr_al": -0.1429,
+  "picr_al_display": "-0.1429",
+  "picr_al_status": "NO_GAIN",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": 0.0040000000000000036,
-  "net_utility": 0.0125,
-  "net_utility_display": "0.0125",
+  "delta_acc_al": -0.03400000000000003,
+  "net_utility": 0.013,
+  "net_utility_display": "0.0130",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.0125,
-  "net_utility_cost_display": "0.0125",
+  "net_utility_cost": 0.013,
+  "net_utility_cost_display": "0.0130",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.874,
-  "post_al_t1_accuracy": 0.878
+  "post_al_t1_accuracy": 0.84
 }

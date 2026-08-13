@@ -22,5 +22,21 @@
     "picr": 0.6060606060606049,
     "t1": 0.85,
     "t2": 0.4
+  },
+  {
+    "timestamp": "2026-08-13T11:57:52.750215",
+    "accuracy": 0.54,
+    "human_effort_ratio": 0.0,
+    "picr": null,
+    "t1": 0.85,
+    "t2": 0.4
+  },
+  {
+    "timestamp": "2026-08-13T14:15:02.817679",
+    "accuracy": 0.54,
+    "human_effort_ratio": 0.0,
+    "picr": null,
+    "t1": 0.85,
+    "t2": 0.4
   }
 ]

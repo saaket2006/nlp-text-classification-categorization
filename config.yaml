@@ -33,6 +33,7 @@ datasets_config:
     threshold_entropy: 1.00
     threshold_confidence: 0.75
     threshold_extreme_entropy: 1.80
+    extreme_entropy_percentile: 0.99
     train_samples: 2500
     test_samples: 500
   dbpedia_14:

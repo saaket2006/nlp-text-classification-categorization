@@ -1,175 +1,176 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 429,
-    "2": 68,
-    "3": 3
+    "1": 439,
+    "2": 60,
+    "3": 1
   },
-  "accuracy_t1": 0.868,
-  "accuracy_final": 0.89,
-  "f1_weighted": 0.8901987266804983,
-  "f1_macro": 0.8912638824538992,
-  "f1_t1_macro": 0.869338183986315,
-  "ece": 0.07614096137046818,
-  "ece_t1": 0.05537044125795367,
-  "ece_final": 0.07614096137046818,
-  "brier_score": 0.20639552423795254,
-  "brier_score_t1": 0.19545725696524294,
-  "brier_score_final": 0.20639552423795254,
-  "total_latency": 3.61583910000013,
-  "average_latency": 0.00723167820000026,
-  "total_compute_cost": 23029.0,
-  "average_compute_cost": 46.058,
-  "human_effort_ratio": 0.006,
-  "picr": 3.6666666666666696,
-  "picr_display": "3.6667",
+  "accuracy_t1": 0.878,
+  "accuracy_final": 0.892,
+  "f1_weighted": 0.8918049531374006,
+  "f1_macro": 0.8928644322761482,
+  "f1_t1_macro": 0.878985053053376,
+  "ece": 0.07897042439460768,
+  "ece_t1": 0.05699890702962879,
+  "ece_final": 0.07897042439460768,
+  "brier_score": 0.20232666062831145,
+  "brier_score_t1": 0.19632936448937768,
+  "brier_score_final": 0.20232666062831145,
+  "total_latency": 4.2985947000070155,
+  "average_latency": 0.00859718940001403,
+  "total_compute_cost": 15439.0,
+  "average_compute_cost": 30.878,
+  "human_effort_ratio": 0.002,
+  "picr": 7.000000000000006,
+  "picr_display": "7.0000",
   "picr_status": "STRONG",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.02200000000000002,
-  "human_labels_count": 3,
+  "tier2_autonomous_gain": 0.014000000000000012,
+  "human_labels_count": 1,
+  "al_human_annotations": 10,
   "confusion_matrix_t1": [
     [
-      91,
+      94,
       4,
       12,
-      13
+      10
     ],
     [
-      1,
-      119,
+      0,
+      120,
       0,
       1
     ],
     [
-      1,
+      2,
       0,
-      112,
-      21
+      117,
+      15
     ],
     [
-      3,
+      4,
       0,
-      10,
-      112
+      13,
+      108
     ]
   ],
   "confusion_matrix_final": [
     [
-      97,
-      3,
+      98,
+      4,
       10,
-      10
+      8
     ],
     [
-      1,
-      120,
+      0,
+      121,
       0,
       0
     ],
     [
+      1,
       0,
-      0,
-      117,
-      17
+      118,
+      15
     ],
     [
-      4,
+      5,
       0,
-      10,
-      111
+      11,
+      109
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      15,
+      13,
       1,
       0,
-      3
+      2
     ],
     [
-      1,
+      0,
       4,
       0,
       0
     ],
     [
+      1,
       0,
-      0,
-      17,
-      7
+      12,
+      5
     ],
     [
-      3,
+      2,
       0,
-      6,
-      14
+      5,
+      16
     ]
   ],
   "per_category_f1": {
     "World": {
-      "precision": 0.9509803921568627,
-      "recall": 0.8083333333333333,
-      "f1-score": 0.8738738738738738,
+      "precision": 0.9423076923076923,
+      "recall": 0.8166666666666667,
+      "f1-score": 0.875,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.975609756097561,
-      "recall": 0.9917355371900827,
-      "f1-score": 0.9836065573770492,
+      "precision": 0.968,
+      "recall": 1.0,
+      "f1-score": 0.983739837398374,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.8540145985401459,
-      "recall": 0.8731343283582089,
-      "f1-score": 0.8634686346863468,
+      "precision": 0.8489208633093526,
+      "recall": 0.8805970149253731,
+      "f1-score": 0.8644688644688645,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.8043478260869565,
-      "recall": 0.888,
-      "f1-score": 0.844106463878327,
+      "precision": 0.8257575757575758,
+      "recall": 0.872,
+      "f1-score": 0.8482490272373541,
       "support": 125.0
     }
   },
   "per_category_f1_t1": {
     "World": {
-      "precision": 0.9479166666666666,
-      "recall": 0.7583333333333333,
-      "f1-score": 0.8425925925925926,
+      "precision": 0.94,
+      "recall": 0.7833333333333333,
+      "f1-score": 0.8545454545454545,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.967479674796748,
-      "recall": 0.9834710743801653,
-      "f1-score": 0.9754098360655737,
+      "precision": 0.967741935483871,
+      "recall": 0.9917355371900827,
+      "f1-score": 0.9795918367346939,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.835820895522388,
-      "recall": 0.835820895522388,
-      "f1-score": 0.835820895522388,
+      "precision": 0.823943661971831,
+      "recall": 0.8731343283582089,
+      "f1-score": 0.8478260869565217,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.7619047619047619,
-      "recall": 0.896,
-      "f1-score": 0.8235294117647058,
+      "precision": 0.8059701492537313,
+      "recall": 0.864,
+      "f1-score": 0.833976833976834,
       "support": 125.0
     }
   },
   "escalation_by_category": {
     "World": {
       "tier2": 16,
-      "tier3": 3,
+      "tier3": 0,
       "total": 120
     },
     "Sports": {
-      "tier2": 5,
-      "tier3": 0,
+      "tier2": 3,
+      "tier3": 1,
       "total": 121
     },
     "Business": {
-      "tier2": 24,
+      "tier2": 18,
       "tier3": 0,
       "total": 134
     },
@@ -179,19 +180,19 @@
       "total": 125
     }
   },
-  "picr_al": 2.7143,
-  "picr_al_display": "2.7143",
+  "picr_al": 5.3333,
+  "picr_al_display": "5.3333",
   "picr_al_status": "STRONG",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": -0.006000000000000005,
-  "net_utility": 0.0217,
-  "net_utility_display": "0.0217",
+  "delta_acc_al": 0.0040000000000000036,
+  "net_utility": 0.0139,
+  "net_utility_display": "0.0139",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.0212,
-  "net_utility_cost_display": "0.0212",
+  "net_utility_cost": 0.0135,
+  "net_utility_cost_display": "0.0135",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.874,
-  "post_al_t1_accuracy": 0.868,
+  "post_al_t1_accuracy": 0.878,
   "active_learning_batch_size": 1
 }

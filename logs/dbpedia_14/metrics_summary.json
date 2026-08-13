@@ -1,40 +1,40 @@
 {
   "total_samples": 1000,
   "tier_distribution": {
-    "1": 969,
-    "2": 28,
-    "3": 3
+    "1": 954,
+    "2": 44,
+    "3": 2
   },
-  "accuracy_t1": 0.976,
-  "accuracy_final": 0.984,
-  "f1_weighted": 0.983989869566122,
-  "f1_macro": 0.984601397325599,
-  "f1_t1_macro": 0.9765612724423468,
-  "ece": 0.012614389021396553,
-  "ece_t1": 0.014504650652408548,
-  "ece_final": 0.012614389021396553,
-  "brier_score": 0.034587575967627786,
-  "brier_score_t1": 0.0379972792074047,
-  "brier_score_final": 0.034587575967627786,
-  "total_latency": 7.2698394999965785,
-  "average_latency": 0.007269839499996578,
-  "total_compute_cost": 15569.0,
-  "average_compute_cost": 15.569,
-  "human_effort_ratio": 0.003,
-  "picr": 2.666666666666669,
-  "picr_display": "2.6667",
+  "accuracy_t1": 0.973,
+  "accuracy_final": 0.982,
+  "f1_weighted": 0.9819132757319272,
+  "f1_macro": 0.9828126858691427,
+  "f1_t1_macro": 0.9736068435447284,
+  "ece": 0.015362710685729971,
+  "ece_t1": 0.015863180935382932,
+  "ece_final": 0.015362710685729971,
+  "brier_score": 0.038734169159841944,
+  "brier_score_t1": 0.04169782962877548,
+  "brier_score_final": 0.038734169159841944,
+  "total_latency": 7.168450200004372,
+  "average_latency": 0.007168450200004372,
+  "total_compute_cost": 15754.0,
+  "average_compute_cost": 15.754,
+  "human_effort_ratio": 0.002,
+  "picr": 4.5000000000000036,
+  "picr_display": "4.5000",
   "picr_status": "STRONG",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.008000000000000007,
-  "human_labels_count": 3,
+  "tier2_autonomous_gain": 0.009000000000000008,
+  "human_labels_count": 2,
   "confusion_matrix_t1": [
     [
-      82,
+      79,
       5,
       0,
       0,
       0,
-      0,
+      3,
       0,
       0,
       0,
@@ -63,9 +63,9 @@
     [
       0,
       0,
-      75,
+      74,
       0,
-      2,
+      3,
       0,
       0,
       0,
@@ -95,9 +95,9 @@
     [
       0,
       0,
+      0,
       1,
-      1,
-      78,
+      79,
       0,
       0,
       0,
@@ -255,12 +255,12 @@
   ],
   "confusion_matrix_final": [
     [
-      83,
+      80,
       4,
       0,
       0,
       0,
-      0,
+      3,
       0,
       0,
       0,
@@ -357,8 +357,8 @@
       0,
       0,
       0,
-      49,
-      2,
+      50,
+      1,
       0,
       0,
       0,
@@ -481,12 +481,12 @@
   ],
   "confusion_matrix_escalated": [
     [
-      3,
+      9,
       2,
       0,
       0,
       0,
-      0,
+      3,
       0,
       0,
       0,
@@ -498,7 +498,7 @@
     ],
     [
       0,
-      2,
+      4,
       0,
       0,
       0,
@@ -583,7 +583,7 @@
       0,
       0,
       0,
-      1,
+      3,
       0,
       0,
       0,
@@ -600,7 +600,7 @@
       0,
       0,
       0,
-      1,
+      2,
       0,
       0,
       0,
@@ -634,7 +634,7 @@
       0,
       0,
       0,
-      0,
+      1,
       0,
       0,
       0,
@@ -707,9 +707,9 @@
   ],
   "per_category_f1": {
     "Company": {
-      "precision": 0.9880952380952381,
-      "recall": 0.9431818181818182,
-      "f1-score": 0.9651162790697675,
+      "precision": 0.9876543209876543,
+      "recall": 0.9090909090909091,
+      "f1-score": 0.9467455621301775,
       "support": 88.0
     },
     "EducationalInstitution": {
@@ -737,21 +737,21 @@
       "support": 81.0
     },
     "MeanOfTransportation": {
-      "precision": 1.0,
+      "precision": 0.9545454545454546,
       "recall": 0.984375,
-      "f1-score": 0.9921259842519685,
+      "f1-score": 0.9692307692307692,
       "support": 64.0
     },
     "Building": {
-      "precision": 0.9607843137254902,
-      "recall": 0.9607843137254902,
-      "f1-score": 0.9607843137254902,
+      "precision": 0.9615384615384616,
+      "recall": 0.9803921568627451,
+      "f1-score": 0.970873786407767,
       "support": 51.0
     },
     "NaturalPlace": {
-      "precision": 0.975609756097561,
+      "precision": 0.9876543209876543,
       "recall": 1.0,
-      "f1-score": 0.9876543209876543,
+      "f1-score": 0.9937888198757764,
       "support": 80.0
     },
     "Village": {
@@ -793,9 +793,9 @@
   },
   "per_category_f1_t1": {
     "Company": {
-      "precision": 0.9879518072289156,
-      "recall": 0.9318181818181818,
-      "f1-score": 0.9590643274853801,
+      "precision": 0.9875,
+      "recall": 0.8977272727272727,
+      "f1-score": 0.9404761904761905,
       "support": 88.0
     },
     "EducationalInstitution": {
@@ -805,9 +805,9 @@
       "support": 83.0
     },
     "Artist": {
-      "precision": 0.9868421052631579,
-      "recall": 0.974025974025974,
-      "f1-score": 0.9803921568627451,
+      "precision": 1.0,
+      "recall": 0.961038961038961,
+      "f1-score": 0.9801324503311258,
       "support": 77.0
     },
     "Athlete": {
@@ -817,15 +817,15 @@
       "support": 64.0
     },
     "OfficeHolder": {
-      "precision": 0.975,
-      "recall": 0.9629629629629629,
-      "f1-score": 0.968944099378882,
+      "precision": 0.9634146341463414,
+      "recall": 0.9753086419753086,
+      "f1-score": 0.9693251533742331,
       "support": 81.0
     },
     "MeanOfTransportation": {
-      "precision": 1.0,
+      "precision": 0.9545454545454546,
       "recall": 0.984375,
-      "f1-score": 0.9921259842519685,
+      "f1-score": 0.9692307692307692,
       "support": 64.0
     },
     "Building": {
@@ -879,12 +879,12 @@
   },
   "escalation_by_category": {
     "Company": {
-      "tier2": 4,
-      "tier3": 1,
+      "tier2": 14,
+      "tier3": 0,
       "total": 88
     },
     "EducationalInstitution": {
-      "tier2": 3,
+      "tier2": 5,
       "tier3": 0,
       "total": 83
     },
@@ -909,12 +909,12 @@
       "total": 64
     },
     "Building": {
-      "tier2": 1,
+      "tier2": 3,
       "tier3": 0,
       "total": 51
     },
     "NaturalPlace": {
-      "tier2": 1,
+      "tier2": 2,
       "tier3": 0,
       "total": 80
     },
@@ -924,7 +924,7 @@
       "total": 48
     },
     "Animal": {
-      "tier2": 0,
+      "tier2": 1,
       "tier3": 0,
       "total": 69
     },
@@ -949,19 +949,19 @@
       "total": 83
     }
   },
-  "picr_al": 2.0,
-  "picr_al_display": "2.0000",
+  "picr_al": 2.5,
+  "picr_al_display": "2.5000",
   "picr_al_status": "STRONG",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": 0.0,
-  "net_utility": 0.0079,
-  "net_utility_display": "0.0079",
+  "delta_acc_al": -0.0030000000000000027,
+  "net_utility": 0.0089,
+  "net_utility_display": "0.0089",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.0077,
-  "net_utility_cost_display": "0.0077",
+  "net_utility_cost": 0.0087,
+  "net_utility_cost_display": "0.0087",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.976,
-  "post_al_t1_accuracy": 0.976,
+  "post_al_t1_accuracy": 0.973,
   "active_learning_batch_size": 1
 }

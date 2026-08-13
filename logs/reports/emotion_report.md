@@ -7,38 +7,38 @@
  | Metric | Value | Note |
  | :--- | :--- | :--- |
  | **Total Test Samples** | 500 | Official untouched test set |
- | **Tier 1 Accuracy** | 54.00% | Baseline (Encoder only) |
- | **Final System Accuracy** | 58.00% | Integrated performance |
- | **Accuracy Boost** | 4.00% | Lift from Tier 2 & 3 |
- | **Macro F1 Score** | 0.3787 | Macro-averaged F1 |
- | **Weighted F1 Score** | 0.5648 | |
- | **Final ECE** | 0.2555 | Calibration error (Final system) |
- | **Tier 1 ECE** | 0.0741 | Calibration error (Tier 1) |
- | **Brier Score** | 0.7228 | Lower is better |
- | **Human Effort Ratio** | 6.60% | Samples requiring simulated human label |
+ | **Tier 1 Accuracy** | 48.00% | Baseline (Encoder only) |
+ | **Final System Accuracy** | 54.00% | Integrated performance |
+ | **Accuracy Boost** | 6.00% | Lift from Tier 2 & 3 |
+ | **Macro F1 Score** | 0.2630 | Macro-averaged F1 |
+ | **Weighted F1 Score** | 0.4811 | |
+ | **Final ECE** | 0.3278 | Calibration error (Final system) |
+ | **Tier 1 ECE** | 0.2492 | Calibration error (Tier 1) |
+ | **Brier Score** | 0.7486 | Lower is better |
+ | **Human Effort Ratio** | 0.00% | Samples requiring simulated human label |
  | **Pre-AL Tier 1 Accuracy** | 58.80% | Tier 1 baseline before AL loop (evaluated on test) |
- | **Post-AL Tier 1 Accuracy** | 54.00% | Tier 1 baseline after AL loop (evaluated on test) |
- | **PICR** | 0.6061 | Point-Improvement-per-Cost-Ratio |
- | **PICR Status** | **BELOW_TARGET** | Efficiency classification |
- | **PICR-AL** | 0.2388 | AL-aware cost-efficiency (λ=0.5) |
- | **Net Utility (U)** | 0.0367 | ΔAcc − (λ × HumanEffort), λ=0.05 |
+ | **Post-AL Tier 1 Accuracy** | 48.00% | Tier 1 baseline after AL loop (evaluated on test) |
+ | **PICR** | N/A | Point-Improvement-per-Cost-Ratio |
+ | **PICR Status** | **AUTONOMOUS** | Efficiency classification |
+ | **PICR-AL** | 6.0000 | AL-aware cost-efficiency (λ=0.5) |
+ | **Net Utility (U)** | 0.0600 | ΔAcc − (λ × HumanEffort), λ=0.05 |
  | **Net Utility Status** | **POSITIVE** | POSITIVE = system adds value after annotation cost |
  
  ## 3. Tier Distribution & Load Balancing
- - **Tier 1 (Base Encoder):** 34 samples (6.8%)
- - **Tier 2 (Local LLM):** 433 samples (86.6%)
- - **Tier 3 (Simulated Human):** 33 samples (6.6%)
+ - **Tier 1 (Base Encoder):** 188 samples (37.6%)
+ - **Tier 2 (Local LLM):** 312 samples (62.4%)
+ - **Tier 3 (Simulated Human):** 0 samples (0.0%)
  
  ## 4. Constraint Validation
- - ✅ **Efficiency Target (>=60%):** 6.8% (FAILED)
- - ✅ **Human Cost Target (<=10%):** 6.6% (PASSED)
+ - ✅ **Efficiency Target (>=60%):** 37.6% (FAILED)
+ - ✅ **Human Cost Target (<=10%):** 0.0% (PASSED)
  
  ## 5. Research Questions (RQ) Analysis
  - **RQ1: Did uncertainty routing reduce human effort without sacrificing accuracy?**
-   - **Verdict:** Not Supported (Tier 1 Coverage: 6.80%, Final Accuracy: 58.00%, Tier 1 Accuracy: 54.00%)
+   - **Verdict:** Not Supported (Tier 1 Coverage: 37.60%, Final Accuracy: 54.00%, Tier 1 Accuracy: 48.00%)
    
  - **RQ2: Did the Active Learning (AL) loop improve Tier 1 on untouched test set?**
-   - **Verdict:** Not observed in this run (Pre-AL Tier 1 Accuracy: 58.80%, Post-AL Tier 1 Accuracy: 54.00%)
+   - **Verdict:** Not observed in this run (Pre-AL Tier 1 Accuracy: 58.80%, Post-AL Tier 1 Accuracy: 48.00%)
    
  - **RQ3: Does PICR identify optimal configurations?**
    - **Verdict:** Supported
@@ -46,20 +46,20 @@
  ## 6. Per-Category Performance Breakdown
  | Category | Tier 1 Precision | Tier 1 Recall | Tier 1 F1 | Tier 1 Support | Final Precision | Final Recall | Final F1 | Final Support |
  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
- | **sadness** | 60.55% | 45.83% | 52.17% | 144 | 60.78% | 64.58% | 62.63% | 144 |
-| **joy** | 56.08% | 86.01% | 67.89% | 193 | 63.95% | 77.20% | 69.95% | 193 |
-| **love** | 20.00% | 13.33% | 16.00% | 30 | 24.24% | 26.67% | 25.40% | 30 |
-| **anger** | 45.65% | 32.81% | 38.18% | 64 | 52.27% | 35.94% | 42.59% | 64 |
-| **fear** | 46.43% | 24.07% | 31.71% | 54 | 50.00% | 24.07% | 32.50% | 54 |
-| **surprise** | 0.00% | 0.00% | 0.00% | 15 | 40.00% | 26.67% | 32.00% | 15 |
+ | **sadness** | 52.44% | 29.86% | 38.05% | 144 | 59.06% | 52.08% | 55.35% | 144 |
+| **joy** | 46.62% | 96.37% | 62.84% | 193 | 53.35% | 90.67% | 67.18% | 193 |
+| **love** | 0.00% | 0.00% | 0.00% | 30 | 12.50% | 3.33% | 5.26% | 30 |
+| **anger** | 77.78% | 10.94% | 19.18% | 64 | 65.00% | 20.31% | 30.95% | 64 |
+| **fear** | 44.44% | 7.41% | 12.70% | 54 | 45.45% | 9.26% | 15.38% | 54 |
+| **surprise** | 0.00% | 0.00% | 0.00% | 15 | 20.00% | 6.67% | 10.00% | 15 |
  
  ## 7. Escalation Pattern Analysis
  | Category | Tier 2 Escalations | Tier 3 Escalations | Total Samples | Escalation Rate |
  | :--- | :---: | :---: | :---: | :---: |
- | **sadness** | 132 | 11 | 144 | 99.31% |
-| **joy** | 156 | 5 | 193 | 83.42% |
-| **love** | 29 | 1 | 30 | 100.00% |
-| **anger** | 58 | 6 | 64 | 100.00% |
-| **fear** | 49 | 5 | 54 | 100.00% |
-| **surprise** | 9 | 5 | 15 | 93.33% |
+ | **sadness** | 123 | 0 | 144 | 85.42% |
+| **joy** | 52 | 0 | 193 | 26.94% |
+| **love** | 13 | 0 | 30 | 43.33% |
+| **anger** | 62 | 0 | 64 | 96.88% |
+| **fear** | 50 | 0 | 54 | 92.59% |
+| **surprise** | 12 | 0 | 15 | 80.00% |
  
