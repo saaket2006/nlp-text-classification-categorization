@@ -1,0 +1,38 @@
+[
+  {
+    "human_annotations": 0,
+    "test_accuracy": 0.562
+  },
+  {
+    "human_annotations": 10,
+    "test_accuracy": 0.49
+  },
+  {
+    "human_annotations": 20,
+    "test_accuracy": 0.462
+  },
+  {
+    "human_annotations": 30,
+    "test_accuracy": 0.464
+  },
+  {
+    "human_annotations": 40,
+    "test_accuracy": 0.506
+  },
+  {
+    "human_annotations": 50,
+    "test_accuracy": 0.55
+  },
+  {
+    "human_annotations": 60,
+    "test_accuracy": 0.55
+  },
+  {
+    "human_annotations": 70,
+    "test_accuracy": 0.552
+  },
+  {
+    "human_annotations": 79,
+    "test_accuracy": 0.546
+  }
+]

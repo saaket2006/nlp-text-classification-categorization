@@ -63,6 +63,8 @@ def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=Fal
     al_batch_size = config.get("tier1", {}).get("active_learning_batch_size", 1)
 
     if update_model and df_al_pool is not None:
+        accumulated_texts = []
+        accumulated_labels = []
         al_texts = []
         al_labels = []
         human_annotations_count = 0
@@ -88,9 +90,13 @@ def run_pipeline(router, df_eval, ag_categories, config, tier1, update_model=Fal
 
                 al_texts.append(text)
                 al_labels.append(router.cat_to_id[simulated_label])
+                
+                accumulated_texts.append(text)
+                accumulated_labels.append(router.cat_to_id[simulated_label])
 
                 if len(al_texts) >= al_batch_size:
-                    tier1.train_on_batch(al_texts, al_labels)
+                    # Train on the accumulated active learning history to guarantee stability and prevent catastrophic forgetting
+                    tier1.train_on_history(accumulated_texts, accumulated_labels, epochs=3, batch_size=8)
                     al_texts = []
                     al_labels = []
                     
@@ -221,6 +227,7 @@ def main():
 
     lambda_al = config["tier1"].get("picr_al_lambda", 0.5)
     annotation_cost_weight = config["tier3"].get("annotation_cost_weight", 0.05)
+    human_error_rate = config.get("tier3", {}).get("human_error_rate", 0.05)
 
     dataset_logs_dir = os.path.join(config["paths"]["logs_dir"], dataset_name)
     dataset_report_dir = os.path.join(config["paths"]["logs_dir"], "reports")
@@ -333,11 +340,12 @@ def main():
         if current_seed == args.seeds[0]:
             val_texts = df_val_calib["text"].tolist()
             
-            # Calibrate extreme entropy cap using percentile
-            percentile = config.get("tier3", {}).get("extreme_entropy_percentile", 0.98)
+            # Calibrate extreme entropy cap using percentile (allow dataset-specific override)
+            ds_cfg = config.get("datasets_config", {}).get(dataset_name, {})
+            percentile = ds_cfg.get("extreme_entropy_percentile", config.get("tier3", {}).get("extreme_entropy_percentile", 0.98))
             current_extreme_entropy_cap = config["tier1"].get("threshold_extreme_entropy", 1.2)
             if len(val_texts) >= 2:
-                print(f"Calibrating dynamic extreme entropy cap on VALIDATION split for {dataset_name} at {percentile:.0%} percentile...")
+                print(f"Calibrating dynamic extreme entropy cap on VALIDATION split for {dataset_name} at {percentile * 100:.1f}% percentile...")
                 _, probs_batch, _ = tier1.predict_batch(val_texts, batch_size=64)
                 temp_ue = UncertaintyEngine(0.0, 1.0)
                 entropies = [temp_ue.calculate_entropy(probs) for probs in probs_batch]
@@ -366,7 +374,8 @@ def main():
                         tier1, tier2, ue_s, ag_categories,
                         entropy_threshold=t1, conf_threshold=t2,
                         extreme_entropy_cap=current_extreme_entropy_cap,
-                        dataset_name=dataset_name, mode="STANDARD"
+                        dataset_name=dataset_name, mode="STANDARD",
+                        human_error_rate=human_error_rate
                     )
 
                     evaluator_sw, _, _, _ = run_pipeline(
@@ -388,7 +397,8 @@ def main():
                         "accuracy": metrics_sw["accuracy_final"],
                         "human_effort_ratio": metrics_sw["human_effort_ratio"],
                         "picr": metrics_sw["picr"],
-                        "net_utility": metrics_sw["net_utility"]
+                        "net_utility": metrics_sw["net_utility"],
+                        "net_utility_cost": metrics_sw["net_utility_cost"]
                     })
 
                 os.makedirs(os.path.dirname(dataset_sweep_file), exist_ok=True)
@@ -396,11 +406,11 @@ def main():
                     json.dump(sweep_results, f, indent=2)
                 print(f"Validation Threshold Sweep results saved to {dataset_sweep_file}")
                 
-                # Select optimal operating point automatically based on Max Net Utility
-                best_sweep = max(sweep_results, key=lambda x: x["net_utility"])
+                # Select optimal operating point automatically based on Max Cost-Aware Net Utility
+                best_sweep = max(sweep_results, key=lambda x: x["net_utility_cost"])
                 config["tier1"]["threshold_entropy"] = best_sweep["tau1"]
                 config["tier1"]["threshold_confidence"] = best_sweep["tau2"]
-                print(f"Validation Sweep selected optimal thresholds (Max Net Utility on Validation Calib: {best_sweep['net_utility']:.4f}):")
+                print(f"Validation Sweep selected optimal thresholds (Max Cost-Aware Net Utility on Validation Calib: {best_sweep['net_utility_cost']:.4f}):")
                 print(f"  Optimal tau_1 (entropy): {best_sweep['tau1']}")
                 print(f"  Optimal tau_2 (confidence): {best_sweep['tau2']}")
         else:
@@ -420,7 +430,8 @@ def main():
             entropy_threshold=config["tier1"]["threshold_entropy"],
             conf_threshold=config["tier1"]["threshold_confidence"],
             extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
-            dataset_name=dataset_name, mode="STANDARD"
+            dataset_name=dataset_name, mode="STANDARD",
+            human_error_rate=human_error_rate
         )
 
         evaluator, results_log, pre_al_acc, post_al_acc = run_pipeline(
@@ -453,19 +464,44 @@ def main():
         with open(learning_curve_path, "w") as f:
             json.dump(evaluator.al_learning_curve, f, indent=2)
 
-        # --- 3. Baselines & Ablations (Run on first seed after capturing the main run stats) ---
+        # --- 3. Baselines & Ablations (Run on first seed using budgets frozen from validation) ---
         if current_seed == args.seeds[0]:
-            # Capture actual tier distribution from main pipeline seed 0
-            main_t1_count = metrics['tier_distribution'].get(1, 0)
-            main_t2_count = metrics['tier_distribution'].get(2, 0)
-            main_t3_count = metrics['tier_distribution'].get(3, 0)
-            main_total = metrics['total_samples']
+            # Evaluate proposed router on Validation Split to capture budget ratios cleanly and calibrate thresholds
+            print("Evaluating Proposed Router on Validation Split to freeze baseline budgets...")
+            restore_pretrained_state(tier1)
+            ue_val = UncertaintyEngine(config["tier1"]["threshold_entropy"], config["tier1"]["threshold_confidence"])
+            router_val = TieredRouter(
+                tier1, tier2, ue_val, ag_categories,
+                entropy_threshold=config["tier1"]["threshold_entropy"],
+                conf_threshold=config["tier1"]["threshold_confidence"],
+                extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
+                dataset_name=dataset_name, mode="STANDARD",
+                human_error_rate=human_error_rate
+            )
+            eval_val, _, _, _ = run_pipeline(
+                router_val, df_val_calib, ag_categories, config, tier1,
+                update_model=False, df_test=df_val_calib, disable_tqdm=True
+            )
+            val_metrics = eval_val.calculate_metrics(
+                lambda_al=lambda_al, 
+                annotation_cost_weight=annotation_cost_weight, 
+                categories=ag_categories,
+                cost_t1=cost_t1, cost_t2=cost_t2, cost_t3=cost_t3
+            )
             
-            f1_ratio = main_t1_count / main_total if main_total > 0 else 0.60
-            f2_ratio = main_t2_count / main_total if main_total > 0 else 0.30
-            f3_ratio = main_t3_count / main_total if main_total > 0 else 0.10
-            budget_ratios = (f1_ratio, f2_ratio, f3_ratio)
-            print(f"Captured Main Seed 0 Tier Ratios: T1={f1_ratio:.2%}, T2={f2_ratio:.2%}, T3={f3_ratio:.2%}")
+            # Freeze routing budget ratios from Validation run
+            val_t1_count = val_metrics['tier_distribution'].get(1, 0)
+            val_t2_count = val_metrics['tier_distribution'].get(2, 0)
+            val_t3_count = val_metrics['tier_distribution'].get(3, 0)
+            val_total = val_metrics['total_samples']
+            
+            val_f1 = val_t1_count / val_total if val_total > 0 else 0.60
+            val_f2 = val_t2_count / val_total if val_total > 0 else 0.30
+            val_f3 = val_t3_count / val_total if val_total > 0 else 0.10
+            val_budget_ratios = (val_f1, val_f2, val_f3)
+            f3_val = val_f3 # AL baseline budget prob
+            
+            print(f"Frozen Validation Budget Ratios: T1={val_f1:.2%}, T2={val_f2:.2%}, T3={val_f3:.2%}")
 
             if args.baseline:
                 print("Running Tier-2-only Baseline on Test Set...")
@@ -474,7 +510,8 @@ def main():
                 router_b = TieredRouter(
                     tier1, tier2, ue_b, ag_categories,
                     entropy_threshold=0.0, conf_threshold=1.0,
-                    dataset_name=dataset_name, mode="TIER2_ONLY"
+                    dataset_name=dataset_name, mode="TIER2_ONLY",
+                    human_error_rate=human_error_rate
                 )
                 eval_b, _, pre_b, post_b = run_pipeline(
                     router_b, df_test, ag_categories, config, tier1,
@@ -500,7 +537,8 @@ def main():
                     tier1, tier2, ue_a, ag_categories,
                     entropy_threshold=config["tier1"]["threshold_entropy"],
                     conf_threshold=config["tier1"]["threshold_confidence"],
-                    dataset_name=dataset_name, mode="NO_TIER2"
+                    dataset_name=dataset_name, mode="NO_TIER2",
+                    human_error_rate=human_error_rate
                 )
                 eval_a, _, pre_a, post_a = run_pipeline(
                     router_a, df_test, ag_categories, config, tier1,
@@ -524,7 +562,8 @@ def main():
                 router_ne = TieredRouter(
                     tier1, tier2, ue_ne, ag_categories,
                     entropy_threshold=999.0, conf_threshold=config["tier1"]["threshold_confidence"],
-                    dataset_name=dataset_name, mode="NO_ENTROPY"
+                    dataset_name=dataset_name, mode="NO_ENTROPY",
+                    human_error_rate=human_error_rate
                 )
                 eval_ne, _, pre_ne, post_ne = run_pipeline(
                     router_ne, df_test, ag_categories, config, tier1,
@@ -549,7 +588,8 @@ def main():
                     tier1, tier2, ue_r, ag_categories,
                     entropy_threshold=0.5, conf_threshold=0.5,
                     dataset_name=dataset_name, mode="BUDGET_MATCHED_RANDOM",
-                    budget_ratios=budget_ratios
+                    budget_ratios=val_budget_ratios,
+                    human_error_rate=human_error_rate
                 )
                 eval_r, _, pre_r, post_r = run_pipeline(
                     router_r, df_test, ag_categories, config, tier1,
@@ -569,35 +609,12 @@ def main():
             # --- 4. Calibrate and Run Active Learning Baselines ---
             print("Calibrating and Running Active Learning Baselines (Budget-Matched)...")
             val_texts = df_val_calib["text"].tolist()
-            
-            # Get validation predictions under standard mode (first run on validation)
-            restore_pretrained_state(tier1)
-            ue_val = UncertaintyEngine(config["tier1"]["threshold_entropy"], config["tier1"]["threshold_confidence"])
-            router_val = TieredRouter(
-                tier1, tier2, ue_val, ag_categories,
-                entropy_threshold=config["tier1"]["threshold_entropy"],
-                conf_threshold=config["tier1"]["threshold_confidence"],
-                extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
-                dataset_name=dataset_name, mode="STANDARD"
-            )
-            eval_val, _, _, _ = run_pipeline(
-                router_val, df_val_calib, ag_categories, config, tier1,
-                update_model=False, df_test=df_val_calib, disable_tqdm=True
-            )
-            val_metrics = eval_val.calculate_metrics(
-                lambda_al=lambda_al, 
-                annotation_cost_weight=annotation_cost_weight, 
-                categories=ag_categories,
-                cost_t1=cost_t1,
-                cost_t2=cost_t2,
-                cost_t3=cost_t3
-            )
-            f3_val = val_metrics["human_effort_ratio"]
             print(f"Validation human annotation rate to match: {f3_val:.2%}")
             
             # Gather T1 outputs on validation set for threshold calibration
             _, val_probs_batch, _ = tier1.predict_batch(val_texts, batch_size=64)
             val_confs = [float(np.max(p)) for p in val_probs_batch]
+            temp_ue = UncertaintyEngine(0.0, 1.0)
             val_ents = [temp_ue.calculate_entropy(p) for p in val_probs_batch]
             val_margins = []
             for p in val_probs_batch:
@@ -635,7 +652,8 @@ def main():
                     entropy_threshold=al_entropy_threshold,
                     conf_threshold=al_least_conf_threshold,
                     extreme_entropy_cap=config["tier1"]["threshold_extreme_entropy"],
-                    dataset_name=dataset_name, mode=mode
+                    dataset_name=dataset_name, mode=mode,
+                    human_error_rate=human_error_rate
                 )
                 router_al.al_budget_prob = f3_val
                 router_al.al_least_conf_threshold = al_least_conf_threshold

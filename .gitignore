@@ -5,5 +5,3 @@ logs/tier2_errors
 .vscode
 logs/*/llm_cache.json
 .codegraph
-.gemini
-tests

@@ -1,0 +1,22 @@
+[
+  {
+    "human_annotations": 0,
+    "test_accuracy": 0.796
+  },
+  {
+    "human_annotations": 10,
+    "test_accuracy": 0.79
+  },
+  {
+    "human_annotations": 20,
+    "test_accuracy": 0.798
+  },
+  {
+    "human_annotations": 30,
+    "test_accuracy": 0.774
+  },
+  {
+    "human_annotations": 39,
+    "test_accuracy": 0.78
+  }
+]

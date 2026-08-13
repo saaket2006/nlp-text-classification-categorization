@@ -5,7 +5,7 @@ import numpy as np
 import random
 
 class TieredRouter:
-    def __init__(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap=1.2, dataset_name: str = None, mode: str = "STANDARD", budget_ratios: tuple = (0.60, 0.30, 0.10)):
+    def __init__(self, tier1, tier2, uncertainty_engine, categories, entropy_threshold, conf_threshold, extreme_entropy_cap=1.2, dataset_name: str = None, mode: str = "STANDARD", budget_ratios: tuple = (0.60, 0.30, 0.10), human_error_rate: float = 0.05):
         self.tier1 = tier1
         self.tier2 = tier2
         self.llm = tier2
@@ -19,6 +19,7 @@ class TieredRouter:
         self.dataset_name = dataset_name
         self.mode = mode.upper()
         self.budget_ratios = budget_ratios  # (p1, p2, p3) for BUDGET_MATCHED_RANDOM mode
+        self.human_error_rate = human_error_rate
         
         # Thresholds for AL Baselines (calibrated dynamically to match escalation rates)
         self.al_budget_prob = 0.10
@@ -47,12 +48,14 @@ class TieredRouter:
                 probs[self.cat_to_id[final_label]] = c
             output["final_probs"] = probs
         elif tier == 3:
+            # Calibrate Tier 3 probability vector based on true human oracle correctness rate (1.0 - human_error_rate)
+            c = 1.0 - self.human_error_rate
             K = len(self.categories)
-            probs = [0.0] * K
+            probs = [(1.0 - c) / (K - 1) if K > 1 else 0.0] * K
             if final_label in self.cat_to_id:
-                probs[self.cat_to_id[final_label]] = 1.0
+                probs[self.cat_to_id[final_label]] = c
             else:
-                probs[0] = 1.0
+                probs[0] = c
             output["final_probs"] = probs
             
         return output
@@ -94,11 +97,11 @@ class TieredRouter:
                     output["rationale"] = f"Budget-matched random routing: Tier 2 suggests {t2_labels} (conf: {t2_conf})."
                 else:
                     output["tier"] = 3
-                    output["confidence"] = 1.0
+                    output["confidence"] = 1.0 - self.human_error_rate
                     output["rationale"] = "Tier 2 failed in random routing. Escalating to Tier 3."
             else:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = "Budget-matched random routing: Tier 3 (Direct Human Escalation)"
             return output
 
@@ -114,7 +117,7 @@ class TieredRouter:
                 output["rationale"] = f"Tier 2 Only Baseline suggests {t2_labels} (conf: {t2_conf})."
             else:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = "Tier 2 failed in baseline. Escalating to Tier 3."
             return output
 
@@ -122,7 +125,7 @@ class TieredRouter:
         if self.mode == "NO_TIER2":
             if t1_entropy > self.extreme_entropy_cap or t1_entropy > self.entropy_threshold or t1_conf < self.conf_threshold:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = "T1 uncertain. Bypassing Tier 2, escalating directly to Tier 3."
             return output
 
@@ -139,7 +142,7 @@ class TieredRouter:
                     output["rationale"] = f"No Entropy Routing: T1 low confidence ({t1_conf:.2f}). Tier 2 suggests {t2_labels}."
                 else:
                     output["tier"] = 3
-                    output["confidence"] = 1.0
+                    output["confidence"] = 1.0 - self.human_error_rate
                     output["rationale"] = "Tier 2 failed. Escalating to Tier 3."
             return output
 
@@ -148,7 +151,7 @@ class TieredRouter:
             r = random.random()
             if r < self.al_budget_prob:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = "Active Learning Random Selection Baseline (Tier 3)"
             else:
                 output["tier"] = 1
@@ -158,7 +161,7 @@ class TieredRouter:
         if self.mode == "AL_LEAST_CONFIDENCE":
             if t1_conf < self.al_least_conf_threshold:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = f"Least Confidence AL Baseline: T1 confidence {t1_conf:.2f} below threshold."
             else:
                 output["tier"] = 1
@@ -168,7 +171,7 @@ class TieredRouter:
         if self.mode == "AL_ENTROPY":
             if t1_entropy > self.al_entropy_threshold:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = f"Entropy AL Baseline: T1 entropy {t1_entropy:.2f} above threshold."
             else:
                 output["tier"] = 1
@@ -181,7 +184,7 @@ class TieredRouter:
             output["margin"] = float(margin)
             if margin < self.al_margin_threshold:
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = f"Margin AL Baseline: T1 margin {margin:.2f} below threshold."
             else:
                 output["tier"] = 1
@@ -192,7 +195,7 @@ class TieredRouter:
         # 1. Absolute Hard Stop: Extreme Uncertainty -> Human
         if t1_entropy > self.extreme_entropy_cap:
             output["tier"] = 3
-            output["confidence"] = 1.0
+            output["confidence"] = 1.0 - self.human_error_rate
             output["rationale"] = f"Extreme T1 uncertainty ({t1_entropy:.2f} > {self.extreme_entropy_cap}). Direct Human Escalation."
             return output
 
@@ -268,7 +271,7 @@ class TieredRouter:
             else:
                 # LLM Failure -> Human
                 output["tier"] = 3
-                output["confidence"] = 1.0
+                output["confidence"] = 1.0 - self.human_error_rate
                 output["rationale"] = "Tier 2 failed. Escalating to Human."
 
         return output

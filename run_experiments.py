@@ -107,7 +107,7 @@ def main():
     
     headers = [
         "Dataset", "T1 Acc (Pre-AL)", "T1 Acc (Post-AL)", "Final Acc", "F1 Macro", 
-        "ECE T1", "ECE Final", "Brier Final", "Human Effort %", "Net Utility", "Avg Cost"
+        "ECE T1", "ECE Final", "Brier Final", "Human Effort %", "Net Utility (Human)", "Net Utility (Cost)", "Avg Cost"
     ]
     
     rows = []
@@ -142,6 +142,7 @@ def main():
                 fmt("brier_score_final"),
                 fmt("human_effort_ratio", percent=True),
                 fmt("net_utility"),
+                fmt("net_utility_cost"),
                 fmt("average_compute_cost")
             ])
             
@@ -164,6 +165,7 @@ def main():
                 f"{m.get('brier_score_final', 0.0):.4f}",
                 f"{m.get('human_effort_ratio', 0.0):.2%}",
                 f"{m.get('net_utility', 0.0):.4f}",
+                f"{m.get('net_utility_cost', 0.0):.4f}",
                 f"{m.get('average_compute_cost', 0.0):.2f}"
             ])
         else:

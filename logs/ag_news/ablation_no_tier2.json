@@ -1,193 +1,196 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 419,
+    "1": 400,
     "2": 0,
-    "3": 81
+    "3": 100
   },
-  "accuracy_t1": 0.86,
-  "accuracy_final": 0.93,
-  "f1_weighted": 0.9297232015009629,
-  "f1_macro": 0.9304321478391775,
-  "f1_t1_macro": 0.8605124985517321,
-  "ece": 0.03883474099636084,
-  "ece_t1": 0.04826838696002965,
-  "ece_final": 0.03883474099636084,
-  "brier_score": 0.267794370026748,
-  "brier_score_t1": 0.2062981490880218,
-  "brier_score_final": 0.267794370026748,
-  "total_latency": 3.639610799984439,
-  "average_latency": 0.007279221599968878,
-  "total_compute_cost": 243419.0,
-  "average_compute_cost": 486.838,
-  "human_effort_ratio": 0.162,
-  "picr": 0.43209876543209913,
-  "picr_display": "0.4321",
+  "accuracy_t1": 0.866,
+  "accuracy_final": 0.934,
+  "f1_weighted": 0.9338402845615054,
+  "f1_macro": 0.9344390529346887,
+  "f1_t1_macro": 0.8677741868986109,
+  "ece": 0.02370295095443724,
+  "ece_t1": 0.03413608765602111,
+  "ece_final": 0.02370295095443724,
+  "brier_score": 0.2494809978238633,
+  "brier_score_t1": 0.20611479346090392,
+  "brier_score_final": 0.2494809978238633,
+  "total_latency": 3.44147269999894,
+  "average_latency": 0.00688294539999788,
+  "total_compute_cost": 300400.0,
+  "average_compute_cost": 600.8,
+  "human_effort_ratio": 0.2,
+  "picr": 0.3400000000000003,
+  "picr_display": "0.3400",
   "picr_status": "BELOW_TARGET",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.07000000000000006,
-  "human_labels_count": 81,
+  "tier2_autonomous_gain": 0.06800000000000006,
+  "human_labels_count": 100,
   "confusion_matrix_t1": [
     [
-      95,
-      6,
+      92,
+      4,
       10,
-      9
+      14
     ],
     [
       0,
-      121,
+      120,
       0,
-      0
-    ],
-    [
-      2,
-      2,
-      102,
-      28
-    ],
-    [
-      7,
-      2,
-      4,
-      112
-    ]
-  ],
-  "confusion_matrix_final": [
-    [
-      106,
-      4,
-      7,
-      3
-    ],
-    [
-      0,
-      121,
-      0,
-      0
-    ],
-    [
-      1,
-      0,
-      118,
-      15
-    ],
-    [
-      4,
-      0,
-      1,
-      120
-    ]
-  ],
-  "confusion_matrix_escalated": [
-    [
-      15,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      1,
-      0,
-      0
-    ],
-    [
-      1,
-      0,
-      34,
       1
     ],
     [
       1,
       0,
+      104,
+      29
+    ],
+    [
+      4,
       0,
-      28
+      4,
+      117
+    ]
+  ],
+  "confusion_matrix_final": [
+    [
+      106,
+      5,
+      3,
+      6
+    ],
+    [
+      0,
+      121,
+      0,
+      0
+    ],
+    [
+      2,
+      0,
+      116,
+      16
+    ],
+    [
+      0,
+      1,
+      0,
+      124
+    ]
+  ],
+  "confusion_matrix_escalated": [
+    [
+      29,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      4,
+      0,
+      0
+    ],
+    [
+      2,
+      0,
+      37,
+      1
+    ],
+    [
+      0,
+      1,
+      0,
+      25
     ]
   ],
   "per_category_f1": {
     "World": {
-      "precision": 0.954954954954955,
+      "precision": 0.9814814814814815,
       "recall": 0.8833333333333333,
-      "f1-score": 0.9177489177489178,
+      "f1-score": 0.9298245614035088,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.968,
+      "precision": 0.952755905511811,
       "recall": 1.0,
-      "f1-score": 0.983739837398374,
+      "f1-score": 0.9758064516129032,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.9365079365079365,
-      "recall": 0.8805970149253731,
-      "f1-score": 0.9076923076923077,
+      "precision": 0.9747899159663865,
+      "recall": 0.8656716417910447,
+      "f1-score": 0.9169960474308301,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.8695652173913043,
-      "recall": 0.96,
-      "f1-score": 0.9125475285171103,
+      "precision": 0.8493150684931506,
+      "recall": 0.992,
+      "f1-score": 0.915129151291513,
       "support": 125.0
     }
   },
   "per_category_f1_t1": {
     "World": {
-      "precision": 0.9134615384615384,
-      "recall": 0.7916666666666666,
-      "f1-score": 0.8482142857142857,
+      "precision": 0.9484536082474226,
+      "recall": 0.7666666666666667,
+      "f1-score": 0.847926267281106,
       "support": 120.0
     },
     "Sports": {
-      "precision": 0.9236641221374046,
-      "recall": 1.0,
-      "f1-score": 0.9603174603174603,
+      "precision": 0.967741935483871,
+      "recall": 0.9917355371900827,
+      "f1-score": 0.9795918367346939,
       "support": 121.0
     },
     "Business": {
-      "precision": 0.8793103448275862,
-      "recall": 0.7611940298507462,
-      "f1-score": 0.816,
+      "precision": 0.8813559322033898,
+      "recall": 0.7761194029850746,
+      "f1-score": 0.8253968253968254,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.7516778523489933,
-      "recall": 0.896,
-      "f1-score": 0.8175182481751825,
+      "precision": 0.7267080745341615,
+      "recall": 0.936,
+      "f1-score": 0.8181818181818182,
       "support": 125.0
     }
   },
   "escalation_by_category": {
     "World": {
       "tier2": 0,
-      "tier3": 15,
+      "tier3": 30,
       "total": 120
     },
     "Sports": {
       "tier2": 0,
-      "tier3": 1,
+      "tier3": 4,
       "total": 121
     },
     "Business": {
       "tier2": 0,
-      "tier3": 36,
+      "tier3": 40,
       "total": 134
     },
     "Sci/Tech": {
       "tier2": 0,
-      "tier3": 29,
+      "tier3": 26,
       "total": 125
     }
   },
-  "picr_al": 0.3865,
-  "picr_al_display": "0.3865",
+  "picr_al": 0.3184,
+  "picr_al_display": "0.3184",
   "picr_al_status": "BELOW_TARGET",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": -0.014000000000000012,
-  "net_utility": 0.0619,
-  "net_utility_display": "0.0619",
+  "delta_acc_al": -0.008000000000000007,
+  "net_utility": 0.058,
+  "net_utility_display": "0.0580",
   "net_utility_status": "POSITIVE",
+  "net_utility_cost": 0.058,
+  "net_utility_cost_display": "0.0580",
+  "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.874,
-  "post_al_t1_accuracy": 0.86
+  "post_al_t1_accuracy": 0.866
 }

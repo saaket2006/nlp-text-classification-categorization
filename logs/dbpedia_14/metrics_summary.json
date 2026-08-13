@@ -1,25 +1,31 @@
 {
   "total_samples": 1000,
   "tier_distribution": {
-    "1": 959,
-    "2": 38,
+    "1": 969,
+    "2": 28,
     "3": 3
   },
-  "accuracy_t1": 0.977,
-  "accuracy_final": 0.983,
-  "f1_weighted": 0.98296123483457,
-  "f1_macro": 0.9836154733372879,
-  "f1_t1_macro": 0.9775287499943401,
-  "ece": 0.015095663592815405,
-  "ece_t1": 0.01472222718596456,
-  "ece_final": 0.015095663592815405,
-  "brier_score": 0.01641425684875439,
+  "accuracy_t1": 0.976,
+  "accuracy_final": 0.984,
+  "f1_weighted": 0.983989869566122,
+  "f1_macro": 0.984601397325599,
+  "f1_t1_macro": 0.9765612724423468,
+  "ece": 0.012614389021396553,
+  "ece_t1": 0.014504650652408548,
+  "ece_final": 0.012614389021396553,
+  "brier_score": 0.034587575967627786,
+  "brier_score_t1": 0.0379972792074047,
+  "brier_score_final": 0.034587575967627786,
+  "total_latency": 7.2698394999965785,
+  "average_latency": 0.007269839499996578,
+  "total_compute_cost": 15569.0,
+  "average_compute_cost": 15.569,
   "human_effort_ratio": 0.003,
-  "picr": 2.0000000000000018,
-  "picr_display": "2.0000",
+  "picr": 2.666666666666669,
+  "picr_display": "2.6667",
   "picr_status": "STRONG",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.006000000000000005,
+  "tier2_autonomous_gain": 0.008000000000000007,
   "human_labels_count": 3,
   "confusion_matrix_t1": [
     [
@@ -88,16 +94,16 @@
     ],
     [
       0,
-      1,
       0,
       1,
-      79,
+      1,
+      78,
       0,
       0,
       0,
       0,
       0,
-      0,
+      1,
       0,
       0,
       0
@@ -249,12 +255,12 @@
   ],
   "confusion_matrix_final": [
     [
-      82,
+      83,
       4,
       0,
       0,
       0,
-      1,
+      0,
       0,
       0,
       0,
@@ -475,12 +481,11 @@
   ],
   "confusion_matrix_escalated": [
     [
-      5,
+      3,
       2,
       0,
       0,
       0,
-      1,
       0,
       0,
       0,
@@ -488,7 +493,8 @@
       0,
       0,
       0,
-      1
+      0,
+      0
     ],
     [
       0,
@@ -577,7 +583,7 @@
       0,
       0,
       0,
-      2,
+      1,
       0,
       0,
       0,
@@ -587,40 +593,6 @@
       0
     ],
     [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      3,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      2,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
       0,
       0,
       0,
@@ -632,6 +604,40 @@
       0,
       0,
       0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0
     ],
     [
@@ -696,14 +702,14 @@
       0,
       0,
       0,
-      6
+      4
     ]
   ],
   "per_category_f1": {
     "Company": {
-      "precision": 0.9879518072289156,
-      "recall": 0.9318181818181818,
-      "f1-score": 0.9590643274853801,
+      "precision": 0.9880952380952381,
+      "recall": 0.9431818181818182,
+      "f1-score": 0.9651162790697675,
       "support": 88.0
     },
     "EducationalInstitution": {
@@ -731,9 +737,9 @@
       "support": 81.0
     },
     "MeanOfTransportation": {
-      "precision": 0.984375,
+      "precision": 1.0,
       "recall": 0.984375,
-      "f1-score": 0.984375,
+      "f1-score": 0.9921259842519685,
       "support": 64.0
     },
     "Building": {
@@ -793,15 +799,15 @@
       "support": 88.0
     },
     "EducationalInstitution": {
-      "precision": 0.9310344827586207,
+      "precision": 0.9418604651162791,
       "recall": 0.9759036144578314,
-      "f1-score": 0.9529411764705882,
+      "f1-score": 0.9585798816568047,
       "support": 83.0
     },
     "Artist": {
-      "precision": 1.0,
+      "precision": 0.9868421052631579,
       "recall": 0.974025974025974,
-      "f1-score": 0.9868421052631579,
+      "f1-score": 0.9803921568627451,
       "support": 77.0
     },
     "Athlete": {
@@ -811,9 +817,9 @@
       "support": 64.0
     },
     "OfficeHolder": {
-      "precision": 0.9753086419753086,
-      "recall": 0.9753086419753086,
-      "f1-score": 0.9753086419753086,
+      "precision": 0.975,
+      "recall": 0.9629629629629629,
+      "f1-score": 0.968944099378882,
       "support": 81.0
     },
     "MeanOfTransportation": {
@@ -847,9 +853,9 @@
       "support": 69.0
     },
     "Plant": {
-      "precision": 1.0,
+      "precision": 0.9871794871794872,
       "recall": 0.9871794871794872,
-      "f1-score": 0.9935483870967742,
+      "f1-score": 0.9871794871794872,
       "support": 78.0
     },
     "Album": {
@@ -873,7 +879,7 @@
   },
   "escalation_by_category": {
     "Company": {
-      "tier2": 8,
+      "tier2": 4,
       "tier3": 1,
       "total": 88
     },
@@ -903,12 +909,12 @@
       "total": 64
     },
     "Building": {
-      "tier2": 2,
+      "tier2": 1,
       "tier3": 0,
       "total": 51
     },
     "NaturalPlace": {
-      "tier2": 3,
+      "tier2": 1,
       "tier3": 0,
       "total": 80
     },
@@ -918,7 +924,7 @@
       "total": 48
     },
     "Animal": {
-      "tier2": 1,
+      "tier2": 0,
       "tier3": 0,
       "total": 69
     },
@@ -938,21 +944,24 @@
       "total": 76
     },
     "WrittenWork": {
-      "tier2": 6,
+      "tier2": 4,
       "tier3": 0,
       "total": 83
     }
   },
-  "picr_al": 1.625,
-  "picr_al_display": "1.6250",
-  "picr_al_status": "ACCEPTABLE",
+  "picr_al": 2.0,
+  "picr_al_display": "2.0000",
+  "picr_al_status": "STRONG",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": 0.0010000000000000009,
-  "net_utility": 0.0059,
-  "net_utility_display": "0.0059",
+  "delta_acc_al": 0.0,
+  "net_utility": 0.0079,
+  "net_utility_display": "0.0079",
   "net_utility_status": "POSITIVE",
+  "net_utility_cost": 0.0077,
+  "net_utility_cost_display": "0.0077",
+  "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.976,
-  "post_al_t1_accuracy": 0.977,
+  "post_al_t1_accuracy": 0.976,
   "active_learning_batch_size": 1
 }

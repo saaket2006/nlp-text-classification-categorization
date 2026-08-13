@@ -73,6 +73,40 @@ class Tier1Model:
         self.model.eval()
         return loss.item()
 
+    def train_on_history(self, texts, labels, epochs=3, batch_size=8):
+        """
+        Fine-tune the model on the accumulated history of active learning samples to prevent catastrophic forgetting.
+        """
+        if not texts:
+            return 0.0
+            
+        import random
+        self.model.train()
+        total_loss = 0.0
+        
+        for epoch in range(epochs):
+            indices = list(range(len(texts)))
+            random.shuffle(indices)
+            
+            for i in range(0, len(texts), batch_size):
+                batch_indices = indices[i:i+batch_size]
+                batch_texts = [texts[idx] for idx in batch_indices]
+                batch_labels = [labels[idx] for idx in batch_indices]
+                
+                inputs = self.tokenizer(batch_texts, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+                inputs.pop("token_type_ids", None)
+                labels_tensor = torch.tensor(batch_labels).to(self.device)
+                
+                self.optimizer.zero_grad()
+                outputs = self.model(**inputs, labels=labels_tensor)
+                loss = outputs.loss
+                loss.backward()
+                self.optimizer.step()
+                total_loss += loss.item()
+                
+        self.model.eval()
+        return total_loss
+
     def pretrain(self, train_texts, train_labels, batch_size=16, epochs=3, early_stopping_patience=None):
         # Build simple dataset holding raw texts and labels
         class TextDataset(torch.utils.data.Dataset):

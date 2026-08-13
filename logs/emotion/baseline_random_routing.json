@@ -1,26 +1,32 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 477,
-    "2": 23,
-    "3": 0
+    "1": 54,
+    "2": 436,
+    "3": 10
   },
   "accuracy_t1": 0.588,
-  "accuracy_final": 0.58,
-  "f1_weighted": 0.5380904215090145,
-  "f1_macro": 0.3438147251319907,
+  "accuracy_final": 0.62,
+  "f1_weighted": 0.6046786803600137,
+  "f1_macro": 0.46688007952149296,
   "f1_t1_macro": 0.3514714654064725,
-  "ece": 0.05532971624135974,
+  "ece": 0.2935992905735969,
   "ece_t1": 0.0356668971180916,
-  "ece_final": 0.05532971624135974,
-  "brier_score": 0.21009990069547735,
-  "human_effort_ratio": 0.0,
-  "picr": null,
-  "picr_display": "N/A",
-  "picr_status": "NO_GAIN",
+  "ece_final": 0.2935992905735969,
+  "brier_score": 0.697771783900959,
+  "brier_score_t1": 0.5333234322433897,
+  "brier_score_final": 0.697771783900959,
+  "total_latency": 3.4019970999997895,
+  "average_latency": 0.006803994199999579,
+  "total_compute_cost": 117254.0,
+  "average_compute_cost": 234.508,
+  "human_effort_ratio": 0.02,
+  "picr": 1.6000000000000014,
+  "picr_display": "1.6000",
+  "picr_status": "ACCEPTABLE",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": -0.008000000000000007,
-  "human_labels_count": 0,
+  "tier2_autonomous_gain": 0.03200000000000003,
+  "human_labels_count": 10,
   "confusion_matrix_t1": [
     [
       101,
@@ -73,139 +79,139 @@
   ],
   "confusion_matrix_final": [
     [
-      101,
-      27,
-      2,
-      9,
-      5,
-      0
-    ],
-    [
-      21,
-      157,
+      120,
+      15,
       3,
-      5,
-      6,
-      1
+      3,
+      1,
+      2
     ],
     [
+      27,
+      141,
+      13,
+      3,
       4,
-      24,
-      1,
-      1,
+      5
+    ],
+    [
+      7,
+      13,
+      10,
+      0,
       0,
       0
     ],
     [
       30,
-      11,
-      0,
-      13,
-      9,
-      1
+      5,
+      1,
+      20,
+      4,
+      4
     ],
     [
-      17,
-      17,
-      0,
+      22,
+      10,
+      1,
       2,
-      18,
-      0
+      15,
+      4
     ],
     [
-      7,
-      7,
-      0,
+      4,
+      4,
+      2,
       0,
       1,
-      0
+      4
     ]
   ],
   "confusion_matrix_escalated": [
     [
+      110,
+      12,
+      2,
+      3,
+      1,
+      2
+    ],
+    [
+      25,
+      123,
+      12,
+      3,
+      3,
+      5
+    ],
+    [
+      6,
+      10,
+      10,
+      0,
+      0,
+      0
+    ],
+    [
+      27,
       5,
       1,
-      0,
-      0,
-      0,
-      0
+      17,
+      4,
+      4
     ],
     [
-      0,
-      5,
-      0,
+      20,
+      6,
       1,
-      1,
-      1
+      2,
+      14,
+      4
     ],
     [
-      0,
+      4,
+      3,
       2,
       0,
-      0,
-      0,
-      0
-    ],
-    [
-      2,
       1,
-      0,
-      0,
-      0,
-      1
-    ],
-    [
-      2,
-      1,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
+      4
     ]
   ],
   "per_category_f1": {
     "sadness": {
-      "precision": 0.5611111111111111,
-      "recall": 0.7013888888888888,
-      "f1-score": 0.6234567901234568,
+      "precision": 0.5714285714285714,
+      "recall": 0.8333333333333334,
+      "f1-score": 0.6779661016949152,
       "support": 144.0
     },
     "joy": {
-      "precision": 0.6460905349794238,
-      "recall": 0.8134715025906736,
-      "f1-score": 0.7201834862385321,
+      "precision": 0.75,
+      "recall": 0.7305699481865285,
+      "f1-score": 0.7401574803149606,
       "support": 193.0
     },
     "love": {
-      "precision": 0.16666666666666666,
-      "recall": 0.03333333333333333,
-      "f1-score": 0.05555555555555555,
+      "precision": 0.3333333333333333,
+      "recall": 0.3333333333333333,
+      "f1-score": 0.3333333333333333,
       "support": 30.0
     },
     "anger": {
-      "precision": 0.43333333333333335,
-      "recall": 0.203125,
-      "f1-score": 0.2765957446808511,
+      "precision": 0.7142857142857143,
+      "recall": 0.3125,
+      "f1-score": 0.43478260869565216,
       "support": 64.0
     },
     "fear": {
-      "precision": 0.46153846153846156,
-      "recall": 0.3333333333333333,
-      "f1-score": 0.3870967741935484,
+      "precision": 0.6,
+      "recall": 0.2777777777777778,
+      "f1-score": 0.379746835443038,
       "support": 54.0
     },
     "surprise": {
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1-score": 0.0,
+      "precision": 0.21052631578947367,
+      "recall": 0.26666666666666666,
+      "f1-score": 0.23529411764705882,
       "support": 15.0
     }
   },
@@ -249,44 +255,47 @@
   },
   "escalation_by_category": {
     "sadness": {
-      "tier2": 6,
-      "tier3": 0,
+      "tier2": 129,
+      "tier3": 1,
       "total": 144
     },
     "joy": {
-      "tier2": 8,
-      "tier3": 0,
+      "tier2": 167,
+      "tier3": 4,
       "total": 193
     },
     "love": {
-      "tier2": 2,
+      "tier2": 26,
       "tier3": 0,
       "total": 30
     },
     "anger": {
-      "tier2": 4,
-      "tier3": 0,
+      "tier2": 55,
+      "tier3": 3,
       "total": 64
     },
     "fear": {
-      "tier2": 3,
-      "tier3": 0,
+      "tier2": 45,
+      "tier3": 2,
       "total": 54
     },
     "surprise": {
-      "tier2": 0,
+      "tier2": 14,
       "tier3": 0,
       "total": 15
     }
   },
-  "picr_al": -8.0,
-  "picr_al_display": "-8.0000",
-  "picr_al_status": "NO_GAIN",
+  "picr_al": 1.5238,
+  "picr_al_display": "1.5238",
+  "picr_al_status": "ACCEPTABLE",
   "picr_al_lambda": 0.5,
   "delta_acc_al": 0.0,
-  "net_utility": -0.008,
-  "net_utility_display": "-0.0080",
-  "net_utility_status": "NEGATIVE",
+  "net_utility": 0.031,
+  "net_utility_display": "0.0310",
+  "net_utility_status": "POSITIVE",
+  "net_utility_cost": 0.0281,
+  "net_utility_cost_display": "0.0281",
+  "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.588,
   "post_al_t1_accuracy": 0.588

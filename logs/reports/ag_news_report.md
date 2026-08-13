@@ -12,9 +12,9 @@
  | **Accuracy Boost** | 2.20% | Lift from Tier 2 & 3 |
  | **Macro F1 Score** | 0.8913 | Macro-averaged F1 |
  | **Weighted F1 Score** | 0.8902 | |
- | **Final ECE** | 0.0764 | Calibration error (Final system) |
+ | **Final ECE** | 0.0761 | Calibration error (Final system) |
  | **Tier 1 ECE** | 0.0554 | Calibration error (Tier 1) |
- | **Brier Score** | 0.2066 | Lower is better |
+ | **Brier Score** | 0.2064 | Lower is better |
  | **Human Effort Ratio** | 0.60% | Samples requiring simulated human label |
  | **Pre-AL Tier 1 Accuracy** | 87.40% | Tier 1 baseline before AL loop (evaluated on test) |
  | **Post-AL Tier 1 Accuracy** | 86.80% | Tier 1 baseline after AL loop (evaluated on test) |

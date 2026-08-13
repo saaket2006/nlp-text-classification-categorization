@@ -1,32 +1,32 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 424,
-    "2": 72,
-    "3": 4
+    "1": 427,
+    "2": 62,
+    "3": 11
   },
   "accuracy_t1": 0.874,
-  "accuracy_final": 0.87,
-  "f1_weighted": 0.8706874619930186,
-  "f1_macro": 0.8721231659464391,
+  "accuracy_final": 0.872,
+  "f1_weighted": 0.8727311567469374,
+  "f1_macro": 0.8739013664799693,
   "f1_t1_macro": 0.8758615632869504,
-  "ece": 0.055789961016178106,
+  "ece": 0.05769188374996196,
   "ece_t1": 0.04136771196126938,
-  "ece_final": 0.055789961016178106,
-  "brier_score": 0.20355426334163323,
+  "ece_final": 0.05769188374996196,
+  "brier_score": 0.19959872891338362,
   "brier_score_t1": 0.18368954500465304,
-  "brier_score_final": 0.20355426334163323,
-  "total_latency": 3.573719300005905,
-  "average_latency": 0.00714743860001181,
-  "total_compute_cost": 26824.0,
-  "average_compute_cost": 53.648,
-  "human_effort_ratio": 0.008,
-  "picr": -0.5000000000000004,
-  "picr_display": "-0.5000",
+  "brier_score_final": 0.19959872891338362,
+  "total_latency": 3.425001700003122,
+  "average_latency": 0.006850003400006245,
+  "total_compute_cost": 45827.0,
+  "average_compute_cost": 91.654,
+  "human_effort_ratio": 0.022,
+  "picr": -0.090909090909091,
+  "picr_display": "-0.0909",
   "picr_status": "NO_GAIN",
   "picr_negative_warning": true,
-  "tier2_autonomous_gain": -0.0040000000000000036,
-  "human_labels_count": 4,
+  "tier2_autonomous_gain": -0.0020000000000000018,
+  "human_labels_count": 11,
   "confusion_matrix_t1": [
     [
       98,
@@ -57,8 +57,8 @@
     [
       98,
       3,
-      10,
-      9
+      9,
+      10
     ],
     [
       3,
@@ -67,49 +67,49 @@
       1
     ],
     [
-      2,
+      1,
       0,
       111,
-      21
+      22
     ],
     [
-      4,
+      6,
       0,
-      12,
-      109
+      9,
+      110
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      14,
-      0,
+      15,
+      1,
       1,
       3
     ],
     [
       1,
-      13,
+      17,
       0,
       0
     ],
     [
       0,
       0,
-      21,
-      5
+      17,
+      3
     ],
     [
-      1,
+      2,
       0,
-      3,
-      14
+      2,
+      11
     ]
   ],
   "per_category_f1": {
     "World": {
-      "precision": 0.9158878504672897,
+      "precision": 0.9074074074074074,
       "recall": 0.8166666666666667,
-      "f1-score": 0.8634361233480177,
+      "f1-score": 0.8596491228070176,
       "support": 120.0
     },
     "Sports": {
@@ -119,15 +119,15 @@
       "support": 121.0
     },
     "Business": {
-      "precision": 0.8345864661654135,
+      "precision": 0.8604651162790697,
       "recall": 0.8283582089552238,
-      "f1-score": 0.8314606741573034,
+      "f1-score": 0.844106463878327,
       "support": 134.0
     },
     "Sci/Tech": {
-      "precision": 0.7785714285714286,
-      "recall": 0.872,
-      "f1-score": 0.8226415094339623,
+      "precision": 0.7692307692307693,
+      "recall": 0.88,
+      "f1-score": 0.8208955223880597,
       "support": 125.0
     }
   },
@@ -159,34 +159,37 @@
   },
   "escalation_by_category": {
     "World": {
-      "tier2": 18,
-      "tier3": 0,
+      "tier2": 15,
+      "tier3": 5,
       "total": 120
     },
     "Sports": {
-      "tier2": 12,
-      "tier3": 2,
+      "tier2": 15,
+      "tier3": 3,
       "total": 121
     },
     "Business": {
-      "tier2": 26,
-      "tier3": 0,
+      "tier2": 18,
+      "tier3": 2,
       "total": 134
     },
     "Sci/Tech": {
-      "tier2": 16,
-      "tier3": 2,
+      "tier2": 14,
+      "tier3": 1,
       "total": 125
     }
   },
-  "picr_al": -0.4444,
-  "picr_al_display": "-0.4444",
+  "picr_al": -0.087,
+  "picr_al_display": "-0.0870",
   "picr_al_status": "NO_GAIN",
   "picr_al_lambda": 0.5,
   "delta_acc_al": 0.0,
-  "net_utility": -0.0044,
-  "net_utility_display": "-0.0044",
+  "net_utility": -0.0031,
+  "net_utility_display": "-0.0031",
   "net_utility_status": "NEGATIVE",
+  "net_utility_cost": -0.0035,
+  "net_utility_cost_display": "-0.0035",
+  "net_utility_cost_status": "NEGATIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.874,
   "post_al_t1_accuracy": 0.874

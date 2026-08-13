@@ -197,6 +197,7 @@ class PipelineEvaluator:
             picr_al_status = "NO_GAIN"
 
         # Net Utility computation
+        # 1. Uh = ΔAccuracy - (λ_cost * HumanEffortRatio)
         net_utility = delta_acc - (annotation_cost_weight * raw_human_effort_ratio)
         net_utility = float(round(net_utility, 4))
         net_utility_display = f"{net_utility:.4f}"
@@ -207,6 +208,20 @@ class PipelineEvaluator:
             net_utility_status = "BREAK_EVEN"
         else:
             net_utility_status = "NEGATIVE"
+
+        # 2. Uc = ΔAccuracy - (λ_cost * NormalizedComputeCost)
+        max_possible_cost = cost_t1 + cost_t3
+        normalized_compute_cost = average_compute_cost / max_possible_cost if max_possible_cost > 0 else 0.0
+        net_utility_cost = delta_acc - (annotation_cost_weight * normalized_compute_cost)
+        net_utility_cost = float(round(net_utility_cost, 4))
+        net_utility_cost_display = f"{net_utility_cost:.4f}"
+
+        if net_utility_cost > 0:
+            net_utility_cost_status = "POSITIVE"
+        elif net_utility_cost == 0:
+            net_utility_cost_status = "BREAK_EVEN"
+        else:
+            net_utility_cost_status = "NEGATIVE"
 
         metrics = {
             "total_samples": total,
@@ -247,6 +262,9 @@ class PipelineEvaluator:
             "net_utility": net_utility,
             "net_utility_display": net_utility_display,
             "net_utility_status": net_utility_status,
+            "net_utility_cost": net_utility_cost,
+            "net_utility_cost_display": net_utility_cost_display,
+            "net_utility_cost_status": net_utility_cost_status,
             "annotation_cost_weight": float(annotation_cost_weight)
         }
 
@@ -290,7 +308,7 @@ def calculate_multi_seed_stats(runs: list):
     keys = [
         "accuracy_final", "accuracy_t1", "human_effort_ratio", "f1_macro", 
         "f1_weighted", "ece_final", "ece_t1", "brier_score_final", "brier_score_t1", 
-        "net_utility", "total_latency", "average_latency", "total_compute_cost", "average_compute_cost"
+        "net_utility", "net_utility_cost", "total_latency", "average_latency", "total_compute_cost", "average_compute_cost"
     ]
     mean_stats = {}
     std_stats = {}

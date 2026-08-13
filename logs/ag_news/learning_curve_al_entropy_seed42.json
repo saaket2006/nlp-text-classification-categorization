@@ -5,10 +5,10 @@
   },
   {
     "human_annotations": 10,
-    "test_accuracy": 0.874
+    "test_accuracy": 0.868
   },
   {
-    "human_annotations": 13,
-    "test_accuracy": 0.868
+    "human_annotations": 11,
+    "test_accuracy": 0.874
   }
 ]

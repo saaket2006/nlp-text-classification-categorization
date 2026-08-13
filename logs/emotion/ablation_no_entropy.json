@@ -1,25 +1,31 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 195,
-    "2": 305,
+    "1": 407,
+    "2": 93,
     "3": 0
   },
   "accuracy_t1": 0.588,
-  "accuracy_final": 0.644,
-  "f1_weighted": 0.6206228250339082,
-  "f1_macro": 0.4695417785405191,
+  "accuracy_final": 0.618,
+  "f1_weighted": 0.580447051524332,
+  "f1_macro": 0.4139447641992278,
   "f1_t1_macro": 0.3514714654064725,
-  "ece": 0.25331125499248497,
+  "ece": 0.10128849618434904,
   "ece_t1": 0.0356668971180916,
-  "ece_final": 0.25331125499248497,
-  "brier_score": 0.30607268184558817,
+  "ece_final": 0.10128849618434904,
+  "brier_score": 0.5758107239569379,
+  "brier_score_t1": 0.5333234322433897,
+  "brier_score_final": 0.5758107239569379,
+  "total_latency": 3.3531546000012895,
+  "average_latency": 0.006706309200002579,
+  "total_compute_cost": 19007.0,
+  "average_compute_cost": 38.014,
   "human_effort_ratio": 0.0,
   "picr": null,
   "picr_display": "N/A",
   "picr_status": "AUTONOMOUS",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.05600000000000005,
+  "tier2_autonomous_gain": 0.030000000000000027,
   "human_labels_count": 0,
   "confusion_matrix_t1": [
     [
@@ -73,139 +79,139 @@
   ],
   "confusion_matrix_final": [
     [
-      120,
-      15,
-      3,
-      3,
-      1,
-      2
-    ],
-    [
-      21,
-      157,
-      6,
+      110,
+      26,
+      2,
       4,
+      1,
+      1
+    ],
+    [
+      20,
+      162,
       3,
+      4,
+      2,
       2
     ],
     [
-      8,
-      14,
-      8,
+      6,
+      21,
+      3,
       0,
       0,
       0
     ],
     [
-      27,
+      31,
+      9,
+      0,
+      14,
       7,
-      1,
-      18,
-      6,
-      5
+      3
     ],
     [
-      26,
-      6,
-      1,
-      2,
-      15,
-      4
+      19,
+      14,
+      0,
+      3,
+      18,
+      0
     ],
     [
       4,
-      5,
-      1,
+      7,
       0,
-      1,
-      4
+      0,
+      2,
+      2
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      86,
-      11,
-      3,
+      22,
+      5,
+      1,
+      0,
+      0,
+      1
+    ],
+    [
+      5,
+      8,
+      1,
+      1,
+      0,
+      2
+    ],
+    [
       3,
       1,
-      2
-    ],
-    [
-      17,
-      33,
-      6,
-      4,
       2,
-      2
-    ],
-    [
-      8,
-      6,
-      8,
       0,
       0,
       0
     ],
     [
-      21,
-      6,
-      1,
-      16,
+      7,
       4,
-      5
-    ],
-    [
-      24,
-      4,
-      1,
-      2,
-      13,
-      4
-    ],
-    [
+      0,
       4,
       2,
-      1,
+      3
+    ],
+    [
+      7,
+      3,
       0,
       1,
-      4
+      5,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      0,
+      1,
+      2
     ]
   ],
   "per_category_f1": {
     "sadness": {
-      "precision": 0.5825242718446602,
-      "recall": 0.8333333333333334,
-      "f1-score": 0.6857142857142857,
+      "precision": 0.5789473684210527,
+      "recall": 0.7638888888888888,
+      "f1-score": 0.6586826347305389,
       "support": 144.0
     },
     "joy": {
-      "precision": 0.7696078431372549,
-      "recall": 0.8134715025906736,
-      "f1-score": 0.7909319899244333,
+      "precision": 0.6778242677824268,
+      "recall": 0.8393782383419689,
+      "f1-score": 0.75,
       "support": 193.0
     },
     "love": {
-      "precision": 0.4,
-      "recall": 0.26666666666666666,
-      "f1-score": 0.32,
+      "precision": 0.375,
+      "recall": 0.1,
+      "f1-score": 0.15789473684210525,
       "support": 30.0
     },
     "anger": {
-      "precision": 0.6666666666666666,
-      "recall": 0.28125,
-      "f1-score": 0.3956043956043956,
+      "precision": 0.56,
+      "recall": 0.21875,
+      "f1-score": 0.3146067415730337,
       "support": 64.0
     },
     "fear": {
-      "precision": 0.5769230769230769,
-      "recall": 0.2777777777777778,
-      "f1-score": 0.375,
+      "precision": 0.6,
+      "recall": 0.3333333333333333,
+      "f1-score": 0.42857142857142855,
       "support": 54.0
     },
     "surprise": {
-      "precision": 0.23529411764705882,
-      "recall": 0.26666666666666666,
-      "f1-score": 0.25,
+      "precision": 0.25,
+      "recall": 0.13333333333333333,
+      "f1-score": 0.17391304347826086,
       "support": 15.0
     }
   },
@@ -249,44 +255,47 @@
   },
   "escalation_by_category": {
     "sadness": {
-      "tier2": 106,
+      "tier2": 29,
       "tier3": 0,
       "total": 144
     },
     "joy": {
-      "tier2": 64,
+      "tier2": 17,
       "tier3": 0,
       "total": 193
     },
     "love": {
-      "tier2": 22,
+      "tier2": 6,
       "tier3": 0,
       "total": 30
     },
     "anger": {
-      "tier2": 53,
+      "tier2": 20,
       "tier3": 0,
       "total": 64
     },
     "fear": {
-      "tier2": 48,
+      "tier2": 16,
       "tier3": 0,
       "total": 54
     },
     "surprise": {
-      "tier2": 12,
+      "tier2": 5,
       "tier3": 0,
       "total": 15
     }
   },
-  "picr_al": 56.0,
-  "picr_al_display": "56.0000",
+  "picr_al": 30.0,
+  "picr_al_display": "30.0000",
   "picr_al_status": "STRONG",
   "picr_al_lambda": 0.5,
   "delta_acc_al": 0.0,
-  "net_utility": 0.056,
-  "net_utility_display": "0.0560",
+  "net_utility": 0.03,
+  "net_utility_display": "0.0300",
   "net_utility_status": "POSITIVE",
+  "net_utility_cost": 0.0294,
+  "net_utility_cost_display": "0.0294",
+  "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.588,
   "post_al_t1_accuracy": 0.588
