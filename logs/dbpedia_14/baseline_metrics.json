@@ -5,19 +5,19 @@
     "2": 1000,
     "3": 0
   },
-  "accuracy_t1": 0.976,
+  "accuracy_t1": 0.977,
   "accuracy_final": 0.963,
   "f1_weighted": 0.962779653654427,
   "f1_macro": 0.963703628540751,
-  "f1_t1_macro": 0.9766134292088517,
+  "f1_t1_macro": 0.9774737617355144,
   "ece": 0.012160000000000087,
-  "ece_t1": 0.01244295695424084,
+  "ece_t1": 0.013429887264967015,
   "ece_final": 0.012160000000000087,
   "brier_score": 0.08775058461538462,
-  "brier_score_t1": 0.03693482898156958,
+  "brier_score_t1": 0.03821140211267229,
   "brier_score_final": 0.08775058461538462,
-  "total_latency": 8.219291799995517,
-  "average_latency": 0.008219291799995518,
+  "total_latency": 0.2673852002044441,
+  "average_latency": 0.00026738520020444414,
   "total_compute_cost": 200000.0,
   "average_compute_cost": 200.0,
   "human_effort_ratio": 0.0,
@@ -25,7 +25,7 @@
   "picr_display": "N/A",
   "picr_status": "NO_GAIN",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": -0.013000000000000012,
+  "tier2_autonomous_gain": -0.014000000000000012,
   "human_labels_count": 0,
   "al_human_annotations": 0,
   "confusion_matrix_t1": [
@@ -64,9 +64,9 @@
     [
       0,
       0,
-      75,
+      74,
       0,
-      2,
+      3,
       0,
       0,
       0,
@@ -95,10 +95,10 @@
     ],
     [
       0,
+      0,
+      0,
       1,
-      1,
-      1,
-      78,
+      80,
       0,
       0,
       0,
@@ -800,15 +800,15 @@
       "support": 88.0
     },
     "EducationalInstitution": {
-      "precision": 0.9310344827586207,
+      "precision": 0.9418604651162791,
       "recall": 0.9759036144578314,
-      "f1-score": 0.9529411764705882,
+      "f1-score": 0.9585798816568047,
       "support": 83.0
     },
     "Artist": {
-      "precision": 0.9868421052631579,
-      "recall": 0.974025974025974,
-      "f1-score": 0.9803921568627451,
+      "precision": 1.0,
+      "recall": 0.961038961038961,
+      "f1-score": 0.9801324503311258,
       "support": 77.0
     },
     "Athlete": {
@@ -818,9 +818,9 @@
       "support": 64.0
     },
     "OfficeHolder": {
-      "precision": 0.975,
-      "recall": 0.9629629629629629,
-      "f1-score": 0.968944099378882,
+      "precision": 0.963855421686747,
+      "recall": 0.9876543209876543,
+      "f1-score": 0.975609756097561,
       "support": 81.0
     },
     "MeanOfTransportation": {
@@ -950,19 +950,19 @@
       "total": 83
     }
   },
-  "picr_al": -13.0,
-  "picr_al_display": "-13.0000",
+  "picr_al": -14.0,
+  "picr_al_display": "-14.0000",
   "picr_al_status": "NO_GAIN",
   "picr_al_lambda": 0.5,
   "delta_acc_al": 0.0,
-  "net_utility": -0.013,
-  "net_utility_display": "-0.0130",
+  "net_utility": -0.014,
+  "net_utility_display": "-0.0140",
   "net_utility_status": "NEGATIVE",
-  "net_utility_cost": -0.0163,
-  "net_utility_cost_display": "-0.0163",
+  "net_utility_cost": -0.0173,
+  "net_utility_cost_display": "-0.0173",
   "net_utility_cost_status": "NEGATIVE",
   "annotation_cost_weight": 0.05,
-  "pre_al_t1_accuracy": 0.976,
-  "post_al_t1_accuracy": 0.976,
+  "pre_al_t1_accuracy": 0.977,
+  "post_al_t1_accuracy": 0.977,
   "mode": "tier2_only_baseline"
 }

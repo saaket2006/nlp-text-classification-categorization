@@ -1,232 +1,232 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 67,
-    "2": 431,
-    "3": 2
+    "1": 3,
+    "2": 492,
+    "3": 5
   },
-  "accuracy_t1": 0.596,
-  "accuracy_final": 0.626,
-  "f1_weighted": 0.5971271426534583,
-  "f1_macro": 0.4303371540213645,
-  "f1_t1_macro": 0.3360304193764405,
-  "ece": 0.23549283644914626,
-  "ece_t1": 0.040071526467800135,
-  "ece_final": 0.23549283644914626,
-  "brier_score": 0.6239409983633547,
-  "brier_score_t1": 0.5371600752463248,
-  "brier_score_final": 0.6239409983633547,
-  "total_latency": 3.234708200008754,
-  "average_latency": 0.006469416400017508,
-  "total_compute_cost": 92267.0,
-  "average_compute_cost": 184.534,
-  "human_effort_ratio": 0.004,
-  "picr": 7.500000000000006,
-  "picr_display": "7.5000",
+  "accuracy_t1": 0.602,
+  "accuracy_final": 0.628,
+  "f1_weighted": 0.6114398852765854,
+  "f1_macro": 0.39942536782655796,
+  "f1_t1_macro": 0.34800748241627605,
+  "ece": 0.3067317750692365,
+  "ece_t1": 0.03109678006172179,
+  "ece_final": 0.3067317750692365,
+  "brier_score": 0.7065756542706962,
+  "brier_score_t1": 0.5346025448820916,
+  "brier_score_final": 0.7065756542706962,
+  "total_latency": 3.5365039003954735,
+  "average_latency": 0.007073007800790947,
+  "total_compute_cost": 113403.0,
+  "average_compute_cost": 226.806,
+  "human_effort_ratio": 0.01,
+  "picr": 2.6000000000000023,
+  "picr_display": "2.6000",
   "picr_status": "STRONG",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.030000000000000027,
-  "human_labels_count": 2,
-  "al_human_annotations": 7,
+  "tier2_autonomous_gain": 0.026000000000000023,
+  "human_labels_count": 5,
+  "al_human_annotations": 22,
   "confusion_matrix_t1": [
     [
-      110,
-      29,
-      0,
-      2,
-      3,
-      0
-    ],
-    [
+      113,
       22,
-      160,
       1,
-      3,
-      7,
+      6,
+      2,
+      0
+    ],
+    [
+      26,
+      157,
+      2,
+      2,
+      6,
       0
     ],
     [
       8,
-      22,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      35,
-      9,
-      0,
-      12,
-      8,
-      0
-    ],
-    [
       20,
-      16,
+      0,
+      1,
+      0,
+      1
+    ],
+    [
+      34,
+      7,
+      0,
+      14,
+      9,
+      0
+    ],
+    [
+      21,
+      12,
       0,
       2,
-      16,
-      0
+      17,
+      2
     ],
     [
-      7,
+      8,
       6,
       0,
       0,
-      2,
+      1,
       0
     ]
   ],
   "confusion_matrix_final": [
     [
-      117,
-      21,
-      1,
+      122,
+      13,
       3,
-      2,
-      0
-    ],
-    [
-      17,
-      155,
-      6,
-      6,
-      8,
-      1
-    ],
-    [
-      10,
-      15,
-      5,
-      0,
-      0,
-      0
-    ],
-    [
-      29,
-      8,
+      3,
       1,
-      16,
-      8,
       2
     ],
     [
-      19,
-      10,
-      1,
-      2,
-      18,
+      26,
+      145,
+      11,
+      4,
+      3,
       4
     ],
     [
+      10,
+      11,
+      9,
+      0,
+      0,
+      0
+    ],
+    [
+      28,
       6,
-      5,
       1,
+      19,
+      5,
+      4
+    ],
+    [
+      26,
+      6,
+      1,
+      2,
+      15,
+      4
+    ],
+    [
+      4,
+      4,
+      2,
       0,
       1,
-      2
+      4
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      110,
-      21,
-      1,
-      3,
-      2,
-      0
-    ],
-    [
-      16,
-      101,
-      6,
-      6,
-      8,
-      1
-    ],
-    [
-      10,
+      122,
       13,
-      5,
-      0,
-      0,
-      0
-    ],
-    [
-      29,
-      8,
+      3,
+      3,
       1,
-      16,
-      8,
       2
     ],
     [
-      18,
-      10,
-      1,
-      2,
-      18,
+      26,
+      142,
+      11,
+      4,
+      3,
       4
     ],
     [
+      10,
+      11,
+      9,
+      0,
+      0,
+      0
+    ],
+    [
+      28,
       6,
-      3,
       1,
+      19,
+      5,
+      4
+    ],
+    [
+      26,
+      6,
+      1,
+      2,
+      15,
+      4
+    ],
+    [
+      4,
+      4,
+      2,
       0,
       1,
-      2
+      4
     ]
   ],
   "per_category_f1": {
     "sadness": {
-      "precision": 0.5909090909090909,
-      "recall": 0.8125,
-      "f1-score": 0.6842105263157895,
+      "precision": 0.5648148148148148,
+      "recall": 0.8472222222222222,
+      "f1-score": 0.6777777777777778,
       "support": 144.0
     },
     "joy": {
-      "precision": 0.7242990654205608,
-      "recall": 0.8031088082901554,
-      "f1-score": 0.7616707616707616,
+      "precision": 0.7837837837837838,
+      "recall": 0.7512953367875648,
+      "f1-score": 0.7671957671957672,
       "support": 193.0
     },
     "love": {
       "precision": 0.3333333333333333,
-      "recall": 0.16666666666666666,
-      "f1-score": 0.2222222222222222,
+      "recall": 0.3,
+      "f1-score": 0.3157894736842105,
       "support": 30.0
     },
     "anger": {
-      "precision": 0.5925925925925926,
-      "recall": 0.25,
-      "f1-score": 0.3516483516483517,
+      "precision": 0.6785714285714286,
+      "recall": 0.296875,
+      "f1-score": 0.41304347826086957,
       "support": 64.0
     },
     "fear": {
-      "precision": 0.4864864864864865,
-      "recall": 0.3333333333333333,
-      "f1-score": 0.3956043956043956,
+      "precision": 0.6,
+      "recall": 0.2777777777777778,
+      "f1-score": 0.379746835443038,
       "support": 54.0
     },
     "surprise": {
       "precision": 0.2222222222222222,
-      "recall": 0.13333333333333333,
-      "f1-score": 0.16666666666666666,
+      "recall": 0.26666666666666666,
+      "f1-score": 0.24242424242424243,
       "support": 15.0
     }
   },
   "per_category_f1_t1": {
     "sadness": {
-      "precision": 0.5445544554455446,
-      "recall": 0.7638888888888888,
-      "f1-score": 0.6358381502890174,
+      "precision": 0.5380952380952381,
+      "recall": 0.7847222222222222,
+      "f1-score": 0.6384180790960452,
       "support": 144.0
     },
     "joy": {
-      "precision": 0.6611570247933884,
-      "recall": 0.8290155440414507,
-      "f1-score": 0.735632183908046,
+      "precision": 0.7008928571428571,
+      "recall": 0.8134715025906736,
+      "f1-score": 0.7529976019184652,
       "support": 193.0
     },
     "love": {
@@ -236,15 +236,15 @@
       "support": 30.0
     },
     "anger": {
-      "precision": 0.631578947368421,
-      "recall": 0.1875,
-      "f1-score": 0.2891566265060241,
+      "precision": 0.56,
+      "recall": 0.21875,
+      "f1-score": 0.3146067415730337,
       "support": 64.0
     },
     "fear": {
-      "precision": 0.4444444444444444,
-      "recall": 0.2962962962962963,
-      "f1-score": 0.35555555555555557,
+      "precision": 0.4857142857142857,
+      "recall": 0.3148148148148148,
+      "f1-score": 0.38202247191011235,
       "support": 54.0
     },
     "surprise": {
@@ -256,49 +256,49 @@
   },
   "escalation_by_category": {
     "sadness": {
-      "tier2": 136,
-      "tier3": 1,
+      "tier2": 141,
+      "tier3": 3,
       "total": 144
     },
     "joy": {
-      "tier2": 138,
+      "tier2": 190,
       "tier3": 0,
       "total": 193
     },
     "love": {
-      "tier2": 28,
+      "tier2": 30,
       "tier3": 0,
       "total": 30
     },
     "anger": {
-      "tier2": 64,
-      "tier3": 0,
+      "tier2": 63,
+      "tier3": 1,
       "total": 64
     },
     "fear": {
-      "tier2": 52,
-      "tier3": 1,
+      "tier2": 54,
+      "tier3": 0,
       "total": 54
     },
     "surprise": {
-      "tier2": 13,
-      "tier3": 0,
+      "tier2": 14,
+      "tier3": 1,
       "total": 15
     }
   },
-  "picr_al": 6.8,
-  "picr_al_display": "6.8000",
+  "picr_al": 3.0,
+  "picr_al_display": "3.0000",
   "picr_al_status": "STRONG",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": 0.008000000000000007,
-  "net_utility": 0.0298,
-  "net_utility_display": "0.0298",
+  "delta_acc_al": 0.014000000000000012,
+  "net_utility": 0.0255,
+  "net_utility_display": "0.0255",
   "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.0269,
-  "net_utility_cost_display": "0.0269",
+  "net_utility_cost": 0.0222,
+  "net_utility_cost_display": "0.0222",
   "net_utility_cost_status": "POSITIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.588,
-  "post_al_t1_accuracy": 0.596,
+  "post_al_t1_accuracy": 0.602,
   "active_learning_batch_size": 1
 }

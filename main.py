@@ -419,6 +419,7 @@ def main():
                         "tau1": t1,
                         "tau2": t2,
                         "accuracy": metrics_sw["accuracy_final"],
+                        "accuracy_t1": metrics_sw["accuracy_t1"],
                         "human_effort_ratio": metrics_sw["human_effort_ratio"],
                         "picr": metrics_sw["picr"],
                         "net_utility": metrics_sw["net_utility"],
@@ -430,11 +431,18 @@ def main():
                     json.dump(sweep_results, f, indent=2)
                 print(f"Validation Threshold Sweep results saved to {dataset_sweep_file}")
                 
-                # Select optimal operating point automatically based on Max Cost-Aware Net Utility
-                best_sweep = max(sweep_results, key=lambda x: x["net_utility_cost"])
+                # Select optimal operating point prioritizing high PICR while ensuring accuracy does not drop
+                valid_sweeps = [
+                    x for x in sweep_results 
+                    if x["accuracy"] >= x["accuracy_t1"] and x["picr"] is not None and x["human_effort_ratio"] > 0
+                ]
+                if valid_sweeps:
+                    best_sweep = max(valid_sweeps, key=lambda x: x["picr"])
+                else:
+                    best_sweep = max(sweep_results, key=lambda x: x["net_utility_cost"])
                 config["tier1"]["threshold_entropy"] = best_sweep["tau1"]
                 config["tier1"]["threshold_confidence"] = best_sweep["tau2"]
-                print(f"Validation Sweep selected optimal thresholds (Max Cost-Aware Net Utility on Validation Calib: {best_sweep['net_utility_cost']:.4f}):")
+                print(f"Validation Sweep selected optimal thresholds (Optimal PICR on Validation Calib: {best_sweep.get('picr', 0.0):.4f}):")
                 print(f"  Optimal tau_1 (entropy): {best_sweep['tau1']}")
                 print(f"  Optimal tau_2 (confidence): {best_sweep['tau2']}")
         else:

@@ -109,7 +109,7 @@ class Tier1Model:
         # Reset learning rate for active learning fine-tuning (only for active head parameters)
         for param_group in self.optimizer.param_groups:
             if param_group.get('initial_lr', 0) > 0 or param_group['lr'] > 0:
-                param_group['lr'] = 5e-4
+                param_group['lr'] = 1e-4
             
         # Experience replay: mix the escalated samples with a random selection of the initial pretraining data
         combined_texts = list(texts)

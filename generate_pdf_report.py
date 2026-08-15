@@ -864,10 +864,6 @@ def main():
     
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(51, 65, 85)
-    synthesis_text = (
-        "The benefit of adaptive routing varies substantially across datasets. IMDb exhibits the largest gain from LLM-assisted routing, while DBpedia-14 shows smaller gains because its Tier-1 classifier is already highly accurate. Emotion represents a challenging case where routing and adaptation do not recover the strong pre-AL Tier-1 performance, highlighting the dependence of the framework on base-model calibration and task characteristics."
-    )
-    pdf.multi_cell(0, 5.5, synthesis_text)
     pdf.ln(8)
     
     # Embed comparative summary plots

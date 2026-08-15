@@ -1,115 +1,115 @@
 {
   "total_samples": 500,
   "tier_distribution": {
-    "1": 486,
+    "1": 485,
     "2": 0,
-    "3": 14
+    "3": 15
   },
-  "accuracy_t1": 0.792,
-  "accuracy_final": 0.8,
-  "f1_weighted": 0.7999615778688524,
-  "f1_macro": 0.7998847336065573,
-  "f1_t1_macro": 0.7919167667066827,
-  "ece": 0.02415157423019409,
-  "ece_t1": 0.023200733542442294,
-  "ece_final": 0.02415157423019409,
-  "brier_score": 0.28733100101608366,
-  "brier_score_t1": 0.2828731400025857,
-  "brier_score_final": 0.28733100101608366,
-  "total_latency": 4.810555000009117,
-  "average_latency": 0.009621110000018234,
-  "total_compute_cost": 42486.0,
-  "average_compute_cost": 84.972,
-  "human_effort_ratio": 0.028,
-  "picr": 0.285714285714286,
-  "picr_display": "0.2857",
-  "picr_status": "BELOW_TARGET",
+  "accuracy_t1": 0.804,
+  "accuracy_final": 0.804,
+  "f1_weighted": 0.8038117315573771,
+  "f1_macro": 0.8038870389344263,
+  "f1_t1_macro": 0.8038462154328994,
+  "ece": 0.046353091478347735,
+  "ece_t1": 0.04832976722717283,
+  "ece_final": 0.046353091478347735,
+  "brier_score": 0.2820413851466802,
+  "brier_score_t1": 0.28404085940502327,
+  "brier_score_final": 0.2820413851466802,
+  "total_latency": 4.889985499990871,
+  "average_latency": 0.009779970999981742,
+  "total_compute_cost": 45485.0,
+  "average_compute_cost": 90.97,
+  "human_effort_ratio": 0.03,
+  "picr": 0.0,
+  "picr_display": "0.0000",
+  "picr_status": "NO_GAIN",
   "picr_negative_warning": false,
-  "tier2_autonomous_gain": 0.008000000000000007,
-  "human_labels_count": 14,
-  "al_human_annotations": 35,
+  "tier2_autonomous_gain": 0.0,
+  "human_labels_count": 15,
+  "al_human_annotations": 39,
   "confusion_matrix_t1": [
     [
-      203,
-      51
+      194,
+      60
     ],
     [
-      53,
-      193
+      38,
+      208
     ]
   ],
   "confusion_matrix_final": [
     [
-      206,
-      48
+      195,
+      59
     ],
     [
-      52,
-      194
+      39,
+      207
     ]
   ],
   "confusion_matrix_escalated": [
     [
-      5,
+      4,
       0
     ],
     [
-      0,
-      9
+      1,
+      10
     ]
   ],
   "per_category_f1": {
     "neg": {
-      "precision": 0.7984496124031008,
-      "recall": 0.8110236220472441,
-      "f1-score": 0.8046875,
+      "precision": 0.8333333333333334,
+      "recall": 0.7677165354330708,
+      "f1-score": 0.7991803278688525,
       "support": 254.0
     },
     "pos": {
-      "precision": 0.8016528925619835,
-      "recall": 0.7886178861788617,
-      "f1-score": 0.7950819672131147,
+      "precision": 0.7781954887218046,
+      "recall": 0.8414634146341463,
+      "f1-score": 0.80859375,
       "support": 246.0
     }
   },
   "per_category_f1_t1": {
     "neg": {
-      "precision": 0.79296875,
-      "recall": 0.7992125984251969,
-      "f1-score": 0.796078431372549,
+      "precision": 0.8362068965517241,
+      "recall": 0.7637795275590551,
+      "f1-score": 0.7983539094650206,
       "support": 254.0
     },
     "pos": {
-      "precision": 0.7909836065573771,
-      "recall": 0.7845528455284553,
-      "f1-score": 0.7877551020408163,
+      "precision": 0.7761194029850746,
+      "recall": 0.8455284552845529,
+      "f1-score": 0.8093385214007782,
       "support": 246.0
     }
   },
   "escalation_by_category": {
     "neg": {
       "tier2": 0,
-      "tier3": 5,
+      "tier3": 4,
       "total": 254
     },
     "pos": {
       "tier2": 0,
-      "tier3": 9,
+      "tier3": 11,
       "total": 246
     }
   },
-  "picr_al": 0.2414,
-  "picr_al_display": "0.2414",
+  "picr_al": 0.1613,
+  "picr_al_display": "0.1613",
   "picr_al_status": "BELOW_TARGET",
   "picr_al_lambda": 0.5,
-  "delta_acc_al": -0.0020000000000000018,
-  "net_utility": 0.0066,
-  "net_utility_display": "0.0066",
-  "net_utility_status": "POSITIVE",
-  "net_utility_cost": 0.0066,
-  "net_utility_cost_display": "0.0066",
-  "net_utility_cost_status": "POSITIVE",
+  "delta_acc_al": 0.010000000000000009,
+  "net_utility": -0.0015,
+  "net_utility_display": "-0.0015",
+  "net_utility_status": "NEGATIVE",
+  "net_utility_cost": -0.0015,
+  "net_utility_cost_display": "-0.0015",
+  "net_utility_cost_status": "NEGATIVE",
   "annotation_cost_weight": 0.05,
   "pre_al_t1_accuracy": 0.794,
-  "post_al_t1_accuracy": 0.792
+  "post_al_t1_accuracy": 0.804
 }
